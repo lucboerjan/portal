@@ -33,8 +33,8 @@ class UtilityReadingForm
                     ->required()
                     ->native(false)
                     ->displayFormat('d-m-Y')
-                    ->default(now())
-                    ->maxDate(now()),
+                    ->default(now()),
+                    //->maxDate(now()),
 
                 TextInput::make('meter_stand')
                     ->label('Meterstand')

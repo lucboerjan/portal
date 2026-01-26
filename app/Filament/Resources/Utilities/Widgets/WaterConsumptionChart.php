@@ -7,18 +7,14 @@ use App\Models\UtilityReading;
 use App\Models\UtilityType;
 use App\Models\UtilityCorrection;
 
-class ElectricityConsumptionChart extends ChartWidget
+class WaterConsumptionChart extends ChartWidget
 {
-    protected ?string $heading = 'Elektriciteit Verbruik (laatste 12 maanden)';
+    protected ?string $heading = 'Water Verbruik (laatste 12 maanden)';
     
     protected function getData(): array
     {
         // Haal alle benodigde utility types op
-        $dagtellerId = UtilityType::where('name', 'Dagteller In')->value('id');
-        $nachttellerId = UtilityType::where('name', 'Nachtteller In')->value('id');
-        $dagtellerUitId = UtilityType::where('name', 'Dagteller Uit')->value('id');
-        $nachttellerUitId = UtilityType::where('name', 'Nachtteller Uit')->value('id');
-        $zonnepanelenId = UtilityType::where('name', 'Zonnepanelen')->value('id');
+        $watertellerId = UtilityType::where('name', 'Water')->value('id');
         
         $months = collect();
         $consumptionData = [];
@@ -30,18 +26,14 @@ class ElectricityConsumptionChart extends ChartWidget
             
             $consumptionData[] = $this->calculateMonthlyConsumption(
                 $month,
-                $dagtellerId,
-                $nachttellerId,
-                $dagtellerUitId,
-                $nachttellerUitId,
-                $zonnepanelenId
+                $watertellerId,
             );
         }
         
         return [
             'datasets' => [
                 [
-                    'label' => 'Totaal Verbruik (kWh)',
+                    'label' => 'Totaal Verbruik (m³)',
                     'data' => $consumptionData,
                     'borderColor' => 'rgb(59, 130, 246)',
                     'backgroundColor' => 'rgba(59, 130, 246, 0.8)',
@@ -58,24 +50,16 @@ class ElectricityConsumptionChart extends ChartWidget
     
     private function calculateMonthlyConsumption(
         $month,
-        $dagtellerId,
-        $nachttellerId,
-        $dagtellerUitId,
-        $nachttellerUitId,
-        $zonnepanelenId
+        $watertellerId,
     ): float {
         $startOfMonth = $month->copy()->startOfMonth()->toDateString();
         $endOfMonth = $month->copy()->endOfMonth()->toDateString();
         
         // Bereken verschil voor elke meter
-        $dagIn = $this->getMeterDifference($dagtellerId, $startOfMonth, $endOfMonth);
-        $nachtIn = $this->getMeterDifference($nachttellerId, $startOfMonth, $endOfMonth);
-        $dagUit = $this->getMeterDifference($dagtellerUitId, $startOfMonth, $endOfMonth);
-        $nachtUit = $this->getMeterDifference($nachttellerUitId, $startOfMonth, $endOfMonth);
-        $zonnepanelen = $this->getMeterDifference($zonnepanelenId, $startOfMonth, $endOfMonth);
+        $waterIn = $this->getMeterDifference($watertellerId, $startOfMonth, $endOfMonth);
         
         // Formule: (Dagteller In + Nachteller In) - (Dagteller Uit + Nachteller Uit) + Zonnepanelen
-        $consumption = ($dagIn + $nachtIn) - ($dagUit + $nachtUit) + $zonnepanelen;
+        $consumption = $waterIn;
         
         return round($consumption, 2);
     }

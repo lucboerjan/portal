@@ -21,8 +21,11 @@ class UtilityOverview extends Page
             \App\Filament\Resources\Utilities\Widgets\SolarPanelChartLastMonth::class,
             \App\Filament\Resources\Utilities\Widgets\SolarYearlyTotalChart::class,
             \App\Filament\Resources\Utilities\Widgets\SolarPerYearChart::class,
-
             \App\Filament\Resources\Utilities\Widgets\ElectricityConsumptionChart::class,
+            \App\Filament\Resources\Utilities\Widgets\GasConsumptionChart::class,
+            \App\Filament\Resources\Utilities\Widgets\WaterConsumptionChart::class,
+
+            \App\Filament\Resources\Utilities\Widgets\ElectricityConsumptionTable::class,
         ];
     }
 }
