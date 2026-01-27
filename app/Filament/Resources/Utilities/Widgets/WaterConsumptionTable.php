@@ -196,12 +196,16 @@ class WaterConsumptionTable extends BaseWidget
 
 
         // Check of er een correctie is in deze periode (metervervanging)
-        if ($difference < 0) {
+        if ($difference < 0 || $utilityTypeId == 3) {
             $correction = UtilityCorrection::where('utility_type_id', $utilityTypeId)
                 ->whereBetween('correction_date', [$startOfMonth, $endOfMonth])
                 ->sum('old_meter_final_reading');
 
-            $difference = $correction - $previousReading->meter_stand + $currentReading->meter_stand;
+            // dd($correction);
+            if ($correction != 0) {
+                //dd($correction);
+                $difference = $correction - $previousReading->meter_stand + $currentReading->meter_stand;
+            }
         }
 
         return $difference;

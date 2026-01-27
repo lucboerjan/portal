@@ -38,8 +38,8 @@ class UtilityCorrectionForm
                     ->label('Old Meter Reading')
                     ->required()
                     ->numeric()
-                    ->step(0.01)
-                    ->minValue(0),
+                    ->step(0.01),
+                    //>minValue(0),
                 TextInput::make('new_meter_start_reading')
                     ->label('New Meter Reading')
                     ->required()
