@@ -11,9 +11,9 @@ use App\Models\UtilityReading;
 use App\Models\UtilityCorrection;
 use Illuminate\Support\Facades\Log;
 
-class ElectricityConsumptionTable extends BaseWidget
+class WaterConsumptionTable extends BaseWidget
 {
-    protected static ?string $heading = 'Overzichtstabel Verbruik Electriciteit';
+    protected static ?string $heading = 'Overzichtstabel Verbruik Water';
 
     protected int | string | array $columnSpan = 'full';
 
@@ -82,15 +82,7 @@ class ElectricityConsumptionTable extends BaseWidget
     public function getTableRecords(): Collection
     {
         // Haal utility type IDs op
-        $dagtellerId = UtilityType::where('name', 'Dagteller In')->value('id');
-        $nachttellerId = UtilityType::where('name', 'Nachtteller In')->value('id');
-        $dagtellerUitId = UtilityType::where('name', 'Dagteller Uit')->value('id');
-        $nachttellerUitId = UtilityType::where('name', 'Nachtteller Uit')->value('id');
-        $zonnepanelenId = UtilityType::where('name', 'Zonnepanelen')->value('id');
-        $electriciteitDagId = UtilityType::where('name', 'Elektriciteit Dag')->value('id');
-        $electriciteitNachtId = UtilityType::where('name', 'Elektriciteit Nacht')->value('id');
-
-
+        $watertellerId = UtilityType::where('name', 'Water')->value('id');
 
         // Haal alle unieke jaren op uit de readings, gesorteerd van nieuw naar oud
         $years = UtilityReading::selectRaw('DISTINCT YEAR(reading_date) as year')
@@ -108,7 +100,6 @@ class ElectricityConsumptionTable extends BaseWidget
             // Loop door alle maanden
             for ($month = 1; $month <= 12; $month++) {
                 //$monthDate = now()->setYear($year)->setMonth($month)->setDay(1);
-
                 $monthDate = now()
                     ->setYear((int) $year)
                     ->setMonth((int) $month)
@@ -135,13 +126,7 @@ class ElectricityConsumptionTable extends BaseWidget
                 // Bereken verbruik voor deze maand
                 $consumption = $this->calculateMonthlyConsumption(
                     month: $monthDate,
-                    dagtellerId: $dagtellerId,
-                    nachttellerId: $nachttellerId,
-                    dagtellerUitId: $dagtellerUitId,
-                    nachttellerUitId: $nachttellerUitId,
-                    zonnepanelenId: $zonnepanelenId,
-                    electriciteitDagId: $electriciteitDagId,
-                    electriciteitNachtId: $electriciteitNachtId
+                    watertellerId: $watertellerId
                 );
 
                 $row[$monthKey] = $consumption > 0 ? (int)round($consumption) : '';
@@ -162,13 +147,8 @@ class ElectricityConsumptionTable extends BaseWidget
     private function calculateMonthlyConsumption(
 
         $month,
-        $dagtellerId,
-        $nachttellerId,
-        $dagtellerUitId,
-        $nachttellerUitId,
-        $zonnepanelenId,
-        $electriciteitDagId,
-        $electriciteitNachtId
+        $watertellerId
+
     ): float {
 
 
@@ -176,17 +156,11 @@ class ElectricityConsumptionTable extends BaseWidget
         $endOfMonth = $month->copy()->endOfMonth()->toDateString();
 
         // Bereken verschil voor elke meter
-        $dagIn = $this->getMeterDifference($dagtellerId, $startOfMonth, $endOfMonth);
-        $nachtIn = $this->getMeterDifference($nachttellerId, $startOfMonth, $endOfMonth);
-        $dagUit = $this->getMeterDifference($dagtellerUitId, $startOfMonth, $endOfMonth);
-        $nachtUit = $this->getMeterDifference($nachttellerUitId, $startOfMonth, $endOfMonth);
-        $zonnepanelen = $this->getMeterDifference($zonnepanelenId, $startOfMonth, $endOfMonth);
-        $dagelectriciteit = $this->getMeterDifference($electriciteitDagId, $startOfMonth, $endOfMonth);
-        $nachtelectriciteit = $this->getMeterDifference($electriciteitNachtId, $startOfMonth, $endOfMonth);
+        $waterIn = $this->getMeterDifference($watertellerId, $startOfMonth, $endOfMonth);
 
 
         // Formule: (Dagteller In + Nachteller In) - (Dagteller Uit + Nachteller Uit) + Zonnepanelen
-        $consumption = ($dagIn + $nachtIn  + $dagelectriciteit + $nachtelectriciteit) - ($dagUit + $nachtUit) + $zonnepanelen;
+        $consumption = $waterIn;
 
         return $consumption;
     }
