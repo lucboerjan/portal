@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::guard('web')->check()) {
+        return redirect('/admin');
+    }
+    return redirect('/admin/login');
 });
