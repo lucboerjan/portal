@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class ElectricityConsumptionChart extends ChartWidget
 {
     protected ?string $heading = 'Elektriciteit Verbruik (laatste 12 maanden)';
-     protected ?string $pollingInterval = null;
+    protected ?string $pollingInterval = null;
 
     protected function getData(): array
     {
@@ -75,10 +75,10 @@ class ElectricityConsumptionChart extends ChartWidget
         $nachtIn = $this->getMeterDifference($nachttellerId, $startOfMonth, $endOfMonth);
         $dagUit = $this->getMeterDifference($dagtellerUitId, $startOfMonth, $endOfMonth);
         $nachtUit = $this->getMeterDifference($nachttellerUitId, $startOfMonth, $endOfMonth);
-        $zonnepanelen = $this->getZonnepanelenDifference( $startOfMonth, $endOfMonth);
+        $zonnepanelen = $this->getZonnepanelenDifference($startOfMonth, $endOfMonth);
 
         // Formule: (Dagteller In + Nachteller In) - (Dagteller Uit + Nachteller Uit) + Zonnepanelen
-        $consumption = ($dagIn + $nachtIn + $zonnepanelen) - ($dagUit + $nachtUit) ;
+        $consumption = ($dagIn + $nachtIn + $zonnepanelen) - ($dagUit + $nachtUit);
 
         return round($consumption, 2);
     }
@@ -138,7 +138,7 @@ class ElectricityConsumptionChart extends ChartWidget
             ->orderBy('date', 'desc')
             ->first();
 
-Log::info($endReading->counter_reading ." ### " . $endReading->counter_reading);            
+        //Log::info($endReading->counter_reading ." ### " . $endReading->counter_reading);            
 
         if (!$startReading || !$endReading) {
             return 0;

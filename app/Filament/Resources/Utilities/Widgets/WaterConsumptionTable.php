@@ -165,7 +165,7 @@ class WaterConsumptionTable extends BaseWidget
         return $consumption;
     }
 
-    private function getMeterDifference(?int $utilityTypeId, string $startOfMonth, string $endOfMonth): float
+    private function _oldgetMeterDifference(?int $utilityTypeId, string $startOfMonth, string $endOfMonth): float
     {
         if (!$utilityTypeId) {
             return 0;
@@ -209,5 +209,51 @@ class WaterConsumptionTable extends BaseWidget
         }
 
         return $difference;
+    }
+
+    private function getMeterDifference(?int $utilityTypeId, string $startOfMonth, string $endOfMonth): float
+    {
+        if (!$utilityTypeId) {
+            return 0;
+        }
+
+        // Haal de reading van deze maand
+        $currentReading = UtilityReading::where('utility_type_id', $utilityTypeId)
+            ->whereBetween('reading_date', [$startOfMonth, $endOfMonth])
+            ->orderBy('reading_date', 'desc')
+            ->first();
+
+        // Haal de reading van de vorige maand
+        $previousReading = UtilityReading::where('utility_type_id', $utilityTypeId)
+            ->where('reading_date', '<', $startOfMonth)
+            ->orderBy('reading_date', 'desc')
+            ->first();
+
+        if (!$currentReading || !$previousReading) {
+            return 0;
+        }
+
+        // Bereken basis verschil = huidige stand - vorige stand
+        $difference = $currentReading->meter_stand - $previousReading->meter_stand;
+
+        // Check ALTIJD of er een correctie is in deze periode (metervervanging)
+        // Dit geldt zowel voor negatieve verschillen (meter ging terug naar 0)
+        // als voor abnormaal hoge verschillen (nieuwe meter met hoge beginstand)
+        $correction = UtilityCorrection::where('utility_type_id', $utilityTypeId)
+            ->whereBetween('correction_date', [$startOfMonth, $endOfMonth])
+            ->first();
+
+        if ($correction) {
+            // Formule: (oude meter eindstand - vorige reading) + (huidige reading - nieuwe meter beginstand)
+            // Dit geeft het werkelijke verbruik over de meterwissel heen
+            $difference = ($correction->old_meter_final_reading - $previousReading->meter_stand)
+                + ($currentReading->meter_stand - $correction->new_meter_start_reading);
+
+            Log::info("old_meter_final_reading : $correction->old_meter_final_reading");
+            Log::info("previousReading->meter_stand : $previousReading->meter_stand");
+            Log::info("currentReading->meter_stand : $currentReading->meter_stand");
+            Log::info("new_meter_start_reading : $correction->new_meter_start_reading");
+        }
+        return max(0, $difference); // Voorkom negatieve waarden
     }
 }
