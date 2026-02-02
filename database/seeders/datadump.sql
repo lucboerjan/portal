@@ -380,6 +380,7 @@ CREATE TABLE IF NOT EXISTS `aandelen_fondsen` (
 
 -- Dumpen data van tabel portal.aandelen_fondsen: ~0 rows (ongeveer)
 DELETE FROM `aandelen_fondsen`;
+truncate TABLE `aandelen_fondsen`;
 INSERT INTO `aandelen_fondsen` (`id`, `isin`, `naam`, `url`, `fondsType`, `created_at`, `updated_at`) VALUES
 	(1, 'BE6247121302', 'ING Core Fund Balanced', 'https://www.tijd.be/markten-live/fondsen/in-ing-personal-portfolio-balanced-r.60008945.html', 'Aandeel', NULL, NULL),
 	(2, 'LU0119195450', 'NN (L) Patrimonial Aggressive', 'https://www.tijd.be/markten-live/fondsen/goldman-sachs-funds-v-goldman-sachs-patrimonial-aggressive-p-cap-eur.60139019.html', 'Aandeel', NULL, NULL),

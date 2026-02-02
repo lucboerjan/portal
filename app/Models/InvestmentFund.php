@@ -20,12 +20,12 @@ class InvestmentFund extends Model
         'fondsType' => 'string',
     ];
 
-    public function purchases(): HasMany
+    public function InvestmentPurchase(): HasMany
     {
         return $this->hasMany(InvestmentPurchase::class, 'fondsID');
     }
 
-    public function rates(): HasMany
+    public function InvestmentRate(): HasMany
     {
         return $this->hasMany(InvestmentRate::class, 'fondsID');
     }
@@ -101,5 +101,15 @@ class InvestmentFund extends Model
     {
         $latestRate = $this->rates()->latest('datum')->first();
         return $latestRate ? $latestRate->datum->format('d-m') : null;
+    }
+
+    // In je Fund model
+    public function getHuidigeWaardeAttribute(): float
+    {
+        $latestRate = $this->InvestmentRate()->latest('datum')->first();
+        if (!$latestRate) {
+            return 0;
+        }
+        return $this->InvestmentPurchase()->sum('aantal') * $latestRate->dagkoers;
     }
 }

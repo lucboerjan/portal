@@ -31,4 +31,11 @@ class InvestmentPurchase extends Model
     {
         return $this->aantal * $this->aankoopprijs;
     }
+
+
+    // In je Aankoop model
+    public function getAankoopbedragAttribute()
+    {
+        return $this->aantal * $this->aankoopprijs;
+    }
 }

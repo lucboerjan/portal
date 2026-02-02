@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Investments\InvestmentFunds;
 use App\Filament\Resources\Investments\InvestmentFunds\Pages\CreateInvestmentFund;
 use App\Filament\Resources\Investments\InvestmentFunds\Pages\EditInvestmentFund;
 use App\Filament\Resources\Investments\InvestmentFunds\Pages\ListInvestmentFunds;
+use App\Filament\Resources\Investments\InvestmentFunds\RelationManagers\InvestmentPurchaseRelationManager;
 use App\Filament\Resources\Investments\InvestmentFunds\Schemas\InvestmentFundForm;
 use App\Filament\Resources\Investments\InvestmentFunds\Tables\InvestmentFundsTable;
 use App\Models\InvestmentFund;
@@ -14,6 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
+use App\Filament\Resources\Investments\InvestmentFunds\RelationManagers\InvestmentRateRelationManager;
 
 class InvestmentFundResource extends Resource
 {
@@ -36,7 +38,8 @@ class InvestmentFundResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            InvestmentRateRelationManager::class,
+            InvestmentPurchaseRelationManager::class,
         ];
     }
 
