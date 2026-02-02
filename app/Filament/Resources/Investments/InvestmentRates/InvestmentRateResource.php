@@ -18,10 +18,16 @@ use UnitEnum;
 class InvestmentRateResource extends Resource
 {
     protected static ?string $model = InvestmentRate::class;
-            protected static string|UnitEnum|null $navigationGroup = 'Investments';
+    protected static string|UnitEnum|null $navigationGroup = 'Investments';
 
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPresentationChartLine;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
 
     public static function form(Schema $schema): Schema
     {

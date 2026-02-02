@@ -15,18 +15,34 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Forms\Components\DatePicker;
 
 class InvestmentRateRelationManager extends RelationManager
 {
     protected static string $relationship = 'InvestmentRate';
 
+    
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('datum')
+                DatePicker::make('datum')
                     ->required()
-                    ->maxLength(255),
+                    ->default(function () {
+                        $last = \App\Models\InvestmentRate::where('fondsID', $this->ownerRecord->id)
+                        ->orderBy('datum', 'desc')->first();
+
+                        return $last
+                            ? \Carbon\Carbon::parse($last->datum)->addDay()
+                            : now();
+                    })
+                    ->displayFormat('d-m-Y')   // wat jij wil zien
+                    ->native(false),           // mooie Filament datepicker
+
+                TextInput::make('dagkoers')
+                    ->required()
+                    ->numeric()
+                    ->label('Dagkoers'),
             ]);
     }
 
@@ -38,7 +54,7 @@ class InvestmentRateRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('datum')
                     ->date('d-m-Y')
-                    
+
                     ->searchable(),
                 TextColumn::make('dagkoers')
                     ->label('Dagkoers')
