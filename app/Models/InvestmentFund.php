@@ -112,4 +112,46 @@ class InvestmentFund extends Model
         }
         return $this->InvestmentPurchase()->sum('aantal') * $latestRate->dagkoers;
     }
+
+
+    public function aandelenAankopen()
+    {
+        return $this->hasMany(InvestmentPurchase::class, 'fondsID');
+    }
+
+    // App\Models\InvestmentFund.php
+
+    public function getLaatsteKoersAttribute()
+    {
+        return $this->investmentRate()
+            ->orderBy('datum', 'desc')
+            ->first();
+    }
+
+
+    public function getTotaleInvestering()
+    {
+        // Som van (aantal * prijs_per_aandeel) voor alle aankopen
+        return $this->aandelenAankopen()
+            ->get()
+            ->sum(function ($aankoop) {
+                return $aankoop->aantal * $aankoop->aankoopprijs;
+            });
+    }
+
+    public function getRendementEuroAttribute()
+    {
+        return $this->getHuidigeWaardeAttribute() - $this->getTotaleInvestering();
+    }
+
+    public function getRendementPercentageAttribute()
+    {
+        $totaleInvestering = $this->getTotaleInvestering();
+
+        if ($totaleInvestering > 0) {
+            return ($this->getRendementEuroAttribute() / $totaleInvestering) * 100;
+        }
+
+        return 0;
+    }
 }
