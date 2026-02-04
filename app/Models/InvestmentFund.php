@@ -33,12 +33,12 @@ class InvestmentFund extends Model
     // Helper functions for calculations
     public function getTotalQuantityAttribute(): float
     {
-        return $this->purchases->sum('aantal');
+        return $this->InvestmentPurchase->sum('aantal');
     }
 
     public function getPurchaseAmountAttribute(): float
     {
-        return $this->purchases->sum(function ($purchase) {
+        return $this->InvestmentPurchase->sum(function ($purchase) {
             return $purchase->aantal * $purchase->aankoopprijs;
         });
     }
