@@ -20,6 +20,7 @@ class InvestmentOverview extends Page
          return [
             \App\Filament\Resources\Investments\Widgets\InvestmentOverzichtStat::class,
             \App\Filament\Resources\Investments\Widgets\FondsKoersontwikkelingChart::class
+            //\App\Filament\Resources\Investments\Widgets\FondsKoersontwikkelingWidget::class,
 
          ];
     }

@@ -25,6 +25,7 @@ class UtilityOverview extends Page
             \App\Filament\Resources\Utilities\Widgets\GasConsumptionChart::class,
             \App\Filament\Resources\Utilities\Widgets\WaterConsumptionChart::class,
             \App\Filament\Resources\Utilities\Widgets\ElectricityConsumptionTable::class,
+            \App\Filament\Resources\Utilities\Widgets\SolarPanelProductionTable::class,
             \App\Filament\Resources\Utilities\Widgets\WaterConsumptionTable::class,
             \App\Filament\Resources\Utilities\Widgets\GasConsumptionTable::class,
         ];

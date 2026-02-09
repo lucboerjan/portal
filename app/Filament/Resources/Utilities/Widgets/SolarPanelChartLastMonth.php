@@ -41,6 +41,7 @@ class SolarPanelChartLastMonth extends ChartWidget
                     'data' => $rows->pluck('daily'),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => 'rgba(14,165,233,0.2)',
+                    'fill' => true,
                     'tension' => 0.3,
                 ],
             ],

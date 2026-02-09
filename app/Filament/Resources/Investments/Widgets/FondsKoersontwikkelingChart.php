@@ -2,81 +2,65 @@
 
 namespace App\Filament\Resources\Investments\Widgets;
 
-use App\Models\InvestmentFund as Fonds;
+use App\Models\InvestmentFund as Fund;
 use Filament\Widgets\ChartWidget;
-
-
+use Illuminate\Support\Facades\Log;
 
 class FondsKoersontwikkelingChart extends ChartWidget
 {
-    protected ?string $heading = 'Koersontwikkeling per Fonds (90 dagen)';
+    protected  ?string $heading = 'Trend van de koersen';
+    protected  ?string $maxHeight = '350px';
+    protected  string $color = 'primary';
+    public  ?string $filter = null;
 
-    protected static ?int $sort = 4;
+    protected int|string|array $columnSpan = 'full';
 
-    protected int | string | array $columnSpan = 'full';
 
-    public ?string $filter = null;
 
-    protected ?string $maxHeight = '400px';
+    public function filters(): ?array
+    {
+        return Fund::pluck('name', 'id')->toArray();
+    }
 
     protected function getData(): array
     {
         $fondsId = $this->filter;
 
-        if (!$fondsId) {
-            $fonds = Fonds::has('InvestmentPurchase')->first();
-            if (!$fonds) {
-                return [
-                    'datasets' => [],
-                    'labels' => [],
-                ];
-            }
-            $fondsId = $fonds->id;
-        }
 
-        $fonds = Fonds::with('InvestmentRate')->find($fondsId);
+        $fund = Fund::find($fondsId);
 
-        if (!$fonds) {
+        if (! $fund) {
             return [
                 'datasets' => [],
                 'labels' => [],
             ];
         }
 
-        $dagkoersen = $fonds->InvestmentRate()
-            ->where('datum', '>=', now()->subDays(2900))
-            ->orderBy('datum', 'asc')
+        $dagkoersen = $fund->InvestmentRate()
+            ->orderBy('datum')
             ->get();
 
-        $labels = $dagkoersen->pluck('datum')->map(fn($datum) => $datum->format('d-m-Y'))->toArray();
-        $koersen = $dagkoersen->pluck('dagkoers')->map(fn($koers) => (float) $koers)->toArray();
 
-        // Bereken gemiddelde voor referentielijn
-        $gemiddelde = !empty($koersen) ? array_sum($koersen) / count($koersen) : 0;
-        $gemiddeldeData = array_fill(0, count($labels), $gemiddelde);
+        $labels = $dagkoersen->pluck('datum')->map(fn($d) => $d->format('d-m-Y'));
 
+        $filteredLabels = $labels/* ->filter(function ($date) {
+            $month = (int) substr($date, 5, 2);
+            $day   = (int) substr($date, 0, 2);
+
+            // Toon enkel labels op de eerste dag van maand 1,5,9
+            return $day === 1 && in_array($month, [1, 5, 9, 12]);
+        })->values();  */
+;
         return [
             'datasets' => [
                 [
-                    'label' => 'Koers',
-                    'data' => $koersen,
-                    'borderColor' => 'rgb(34, 197, 94)',
-                    'backgroundColor' => 'rgba(34, 197, 94, 0.1)',
-                    'fill' => true,
+                    'label' => $fund->naam,
+                    'data' => $dagkoersen->pluck('dagkoers'),
+                    'borderColor' => '#3b82f6',
                     'tension' => 0.3,
-                    'pointRadius' => 2,
-                    'pointHoverRadius' => 5,
-                ],
-                [
-                    'label' => 'Gemiddelde',
-                    'data' => $gemiddeldeData,
-                    'borderColor' => 'rgb(251, 146, 60)',
-                    'borderDash' => [5, 5],
-                    'fill' => false,
-                    'pointRadius' => 0,
                 ],
             ],
-            'labels' => $labels,
+            'labels' => $filteredLabels,
         ];
     }
 
@@ -87,50 +71,16 @@ class FondsKoersontwikkelingChart extends ChartWidget
 
     protected function getFilters(): ?array
     {
-        $fondsen = Fonds::has('InvestmentPurchase')
+        return Fund::has('InvestmentPurchase')
             ->orderBy('naam')
             ->pluck('naam', 'id')
             ->toArray();
-
-        return $fondsen;
     }
 
-    protected function getOptions(): array
+    public function mount(): void
     {
-        return [
-            'plugins' => [
-                'legend' => [
-                    'display' => true,
-                    'position' => 'bottom',
-                ],
-                'tooltip' => [
-                    'callbacks' => [
-                        'label' => "function(context) {
-                            return context.dataset.label + ': €' + context.parsed.y.toFixed(4);
-                        }",
-                    ],
-                ],
-            ],
-            'scales' => [
-                'y' => [
-                    'ticks' => [
-                        'callback' => "function(value) {
-                            return '€' + value.toFixed(2);
-                        }",
-                    ],
-                ],
-                'x' => [
-                    'ticks' => [
-                        'maxTicksLimit' => 10,
-                        'maxRotation' => 45,
-                        'minRotation' => 45,
-                    ],
-                ],
-            ],
-            'interaction' => [
-                'mode' => 'index',
-                'intersect' => false,
-            ],
-        ];
+        $this->filter = Fund::has('InvestmentPurchase')
+            ->orderBy('id')
+            ->value('id');
     }
 }
