@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \App\Models\UtilitySolarPanelReading::observe(\App\Observers\SolarPanelReadingObserver::class);
+ 
     }
 }

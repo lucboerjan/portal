@@ -10,4 +10,8 @@ class UtilitySolarPanelReading extends Model
         'date',
         'counter_reading',
     ];
+
+    protected $casts = [
+        'date' => 'date',
+    ];
 }
