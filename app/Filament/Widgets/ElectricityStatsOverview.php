@@ -1,11 +1,11 @@
 <?php
 
+// app/Filament/Widgets/ElectricityStatsOverview.php
 namespace App\Filament\Widgets;
 
-use App\Models\UtilityType;
-use App\Services\UtilityConsumptionService;
+use App\Services\Utility\UtilityConsumptionService;
+
 use Filament\Widgets\Widget;
-use Illuminate\Support\Facades\Log;
 
 class ElectricityStatsOverview extends Widget
 {
@@ -13,98 +13,88 @@ class ElectricityStatsOverview extends Widget
     
     protected int | string | array $columnSpan = 'full';
     
-    public ?int $selectedUtilityTypeId = null;
+    public string $typeFilter = 'electricity';
     
-    public function mount(): void
-    {
-        // Selecteer standaard het eerste elektriciteitstype
-        $this->selectedUtilityTypeId =  UtilityType::where('type', 'electricity')->first()?->id;
-    }
+    protected UtilityConsumptionService $service;
     
-    public function getUtilityTypes()
+    public function boot(UtilityConsumptionService $service): void
     {
-        return UtilityType::where('type', 'like','electricity')->get();
-    }
-    
-    public function getConsumptionData()
-    {
-        if (!$this->selectedUtilityTypeId) {
-            return collect();
-        }
-        
-        $service = app(UtilityConsumptionService::class);
-        return $service->getMonthlyConsumption($this->selectedUtilityTypeId);
+        $this->service = $service;
     }
     
     public function getTableData()
     {
-        $data = $this->getConsumptionData();
-        Log::info('Verwerkte data voor tabel:', ['data' => $data->toArray()]);
-        
-        // Groepeer per jaar en maand
-        $years = $data->pluck('year')->unique()->sort()->values();
-        $months = range(1, 12);
-        
-        $tableData = [];
-        
-        foreach ($years as $year) {
-            $row = ['year' => $year];
-            foreach ($months as $month) {
-                $consumption = $data->firstWhere(function ($item) use ($year, $month) {
-                    return $item['year'] == $year && $item['month'] == $month;
-                });
-                $row["month_$month"] = $consumption ? $consumption['consumption'] : null;
-            }
-            $tableData[] = $row;
-        }
-        
-        return $tableData;
+        return $this->service->getTableStructure($this->typeFilter);
     }
     
     public function getChartData()
     {
-        $data = $this->getConsumptionData();
+        $allData = $this->service->getMonthlyConsumptionAllTypes($this->typeFilter);
         
-        $years = $data->pluck('year')->unique()->sort();
-        
-        $datasets = [];
-        foreach ($years as $year) {
-            $yearData = $data->filter(fn($item) => $item['year'] == $year);
-            
-            $monthlyValues = [];
-            for ($month = 1; $month <= 12; $month++) {
-                $value = $yearData->firstWhere('month', $month);
-                $monthlyValues[] = $value ? (float) $value['consumption'] : null;
-            }
-            
-            $datasets[] = [
-                'label' => (string) $year,
-                'data' => $monthlyValues,
-                'borderColor' => $this->getColorForYear($year),
-                'backgroundColor' => $this->getColorForYear($year, 0.1),
-                'tension' => 0.4,
+        if ($allData->isEmpty()) {
+            return [
+                'labels' => [],
+                'datasets' => [],
             ];
         }
         
+        // Verzamel alle periodes
+        $allPeriods = collect();
+        foreach ($allData as $typeData) {
+            $allPeriods = $allPeriods->merge($typeData['data']->pluck('period'));
+        }
+        $allPeriods = $allPeriods->unique()->sort()->values();
+        
+        // Bouw datasets per utility type
+        $datasets = [];
+        $colorIndex = 0;
+        
+        foreach ($allData as $utilityTypeId => $typeData) {
+            $values = [];
+            
+            foreach ($allPeriods as $period) {
+                $consumption = $typeData['data']->get($period);
+                $values[] = $consumption ? (float) $consumption['consumption'] : null;
+            }
+            
+            $datasets[] = [
+                'label' => $typeData['type']->name,
+                'data' => $values,
+                'borderColor' => $this->getColor($colorIndex),
+                'backgroundColor' => $this->getColor($colorIndex, 0.1),
+                'tension' => 0.4,
+                'spanGaps' => true, // Verbind lijnen ook bij ontbrekende data
+            ];
+            
+            $colorIndex++;
+        }
+        
+        // Format labels (bijv. "2025-01" -> "Jan 2025")
+        $labels = $allPeriods->map(function($period) {
+            $date = \Carbon\Carbon::parse($period . '-01');
+            return $date->format('M Y');
+        })->toArray();
+        
         return [
-            'labels' => ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+            'labels' => $labels,
             'datasets' => $datasets,
         ];
     }
     
-    private function getColorForYear(int $year, float $alpha = 1)
+    private function getColor(int $index, float $alpha = 1)
     {
         $colors = [
-            'rgb(59, 130, 246)',  // blue
-            'rgb(16, 185, 129)',  // green
-            'rgb(245, 158, 11)',  // amber
-            'rgb(239, 68, 68)',   // red
-            'rgb(168, 85, 247)',  // purple
-            'rgb(236, 72, 153)',  // pink
+            'rgb(59, 130, 246)',   // blue
+            'rgb(16, 185, 129)',   // green
+            'rgb(245, 158, 11)',   // amber
+            'rgb(239, 68, 68)',    // red
+            'rgb(168, 85, 247)',   // purple
+            'rgb(236, 72, 153)',   // pink
+            'rgb(14, 165, 233)',   // sky
+            'rgb(34, 197, 94)',    // emerald
         ];
         
-        $index = $year % count($colors);
-        $color = $colors[$index];
+        $color = $colors[$index % count($colors)];
         
         if ($alpha < 1) {
             return str_replace('rgb', 'rgba', str_replace(')', ", $alpha)", $color));

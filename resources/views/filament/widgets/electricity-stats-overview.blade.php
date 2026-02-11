@@ -2,117 +2,140 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         <div class="space-y-6">
-            {{-- Utility Type Selector --}}
-            <div>
-                <x-filament::input.wrapper>
-                    <x-filament::input.select wire:model.live="selectedUtilityTypeId">
-                        <option value="">Selecteer een type</option>
-                        @foreach($this->getUtilityTypes() as $type)
-                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                        @endforeach
-                    </x-filament::input.select>
-                </x-filament::input.wrapper>
+            {{-- Grafiek bovenaan --}}
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                <canvas id="consumption-chart-{{ $this->getId() }}" style="max-height: 400px;"></canvas>
             </div>
 
-            @if($this->selectedUtilityTypeId)
-                {{-- Tabel met maandelijks verbruik --}}
+            {{-- Tabel onderaan --}}
+            @php
+                $tableData = $this->getTableData();
+            @endphp
+
+            @if (count($tableData['headers']) > 0)
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <table
+                        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm border border-gray-300 dark:border-gray-600">
                         <thead>
-                            <tr>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Jaar</th>
-                                @foreach(['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'] as $month)
-                                    <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400">{{ $month }}</th>
+                            {{-- Eerste rij: ID's --}}
+                            <tr class="bg-gray-50 dark:bg-gray-900">
+                                <th
+                                    class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border-r border-gray-300 dark:border-gray-600">
+                                    Periode
+                                </th>
+                                @foreach ($tableData['headers'] as $utilityType)
+                                    <th
+                                        class="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 border-r border-gray-300 dark:border-gray-600 last:border-r-0">
+                                        ID: {{ $utilityType->id }}
+                                    </th>
+                                @endforeach
+                            </tr>
+                            {{-- Tweede rij: Namen --}}
+                            <tr class="bg-gray-50 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-600">
+                                <th
+                                    class="px-3 py-2 text-left text-xs font-medium text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600">
+                                    Maand
+                                </th>
+                                @foreach ($tableData['headers'] as $utilityType)
+                                    <th
+                                        class="px-3 py-2 text-right text-xs font-medium text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 last:border-r-0">
+                                        {{ $utilityType->name }}
+                                    </th>
                                 @endforeach
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @foreach($this->getTableData() as $row)
-                                <tr>
-                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $row['year'] }}</td>
-                                    @for($month = 1; $month <= 12; $month++)
-                                        <td class="px-3 py-2 text-sm text-right text-gray-700 dark:text-gray-300">
-                                            @if($row["month_$month"] !== null)
-                                                {{ number_format($row["month_$month"], 2, ',', '.') }}
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
+                            @foreach ($tableData['rows'] as $row)
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td
+                                        class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap border-r border-gray-300 dark:border-gray-600">
+                                        {{ $row['date']->format('M Y') }}
+                                    </td>
+                                    @foreach ($tableData['headers'] as $utilityType)
+                                        <td
+                                            class="px-3 py-2 text-sm text-right text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 last:border-r-0">
+                                            @if (isset($row[$utilityType->id]) && $row[$utilityType->id] !== null)
+                                                {{ number_format($row[$utilityType->id], 2, ',', '.') }}
+                                                {{-- <span class="text-xs text-gray-500">{{ $utilityType->unit }}</span> --}}
                                             @else
                                                 <span class="text-gray-400">-</span>
                                             @endif
                                         </td>
-                                    @endfor
+                                    @endforeach
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-
-                {{-- Chart --}}
-                <div>
-                    <canvas id="consumption-chart-{{ $this->getId() }}" wire:ignore></canvas>
+            @else
+                <div class="text-center py-8 text-gray-500">
+                    Geen data beschikbaar
                 </div>
+            @endif
+        </div>
 
-                @script
-                <script>
-                    const ctx = document.getElementById('consumption-chart-{{ $this->getId() }}');
-                    let chart = null;
-                    
-                    function updateChart() {
-                        const data = @js($this->getChartData());
-                        
-                        if (chart) {
-                            chart.destroy();
-                        }
-                        
-                        chart = new Chart(ctx, {
-                            type: 'line',
-                            data: data,
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: true,
-                                aspectRatio: 2.5,
-                                plugins: {
-                                    legend: {
-                                        position: 'top',
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Maandelijks Verbruik'
-                                    },
-                                    tooltip: {
-                                        callbacks: {
-                                            label: function(context) {
-                                                let label = context.dataset.label || '';
-                                                if (label) {
-                                                    label += ': ';
-                                                }
-                                                if (context.parsed.y !== null) {
-                                                    label += context.parsed.y.toFixed(2) + ' kWh';
-                                                }
-                                                return label;
-                                            }
-                                        }
-                                    }
+        @script
+            <script>
+                const ctx = document.getElementById('consumption-chart-{{ $this->getId() }}');
+                let chart = null;
+
+                function updateChart() {
+                    const data = @js($this->getChartData());
+
+                    if (chart) {
+                        chart.destroy();
+                    }
+
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: data,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
                                 },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        title: {
-                                            display: true,
-                                            text: 'Verbruik (kWh)'
+                                title: {
+                                    display: true,
+                                    text: 'Maandelijks Elektriciteitsverbruik'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed.y !== null) {
+                                                label += context.parsed.y.toFixed(2) + ' kWh';
+                                            }
+                                            return label;
                                         }
                                     }
                                 }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Verbruik (kWh)'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Periode'
+                                    }
+                                }
                             }
-                        });
-                    }
-                    
-                    updateChart();
-                    
-                    Livewire.on('selectedUtilityTypeIdUpdated', () => {
-                        setTimeout(() => updateChart(), 100);
+                        }
                     });
-                </script>
-                @endscript
-            @endif
-        </div>
+                }
+
+                updateChart();
+            </script>
+        @endscript
     </x-filament::section>
 </x-filament-widgets::widget>

@@ -15,6 +15,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Forms\Components\DatePicker;
 
 class InvestmentPurchaseRelationManager extends RelationManager
 {
@@ -24,9 +25,24 @@ class InvestmentPurchaseRelationManager extends RelationManager
     {
         return $schema
             ->components([
-                TextInput::make('datum')
+
+                DatePicker::make('datum')
                     ->required()
-                    ->maxLength(255),
+                    ->default(now())
+                    ->displayFormat('d-m-Y')
+                    ->native(false),
+
+                TextInput::make('aantal')
+                    ->required()
+                    ->numeric()
+                    ->minValue(0),
+
+
+                TextInput::make('aankoopprijs')
+                    ->required()
+                    ->numeric()
+                    ->minValue(0),
+
             ]);
     }
 
