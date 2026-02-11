@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Resources\Utilities\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class WaterGasStatsOverview extends StatsOverviewWidget
+class WaterStatsOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {

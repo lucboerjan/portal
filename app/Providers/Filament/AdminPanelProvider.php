@@ -19,7 +19,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Facades\Filament;
-
+use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Assets\Js;
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -58,11 +59,15 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 
-    public function boot()
+   public function boot()
 {
     Filament::registerRenderHook(
         'panels::body.end',
-        fn () => view('filament.collapse-nav')
-    );
+        fn() => view('filament.collapse-nav')
+    ); 
+  
+    FilamentAsset::register([
+        Js::make('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
+    ]);
 }
 }
