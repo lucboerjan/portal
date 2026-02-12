@@ -11,7 +11,13 @@ class UtilityCorrection extends Model
         'correction_date',
         'old_meter_final_reading',
         'new_meter_start_reading',
-        'note',
+        'reason',
+    ];
+
+    protected $casts = [
+        'correction_date' => 'date',
+        'old_meter_final_reading' => 'decimal:2',
+        'new_meter_start_reading' => 'decimal:2',
     ];
 
     public function utilityType()

@@ -19,10 +19,10 @@ class UtilityCorrectionResource extends Resource
 {
     protected static ?string $model = UtilityCorrection::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Utilities';
+    //protected static string|UnitEnum|null $navigationGroup = 'Utilities';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Pencil;
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 140;
 
 
     public static function form(Schema $schema): Schema
@@ -50,4 +50,12 @@ class UtilityCorrectionResource extends Resource
             'edit' => EditUtilityCorrection::route('/{record}/edit'),
         ];
     }
+
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Utilities';
+    }
+
+
 }

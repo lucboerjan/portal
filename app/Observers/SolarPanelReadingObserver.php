@@ -11,7 +11,7 @@ class SolarPanelReadingObserver
     public function created(UtilitySolarPanelReading $reading)
     {
         $utilityTypeId = 5;
-       
+
 
         if ($reading->date instanceof \DateTime) {
             $month = $reading->date->format('m');
@@ -21,7 +21,7 @@ class SolarPanelReadingObserver
             // Handle the case when $reading->date is not a valid DateTime object
             Log::error('date is not valid: ' . $reading->date);
         }
- 
+
 
         // Zoek maandrecord op basis van reading_date
         $monthly = UtilityReading::where('utility_type_id', $utilityTypeId)
@@ -37,11 +37,11 @@ class SolarPanelReadingObserver
         }
 
         // Datum moet hoogste datum van de maand zijn
-if ($reading->date instanceof \DateTime && $monthly->reading_date instanceof \DateTime) {
-    if ($reading->date > $monthly->reading_date) {
-        $monthly->reading_date = $reading->date;
-    }
-}
+        if ($reading->date instanceof \DateTime && $monthly->reading_date instanceof \DateTime) {
+            if ($reading->date > $monthly->reading_date) {
+                $monthly->reading_date = $reading->date;
+            }
+        }
 
         // Tellerstand zonnepanelen bijwerken
         $monthly->meter_stand = $reading->counter_reading;
@@ -62,7 +62,7 @@ if ($reading->date instanceof \DateTime && $monthly->reading_date instanceof \Da
             // Handle the case when $reading->date is not a valid DateTime object
             Log::error('date is not valid: ' . $reading->date);
         }
-    
+
         // Zoek het maandrecord
         $monthly = UtilityReading::where('utility_type_id', $utilityTypeId)
             ->whereYear('reading_date', $year)

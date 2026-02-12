@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\Utilities\UtilityReadings\UtilityReadingResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -21,6 +22,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Assets\Js;
+use Filament\Navigation\NavigationGroup;
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -57,18 +60,31 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+
+
+            ])
+
+            ->navigationGroups([
+                NavigationGroup::make('Investments')
+                    ->label('Investments')
+                    ->collapsed(), // Collapses this group by default
+
+                NavigationGroup::make('Utilities')
+                    ->label('Utilities')
+                    ->collapsed(), // Collapses this group by default
+
             ]);
     }
 
-   public function boot()
-{
-    Filament::registerRenderHook(
-        'panels::body.end',
-        fn() => view('filament.collapse-nav')
-    ); 
-  
-    FilamentAsset::register([
-        Js::make('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
-    ]);
-}
+    public function boot()
+    {
+        Filament::registerRenderHook(
+            'panels::body.end',
+            fn() => view('filament.collapse-nav')
+        );
+
+        FilamentAsset::register([
+            Js::make('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
+        ]);
+    }
 }

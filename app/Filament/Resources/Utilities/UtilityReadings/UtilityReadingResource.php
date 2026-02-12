@@ -19,9 +19,8 @@ class UtilityReadingResource extends Resource
 {
     protected static ?string $model = UtilityReading::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Utilities';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChartBar;
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 120;
 
     public static function form(Schema $schema): Schema
     {
@@ -47,5 +46,10 @@ class UtilityReadingResource extends Resource
             'create' => CreateUtilityReading::route('/create'),
             'edit' => EditUtilityReading::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Utilities';
     }
 }

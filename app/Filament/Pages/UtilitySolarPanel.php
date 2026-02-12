@@ -5,24 +5,16 @@ namespace App\Filament\Pages;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables;
 use Filament\Pages\Page;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Filament\Forms\Components\Select;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Notifications\Notification;
 use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Infolists\Components\TextEntry;
 use App\Models\UtilitySolarPanelReading;
 use UnitEnum;
 
@@ -35,7 +27,7 @@ class UtilitySolarPanel extends Page implements HasTable
 
   // protected static ?string $navigationGroup = 'Utilities';
    protected static string | UnitEnum | null $navigationGroup = 'Utilities';
-   protected static ?int $navigationSort = 10;
+   protected static ?int $navigationSort = 100;
 
    
    protected string $view = 'filament.pages.solar-panel-counter';
@@ -45,7 +37,7 @@ class UtilitySolarPanel extends Page implements HasTable
 
     public function mount(): void
     {
-        $last = \App\Models\UtilitySolarPanelReading::orderBy('date', 'desc')->first();
+        $last =UtilitySolarPanelReading::orderBy('date', 'desc')->first();
 
         $this->form->fill([
             'date' => $last
@@ -131,7 +123,7 @@ class UtilitySolarPanel extends Page implements HasTable
                     ->numeric(2),
 
             ])
-            ->paginated([10, 25, 50, 100], true)
+            ->paginated([10, 25, 50, 100])
             ->paginationPageOptions([10, 25, 50, 100])
             
             ->filters([

@@ -19,9 +19,6 @@ class UtilityTypeResource extends Resource
 {
     protected static ?string $model = UtilityType::class;
 
-   protected static string|UnitEnum|null $navigationGroup = 'Utilities';
-
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::RectangleGroup;
     protected static ?int $navigationSort = 30;
 
@@ -50,5 +47,10 @@ class UtilityTypeResource extends Resource
             'create' => CreateUtilityType::route('/create'),
             'edit' => EditUtilityType::route('/{record}/edit'),
         ];
+    }
+
+        public static function getNavigationGroup(): ?string
+    {
+        return 'Utilities';
     }
 }
