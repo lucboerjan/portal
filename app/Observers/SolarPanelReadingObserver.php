@@ -4,15 +4,23 @@ namespace App\Observers;
 
 use App\Models\UtilitySolarPanelReading;
 use App\Models\UtilityReading;
+use App\Models\UtilityType;
 use Illuminate\Support\Facades\Log;
 
 class SolarPanelReadingObserver
 {
+ protected int $utilityTypeId;
+
+    public function __construct()
+    {
+        $this->utilityTypeId = UtilityType::where('name', 'Zonnepanelen')->value('id');
+        Log::info('SolarPanelReadingObserver initialized');
+    }
+
+
     public function created(UtilitySolarPanelReading $reading)
     {
-        $utilityTypeId = 5;
-
-
+        Log::info('Created new solar panel reading with data: ' . json_encode($reading->toArray()));
         if ($reading->date instanceof \DateTime) {
             $month = $reading->date->format('m');
             $year = $reading->date->format('Y');
@@ -24,7 +32,7 @@ class SolarPanelReadingObserver
 
 
         // Zoek maandrecord op basis van reading_date
-        $monthly = UtilityReading::where('utility_type_id', $utilityTypeId)
+        $monthly = UtilityReading::where('utility_type_id', $this->utilityTypeId)
             ->whereYear('reading_date', $year)
             ->whereMonth('reading_date', $month)
             ->first();
@@ -32,27 +40,24 @@ class SolarPanelReadingObserver
         // Bestaat het record niet? Maak het aan
         if (!$monthly) {
             $monthly = new UtilityReading();
-            $monthly->utility_type_id = $utilityTypeId;
+            $monthly->utility_type_id = $this->utilityTypeId;
             $monthly->reading_date = $reading->date;
         }
 
         // Datum moet hoogste datum van de maand zijn
-        if ($reading->date instanceof \DateTime && $monthly->reading_date instanceof \DateTime) {
-            if ($reading->date > $monthly->reading_date) {
-                $monthly->reading_date = $reading->date;
-            }
+        if ($reading->date > $monthly->reading_date) {
+            $monthly->reading_date = $reading->date;
         }
 
         // Tellerstand zonnepanelen bijwerken
         $monthly->meter_stand = $reading->counter_reading;
-
+        Log::info('Updating monthly record for month ' . $month . '-' . $year . ' with date ' . $monthly->reading_date . ' and meter stand ' . $monthly->meter_stand);
         $monthly->save();
     }
 
 
     public function updated(UtilitySolarPanelReading $reading)
     {
-        $utilityTypeId = 5;
 
         if ($reading->date instanceof \DateTime) {
             $month = $reading->date->format('m');
@@ -64,7 +69,7 @@ class SolarPanelReadingObserver
         }
 
         // Zoek het maandrecord
-        $monthly = UtilityReading::where('utility_type_id', $utilityTypeId)
+        $monthly = UtilityReading::where('utility_type_id', $this->utilityTypeId)
             ->whereYear('reading_date', $year)
             ->whereMonth('reading_date', $month)
             ->first();
@@ -80,7 +85,47 @@ class SolarPanelReadingObserver
             $monthly->reading_date = $highestDaily->date;
             $monthly->meter_stand       = $highestDaily->counter_reading;
         }
+        Log::info('Updating monthly record for month ' . $month . '-' . $year . ' with date ' . $monthly->reading_date . ' and meter stand ' . $monthly->meter_stand);
 
         $monthly->save();
     }
+
+    Public function deleted(UtilitySolarPanelReading $reading)
+    {
+        if ($reading->date instanceof \DateTime) {
+            $month = $reading->date->format('m');
+            $year = $reading->date->format('Y');
+            Log::info('date is valid: ' . $month . '-' . $year);
+        } else {
+            // Handle the case when $reading->date is not a valid DateTime object
+            Log::error('date is not valid: ' . $reading->date);
+        }
+
+        // Zoek het maandrecord
+        $monthly = UtilityReading::where('utility_type_id', $this->utilityTypeId)
+            ->whereYear('reading_date', $year)
+            ->whereMonth('reading_date', $month)
+            ->first();
+
+        // Na verwijderen moeten we opnieuw de hoogste datum van die maand bepalen
+        $highestDaily = UtilitySolarPanelReading::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->orderByDesc('date')
+            ->first();
+
+        if ($highestDaily) {
+            $monthly->reading_date = $highestDaily->date;
+            $monthly->meter_stand       = $highestDaily->counter_reading;
+        } else {
+            // Geen dagelijkse readings meer, reset maandrecord
+            $monthly->reading_date = null;
+            $monthly->meter_stand       = null;
+        }
+        Log::info('Updating monthly record for month ' . $month . '-' . $year . ' with date ' . ($monthly->reading_date ?? 'null') . ' and meter stand ' . ($monthly->meter_stand ?? 'null'));
+
+        $monthly->save();
+    }
+
+
+
 }

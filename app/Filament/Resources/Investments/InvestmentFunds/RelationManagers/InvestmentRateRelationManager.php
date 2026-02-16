@@ -41,7 +41,6 @@ class InvestmentRateRelationManager extends RelationManager
                         ->aandelenAankopen()
                         ->sum('aantal');
                     
-                    Log::info('Totaal aantal bij hydration: ' . $totaal);
                     $set('totaal_aantal', $totaal);
                 }),
 
@@ -67,22 +66,20 @@ class InvestmentRateRelationManager extends RelationManager
                 ->live()
                 ->debounce(400)
                 ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                    Log::info('Dagkoers bijgewerkt: ' . $state);
+
                     
                     if ($get('__updating_waarde')) {
-                        Log::info('Skip dagkoers update - waarde wordt bijgewerkt');
+                        
                         return;
                     }
 
                     $totaal = (float) $get('totaal_aantal');
-                    Log::info('Totaal aantal bij dagkoers update: ' . $totaal);
+                   
                     
                     if ($state && $totaal > 0) {
                         $dagkoers = (float) $state;
                         $nieuweWaarde = round($dagkoers * $totaal, 2);
-                        
-                        Log::info('Bereken waarde: ' . $dagkoers . ' * ' . $totaal . ' = ' . $nieuweWaarde);
-                        
+                         
                         $set('__updating_dagkoers', true);
                         $set('waarde', $nieuweWaarde);
                         $set('__updating_dagkoers', false);
@@ -97,22 +94,18 @@ class InvestmentRateRelationManager extends RelationManager
                 ->live()
                 ->debounce(400)
                 ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                    Log::info('Waarde bijgewerkt: ' . $state);
                     
                     if ($get('__updating_dagkoers')) {
-                        Log::info('Skip waarde update - dagkoers wordt bijgewerkt');
+      
                         return;
                     }
 
                     $totaal = (float) $get('totaal_aantal');
-                    Log::info('Totaal aantal bij waarde update: ' . $totaal);
                     
                     if ($state && $totaal > 0) {
                         $waarde = (float) $state;
                         $nieuweDagkoers = round($waarde / $totaal, 2);
-                        
-                        Log::info('Bereken dagkoers: ' . $waarde . ' / ' . $totaal . ' = ' . $nieuweDagkoers);
-                        
+                                               
                         $set('__updating_waarde', true);
                         $set('dagkoers', $nieuweDagkoers);
                         $set('__updating_waarde', false);
