@@ -27,6 +27,7 @@ class EindeLoopbaanBdv extends Widget
         $vrijdagenLijst = $data['vrijdagen'];
         $verlofdagenLijst = $data['verlofdagen'];
         $verlofdagenPerJaar = $data['verlofdagen_per_jaar'];
+        $vvplusLijst = $data['vvplus'];
 
         // Start- en einddatum
         $startDate = Carbon::today();
@@ -39,13 +40,33 @@ class EindeLoopbaanBdv extends Widget
         while ($currentDate->lte($endDate)) {
             $isWerkdag = False;
             // Check of het een werkdag is (maandag t/m donderdag)
-            if ($currentDate->format('N') <= 4) {
+            if (in_array($currentDate->format('N'), [1, 3, 4])) {
                 // Check of het geen feestdag of verlofdag is
                 if (
                     !in_array($currentDate->format('Y-m-d'), $feestdagenLijst) &&
                     !in_array($currentDate->format('Y-m-d'), $verlofdagenLijst)
                 ) {
                     $werkdagenTeller++;
+                    $isWerkdag = True;
+                }
+            }
+            
+            if (in_array($currentDate->format('N'), [4])) {
+                // Check of het geen feestdag of verlofdag is
+                if (!in_array($currentDate->format('Y-m-d'), $vvplusLijst))
+                {
+                    $werkdagenTeller-= 0.5;
+                   
+                }
+            }
+
+            if (in_array($currentDate->format('N'), [2, 5])) {
+                // Check of het geen feestdag of verlofdag is
+                if (
+                    !in_array($currentDate->format('Y-m-d'), $feestdagenLijst) &&
+                    !in_array($currentDate->format('Y-m-d'), $verlofdagenLijst)
+                ) {
+                    $werkdagenTeller+= 0.5;
                     $isWerkdag = True;
                 }
             }
