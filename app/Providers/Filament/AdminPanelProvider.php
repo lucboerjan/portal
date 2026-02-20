@@ -28,6 +28,33 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+
+        $color = env('FILAMENT_COLOR', 'gray');
+
+        $colors = [
+            'gray' => Color::Gray,
+            'slate' => Color::Slate,
+            'zinc' => Color::Zinc,
+            'neutral' => Color::Neutral,
+            'red' => Color::Red,
+            'orange' => Color::Orange,
+            'amber' => Color::Amber,
+            'yellow' => Color::Yellow,
+            'lime' => Color::Lime,
+            'green' => Color::Green,
+            'emerald' => Color::Emerald,
+            'teal' => Color::Teal,
+            'cyan' => Color::Cyan,
+            'sky' => Color::Sky,
+            'blue' => Color::Blue,
+            'indigo' => Color::Indigo,
+            'violet' => Color::Violet,
+            'purple' => Color::Purple,
+            'fuchsia' => Color::Fuchsia,
+            'pink' => Color::Pink,
+            'rose' => Color::Rose,
+        ];
+
         return $panel
             ->default()
             ->id('admin')
@@ -35,7 +62,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => $colors[$color] ?? Color::Violet,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
