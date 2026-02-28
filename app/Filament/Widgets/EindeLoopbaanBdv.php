@@ -4,8 +4,9 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\Widget;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+use Ramsey\Uuid\Type\Integer;
 
 class EindeLoopbaanBdv extends Widget
 {
@@ -16,7 +17,22 @@ class EindeLoopbaanBdv extends Widget
     {
         return [
             'werkdagenTotPensioen' => $this->berekenWerkdagenTotPensioen(),
+            'kalenderDagen' => $this->berekenKalenderDagen(),
+            'pensioendatum' => $this->pensioenDatum()->format('d-m-Y'),
         ];
+    }
+
+    private function pensioenDatum()
+    {
+        return Carbon::create(2030, 12, 31);
+    }
+
+    private function berekenKalenderDagen()
+    {
+        $startDate = Carbon::today();
+        $endDate = $this->pensioenDatum();
+
+        return $startDate->diffInDays($endDate);
     }
 
     private function berekenWerkdagenTotPensioen()
@@ -27,19 +43,17 @@ class EindeLoopbaanBdv extends Widget
         $vrijdagenLijst = $data['vrijdagen'];
         $verlofdagenLijst = $data['verlofdagen'];
         $verlofdagenPerJaar = $data['verlofdagen_per_jaar'];
-        $vvplusLijst = $data['vvplus'];
+        $vvpPlusDagenLijst = $data['vvplus'];
 
         // Start- en einddatum
         $startDate = Carbon::today();
 
-        $endDate = Carbon::create(2029, 12, 31);
-
         $werkdagenTeller = 0;
         $currentDate = $startDate->copy();
 
-        while ($currentDate->lte($endDate)) {
+        while ($currentDate->lte($this->pensioenDatum())) {
             $isWerkdag = False;
-            // Check of het een werkdag is (maandag t/m donderdag)
+            // Check of het een werkdag is (maandag, woensdag, donderdag)
             if (in_array($currentDate->format('N'), [1, 3, 4])) {
                 // Check of het geen feestdag of verlofdag is
                 if (
@@ -50,23 +64,18 @@ class EindeLoopbaanBdv extends Widget
                     $isWerkdag = True;
                 }
             }
-            
-            if (in_array($currentDate->format('N'), [4])) {
-                // Check of het geen feestdag of verlofdag is
-                if (!in_array($currentDate->format('Y-m-d'), $vvplusLijst))
-                {
-                    $werkdagenTeller-= 0.5;
-                   
-                }
+            if (in_array($currentDate->format('Y-m-d'), $vvpPlusDagenLijst)) {
+                Log::info($currentDate->format('Y-m-d') . ' is een VVPlus dag');
+                $werkdagenTeller -= 0.5;
             }
 
             if (in_array($currentDate->format('N'), [2, 5])) {
-                // Check of het geen feestdag of verlofdag is
+
                 if (
                     !in_array($currentDate->format('Y-m-d'), $feestdagenLijst) &&
                     !in_array($currentDate->format('Y-m-d'), $verlofdagenLijst)
                 ) {
-                    $werkdagenTeller+= 0.5;
+                    $werkdagenTeller += 0.5;
                     $isWerkdag = True;
                 }
             }
@@ -85,8 +94,7 @@ class EindeLoopbaanBdv extends Widget
             $currentDate->addDay();
         }
         // Trek geplande verlofdagen per jaar af
-        foreach ($verlofdagenPerJaar as $jaar => $verlof) {
-
+        foreach ($verlofdagenPerJaar as $verlof) {
             $werkdagenTeller -= $verlof;
         }
 

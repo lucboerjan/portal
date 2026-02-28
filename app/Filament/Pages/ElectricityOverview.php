@@ -7,7 +7,7 @@ use Filament\Pages\Page;
 use UnitEnum;
 use BackedEnum;
 
-class Utilities extends Page
+class ElectricityOverview extends Page
 {
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bolt';
     protected  string $view = 'filament.pages.ElectricityOverview';

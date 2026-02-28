@@ -5,18 +5,33 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\Widget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Ramsey\Uuid\Type\Integer;
 
 class EindeLoopbaanLbj extends Widget
 {
     protected string $view = 'filament.widgets.einde-loopbaan-lbj';
     protected static null|int $sort = 1;
 
-
     protected function getViewData(): array
     {
         return [
             'werkdagenTotPensioen' => $this->berekenWerkdagenTotPensioen(),
+            'kalenderDagen' => $this->berekenKalenderDagen(),
+            'pensioendatum' => $this->pensioenDatum()->format('d-m-Y'),
         ];
+    }
+
+        private function pensioenDatum()
+    {
+        return Carbon::create(2026, 12, 31);
+    }
+
+    private function berekenKalenderDagen()
+    {
+        $startDate = Carbon::today();
+        $endDate = $this->pensioenDatum();
+
+        return $startDate->diffInDays($endDate);
     }
 
     private function berekenWerkdagenTotPensioen()
@@ -31,12 +46,10 @@ class EindeLoopbaanLbj extends Widget
         // Start- en einddatum
         $startDate = Carbon::today();
 
-        $endDate = Carbon::create(2026, 12, 31);
-
         $werkdagenTeller = 0;
         $currentDate = $startDate->copy();
 
-        while ($currentDate->lte($endDate)) {
+        while ($currentDate->lte($this->pensioenDatum())) {
             $isWerkdag = False;
             // Check of het een werkdag is (maandag t/m donderdag)
             if ($currentDate->format('N') <= 4) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Utility;
+namespace App\Services;
 
 use App\Models\UtilityReading;
 use Illuminate\Support\Facades\Log;

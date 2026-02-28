@@ -8,7 +8,8 @@
                  alt="retirement_man"
                  style="width: 64px; height: 64px;">
 
-            <h1 style="font-size: 1.5rem">Te presteren dagen tot pensioen: {{ $werkdagenTotPensioen }}</h1>
+            <h1 style="font-size: 1.3rem">Te presteren dagen tot pensioen: {{ $werkdagenTotPensioen }} ({{ $kalenderDagen }})<br>
+                Gekozen  pensioendatum : {{ $pensioendatum }}</h1>
         </div>
 
     </x-filament::section>
