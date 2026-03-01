@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Investments\Widgets;
 use App\Models\InvestmentFund;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Facades\Log ;
+use Illuminate\Support\Facades\Log;
 
 class InvestmentOverzichtStat extends BaseWidget
 {
@@ -33,7 +33,7 @@ class InvestmentOverzichtStat extends BaseWidget
                 ->description('Huidige waarde van alle fondsen')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('primary'),
-                //->chart($this->getPortfolioTrendData()),
+            //->chart($this->getPortfolioTrendData()),
 
             Stat::make('Totale Aankoopwaarde', '€ ' . number_format($totaalAankoopwaarde, 2, ',', '.'))
                 ->description('Totaal geïnvesteerd bedrag')
@@ -44,7 +44,7 @@ class InvestmentOverzichtStat extends BaseWidget
                 ->description(number_format($totaalRendementPercentage, 2, ',', '.') . '%')
                 ->descriptionIcon($totaalRendement >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($totaalRendement >= 0 ? 'success' : 'danger'),
-                //->chart($this->getRendementTrendData()),
+            //->chart($this->getRendementTrendData()),
         ];
     }
 
@@ -57,13 +57,13 @@ class InvestmentOverzichtStat extends BaseWidget
             $dagWaarde = 0;
 
             $fondsen = InvestmentFund::with(['InvestmentRate', 'InvestmentPurchase'])->get();
-            
+
             foreach ($fondsen as $fonds) {
                 $dagkoers = $fonds->InvestmentRate()
                     ->whereDate('datum', '<=', $datum)
                     ->orderBy('datum', 'desc')
                     ->first();
-    
+
 
                 if ($dagkoers) {
                     $dagWaarde += $fonds->getTotalQuantityAttribute() * $dagkoers->dagkoers;
@@ -71,7 +71,6 @@ class InvestmentOverzichtStat extends BaseWidget
             }
             $data[] = round($dagWaarde, 2);
         }
-        Log::info('Portfolio Trend Data: ' . implode(', ', $data));
         return $data;
     }
 
@@ -90,7 +89,7 @@ class InvestmentOverzichtStat extends BaseWidget
             }
         }
 
-        for ($i = 6000 ; $i >= 0; $i -= 10) {
+        for ($i = 6000; $i >= 0; $i -= 10) {
             $datum = now()->subDays($i);
             $dagWaarde = 0;
 
@@ -108,7 +107,6 @@ class InvestmentOverzichtStat extends BaseWidget
             }
 
             $rendement = $dagWaarde - $totaalAankoopwaarde;
-            Log::info('Portfolio Trend Data: ' . implode(', ', $data));
             $data[] = round($rendement, 2);
         }
 

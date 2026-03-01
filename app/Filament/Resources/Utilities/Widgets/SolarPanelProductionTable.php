@@ -208,12 +208,7 @@ class SolarPanelProductionTable extends BaseWidget
             // Dit geeft het werkelijke verbruik over de meterwissel heen
             $difference = ($correction->old_meter_final_reading - $previousReading->meter_stand)
                 + ($currentReading->meter_stand - $correction->new_meter_start_reading);
-
-            Log::info("old_meter_final_reading : $correction->old_meter_final_reading");
-            Log::info("previousReading->meter_stand : $previousReading->meter_stand");
-            Log::info("currentReading->meter_stand : $currentReading->meter_stand");
-            Log::info("new_meter_start_reading : $correction->new_meter_start_reading");
-        }
+      }
         return max(0, $difference); // Voorkom negatieve waarden
     }
 }

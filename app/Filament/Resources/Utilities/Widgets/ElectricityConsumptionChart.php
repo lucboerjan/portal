@@ -136,9 +136,7 @@ class ElectricityConsumptionChart extends ChartWidget
         // Haal de laatste reading van de maand uit de DAGELIJKSE zonnepanelen tabel
         $endReading = UtilitySolarPanelReading::where('date', '<=', $endOfMonth)
             ->orderBy('date', 'desc')
-            ->first();
-
-        //Log::info($endReading->counter_reading ." ### " . $endReading->counter_reading);            
+            ->first();         
 
         if (!$startReading || !$endReading) {
             return 0;

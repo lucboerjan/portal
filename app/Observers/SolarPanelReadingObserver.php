@@ -14,20 +14,17 @@ class SolarPanelReadingObserver
     public function __construct()
     {
         $this->utilityTypeId = UtilityType::where('name', 'Zonnepanelen')->value('id');
-        Log::info('SolarPanelReadingObserver initialized');
+        
     }
 
 
     public function created(UtilitySolarPanelReading $reading)
     {
-        Log::info('Created new solar panel reading with data: ' . json_encode($reading->toArray()));
         if ($reading->date instanceof \DateTime) {
             $month = $reading->date->format('m');
             $year = $reading->date->format('Y');
-            Log::info('date is valid: ' . $month . '-' . $year);
         } else {
             // Handle the case when $reading->date is not a valid DateTime object
-            Log::error('date is not valid: ' . $reading->date);
         }
 
 
@@ -51,7 +48,6 @@ class SolarPanelReadingObserver
 
         // Tellerstand zonnepanelen bijwerken
         $monthly->meter_stand = $reading->counter_reading;
-        Log::info('Updating monthly record for month ' . $month . '-' . $year . ' with date ' . $monthly->reading_date . ' and meter stand ' . $monthly->meter_stand);
         $monthly->save();
     }
 
@@ -62,10 +58,9 @@ class SolarPanelReadingObserver
         if ($reading->date instanceof \DateTime) {
             $month = $reading->date->format('m');
             $year = $reading->date->format('Y');
-            Log::info('date is valid: ' . $month . '-' . $year);
+    
         } else {
             // Handle the case when $reading->date is not a valid DateTime object
-            Log::error('date is not valid: ' . $reading->date);
         }
 
         // Zoek het maandrecord
@@ -85,9 +80,7 @@ class SolarPanelReadingObserver
             $monthly->reading_date = $highestDaily->date;
             $monthly->meter_stand       = $highestDaily->counter_reading;
         }
-        Log::info('Updating monthly record for month ' . $month . '-' . $year . ' with date ' . $monthly->reading_date . ' and meter stand ' . $monthly->meter_stand);
-
-        $monthly->save();
+         $monthly->save();
     }
 
     Public function deleted(UtilitySolarPanelReading $reading)
@@ -95,10 +88,8 @@ class SolarPanelReadingObserver
         if ($reading->date instanceof \DateTime) {
             $month = $reading->date->format('m');
             $year = $reading->date->format('Y');
-            Log::info('date is valid: ' . $month . '-' . $year);
         } else {
             // Handle the case when $reading->date is not a valid DateTime object
-            Log::error('date is not valid: ' . $reading->date);
         }
 
         // Zoek het maandrecord
@@ -121,7 +112,6 @@ class SolarPanelReadingObserver
             $monthly->reading_date = null;
             $monthly->meter_stand       = null;
         }
-        Log::info('Updating monthly record for month ' . $month . '-' . $year . ' with date ' . ($monthly->reading_date ?? 'null') . ' and meter stand ' . ($monthly->meter_stand ?? 'null'));
 
         $monthly->save();
     }

@@ -71,8 +71,6 @@ class EindeLoopbaanLbj extends Widget
             }
 
             $message = ($isWerkdag == true) ? ' is een werkdag' : ' is GEEN werkdag';
-            //Log::info($currentDate->format('Y-m-d') . $message);
-
 
             $currentDate->addDay();
         }

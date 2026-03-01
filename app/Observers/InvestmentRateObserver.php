@@ -33,7 +33,6 @@ class InvestmentRateObserver
         }
 
         $targetFondsId = self::FUND_MAPPING[$investmentRate->fondsID];
-        Log::info("Todo InvestmentRate bijwerken voor fonds {$targetFondsId}");
 
         try {
             self::$syncing = true;
@@ -48,11 +47,6 @@ class InvestmentRateObserver
                     'dagkoers' => $investmentRate->dagkoers,
                     // Voeg hier andere velden toe die je wilt synchroniseren
                 ]);
-
-                Log::info("InvestmentRate bijgewerkt voor fonds {$targetFondsId}", [
-                    'datum' => $investmentRate->datum,
-                    'dagkoers' => $investmentRate->dagkoers
-                ]);
             } else {
                 // Maak nieuw record
                 InvestmentRate::create([
@@ -61,14 +55,8 @@ class InvestmentRateObserver
                     'dagkoers' => $investmentRate->dagkoers,
                     // Voeg hier andere velden toe die je wilt synchroniseren
                 ]);
-
-                Log::info("InvestmentRate aangemaakt voor fonds {$targetFondsId}", [
-                    'datum' => $investmentRate->datum,
-                    'dagkoers' => $investmentRate->dagkoers
-                ]);
             }
         } catch (\Exception $e) {
-            Log::error("Fout bij synchroniseren InvestmentRate naar fonds {$targetFondsId}: " . $e->getMessage());
         } finally {
             // Reset de syncing flag - BELANGRIJK voor het voorkomen van loops!
             self::$syncing = false;
@@ -96,12 +84,7 @@ class InvestmentRateObserver
             InvestmentRate::where('fondsID', $targetFondsId)
                 ->where('datum', $investmentRate->datum)
                 ->delete();
-
-            Log::info("InvestmentRate verwijderd voor fonds {$targetFondsId}", [
-                'datum' => $investmentRate->datum
-            ]);
         } catch (\Exception $e) {
-            Log::error("Fout bij verwijderen InvestmentRate voor fonds {$targetFondsId}: " . $e->getMessage());
         } finally {
             self::$syncing = false;
         }

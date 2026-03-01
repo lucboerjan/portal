@@ -65,8 +65,7 @@ class EindeLoopbaanBdv extends Widget
                 }
             }
             if (in_array($currentDate->format('Y-m-d'), $vvpPlusDagenLijst)) {
-                Log::info($currentDate->format('Y-m-d') . ' is een VVPlus dag');
-                $werkdagenTeller -= 0.5;
+                                $werkdagenTeller -= 0.5;
             }
 
             if (in_array($currentDate->format('N'), [2, 5])) {
@@ -88,8 +87,7 @@ class EindeLoopbaanBdv extends Widget
             }
 
             $message = ($isWerkdag == true) ? ' is een werkdag' : ' is GEEN werkdag';
-            //Log::info($currentDate->format('Y-m-d') . $message);
-
+        
 
             $currentDate->addDay();
         }

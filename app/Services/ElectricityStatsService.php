@@ -38,7 +38,6 @@ class ElectricityStatsService
 
             $previous = $row->meter_end;
         }
-        Log::info('matrix', $matrix);
         return $matrix;
     }
 

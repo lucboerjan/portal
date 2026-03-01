@@ -20,9 +20,6 @@ class SendBackupSuccessMail
             ->path($backup->path());
 
         $to = env('BACKUP_NOTIFICATION_EMAIL');
-
-        Log::info("Backup successful email sent to {$to} with attachment: {$absolutePath}");
-
         Mail::to($to)->send(new BackupCompletedMail($absolutePath));
     }
 }

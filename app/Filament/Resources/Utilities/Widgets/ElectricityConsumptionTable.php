@@ -186,7 +186,6 @@ class ElectricityConsumptionTable extends BaseWidget
 
 
         // Formule: (Dagteller In + Nachteller In) - (Dagteller Uit + Nachteller Uit) + Zonnepanelen
-        //Log::info("Calculating consumption for {$month->format('Y-m')}: DagIn={$dagIn}, NachtIn={$nachtIn}, DagUit={$dagUit}, NachtUit={$nachtUit}, Zonnepanelen={$zonnepanelen}, Dagelectriciteit={$dagelectriciteit}, Nachtelectriciteit={$nachtelectriciteit}");
         $consumption = ($dagIn + $nachtIn  + $dagelectriciteit + $nachtelectriciteit) - ($dagUit + $nachtUit) + $zonnepanelen;
 
         return $consumption;
