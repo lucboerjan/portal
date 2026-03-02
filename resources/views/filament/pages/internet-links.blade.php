@@ -64,7 +64,8 @@
                             <span class="drag-handle" style="color: #9ca3af; cursor: grab;">
                                 <x-filament::icon icon="heroicon-o-bars-3" class="h-5 w-5" />
                             </span>
-                            <span style="font-size: 0.875rem; font-weight: 500;">{{ $link->link_title }}</span>
+                           
+                            <a href="{{ $link->url }}" target="_blank"><span style="font-size: 0.875rem; font-weight: 500;">{{ $link->link_title }}</span> </a>
                         </div>
 
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
