@@ -100,6 +100,10 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Utilities')
                     ->collapsed(), // Collapses this group by default
 
+                NavigationGroup::make('Financiën')
+                    ->label('Financiën')
+                    ->collapsed(), // Collapses this group by default
+
             ]);
     }
 
