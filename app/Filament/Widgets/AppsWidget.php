@@ -83,6 +83,14 @@ class AppsWidget extends Widget
             //     'color'  => 'success',
             //     'target' => '_blank',
             // ],
+            // Add more apps here:
+            // [
+            //     'label'  => 'Nieuwe App',
+            //     'url'    => 'https://nieuweapp.example.com',
+            //     'icon'   => 'globe-alt',
+            //     'color'  => 'success',
+            //     'target' => '_blank',
+            // ],
         ];
     }
 

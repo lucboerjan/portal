@@ -6,7 +6,7 @@
         </x-slot>
 
         {{-- App cards --}}
-        <div style="display:flex; flex-direction:row; flex-wrap:wrap; gap:1rem;">
+        <div style="display:flex; flex-direction:row; flex-wrap:wrap; gap:5px;">
             @foreach ($this->getApps() as $app)
                 @php
                     $colors = [
