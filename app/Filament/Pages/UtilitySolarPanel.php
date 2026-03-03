@@ -25,19 +25,21 @@ class UtilitySolarPanel extends Page implements HasTable
 
     protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedSun;
 
-  // protected static ?string $navigationGroup = 'Utilities';
-   protected static string | UnitEnum | null $navigationGroup = 'Utilities';
-   protected static ?int $navigationSort = 100;
+    // protected static ?string $navigationGroup = 'Utilities';
+    protected static string | UnitEnum | null $navigationGroup = 'Utilities';
+    protected static ?int $navigationSort = 100;
+    protected static ?string $navigationLabel = 'Meterstanden Zonnepanelen';
+    protected static ?string $title = 'Meterstanden Zonnepanelen';
 
-   
-   protected string $view = 'filament.pages.solar-panel-counter';
+
+    protected string $view = 'filament.pages.solar-panel-counter';
 
 
     public ?array $data = [];
 
     public function mount(): void
     {
-        $last =UtilitySolarPanelReading::orderBy('date', 'desc')->first();
+        $last = UtilitySolarPanelReading::orderBy('date', 'desc')->first();
 
         $this->form->fill([
             'date' => $last
@@ -53,7 +55,7 @@ class UtilitySolarPanel extends Page implements HasTable
 
                 Section::make()
                     ->columns(2)
-                    
+
                     ->schema([
                         DatePicker::make('date')
                             /*                             ->default(function () {
@@ -62,18 +64,15 @@ class UtilitySolarPanel extends Page implements HasTable
                                 return $last ? \Carbon\Carbon::parse($last->date)->addDay() : now()->toDateString();
                             }) */
                             ->required()
-
-
+                            ->label('Datum')
                             ->displayFormat('d/m/Y'),
                         TextInput::make('counter_reading')
-                            ->required()
-                            ,
 
-                    ])                    
+                            ->required(),
+
+                    ])
             ])
             ->statePath('data');
-            
-            
     }
 
     public function create(): void
@@ -104,8 +103,10 @@ class UtilitySolarPanel extends Page implements HasTable
             ->defaultSort('date', 'desc')
             ->columns([
                 TextColumn::make('date')
+                    ->label('Datum')
                     ->date('d/m/Y'),
-                TextColumn::make('counter_reading'),
+                TextColumn::make('counter_reading')
+                    ->label('Meterstand (kWh)'),
 
                 TextColumn::make('dagopbrengst')
                     ->label('Dagopbrengst (kWh)')
@@ -125,7 +126,7 @@ class UtilitySolarPanel extends Page implements HasTable
             ])
             ->paginated([10, 25, 50, 100])
             ->paginationPageOptions([10, 25, 50, 100])
-            
+
             ->filters([
                 // ...
             ])

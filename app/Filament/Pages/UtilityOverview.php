@@ -14,6 +14,8 @@ class UtilityOverview extends Page
     protected static string | UnitEnum | null $navigationGroup = 'Utilities';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::PresentationChartLine;
     protected static ?int $navigationSort = 50;
+    protected static ?string $navigationLabel = 'Overzicht Utilities';
+    protected static ?string $title = 'Overzicht Utilities';
 
     protected function getHeaderWidgets(): array
     {

@@ -11,9 +11,11 @@ class InvestmentOverview extends Page
 {
     protected string $view = 'filament.pages.investment-overview';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Investments';
+    protected static string | UnitEnum | null $navigationGroup = 'Beleggingen';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CurrencyDollar;
     protected static ?int $navigationSort = 50;
+    protected static ?string $navigationLabel = 'Overzicht Beleggingen';
+    protected static ?string $title = 'Overzicht Beleggingen';
 
     protected function getHeaderWidgets(): array
     {

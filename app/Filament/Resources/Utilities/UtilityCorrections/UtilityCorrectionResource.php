@@ -23,6 +23,9 @@ class UtilityCorrectionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Pencil;
     protected static ?int $navigationSort = 140;
+    protected static ?string $navigationLabel = 'Correcties Utilities';
+    protected static ?string $title = 'Correcties Utilities';
+    protected static ?string $pluralLabel = 'Correcties Utilities';
 
 
     public static function form(Schema $schema): Schema

@@ -20,7 +20,10 @@ use App\Filament\Resources\Investments\InvestmentFunds\RelationManagers\Investme
 class InvestmentFundResource extends Resource
 {
     protected static ?string $model = InvestmentFund::class;
-        protected static string|UnitEnum|null $navigationGroup = 'Investments';
+        protected static string|UnitEnum|null $navigationGroup = 'Beleggingen';
+        protected static ?string $navigationLabel = 'Beleggingsfondsen';
+        protected static ?string $title = 'Beleggingsfondsen';
+        protected static ?string $pluralLabel = 'Beleggingsfondsen';
 
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;

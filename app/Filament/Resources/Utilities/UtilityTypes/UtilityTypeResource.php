@@ -21,6 +21,9 @@ class UtilityTypeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::RectangleGroup;
     protected static ?int $navigationSort = 30;
+    protected static ?string $navigationLabel = 'Soorten Utilities';
+    protected static ?string $title = 'Soorten Utilities';
+    protected static ?string $pluralLabel = 'Soorten Utilities';
 
     
     public static function form(Schema $schema): Schema

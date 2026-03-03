@@ -18,7 +18,7 @@ class InvestmentFundsTable
 
         return $table
             ->columns([
-                TextColumn::make('naam')->label('Name')->sortable()->searchable(),
+                TextColumn::make('naam')->label('Naam')->sortable()->searchable(),
                 TextColumn::make('isin')->label('ISIN')->sortable()->searchable(),
                 //TextColumn::make('fondsType')->label('Fonds Type')->sortable()->searchable(),
                 TextColumn::make('aantal')

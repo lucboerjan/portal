@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages;
+/* namespace App\Filament\Pages;
 
 use App\Filament\Widgets\ElectricityStatsOverview;
 use Filament\Pages\Page;
@@ -20,4 +20,6 @@ class ElectricityOverview extends Page
             ElectricityStatsOverview::class,
         ];
     }
+    }
 }
+*/

@@ -21,6 +21,9 @@ class UtilityReadingResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChartBar;
     protected static ?int $navigationSort = 120;
+        protected static ?string $navigationLabel = 'Meterstanden Utilities';
+        protected static ?string $title = 'Meterstanden Utilities';
+        protected static ?string $pluralLabel = 'Meterstanden Utilities';
 
     public static function form(Schema $schema): Schema
     {
