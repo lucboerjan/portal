@@ -67,6 +67,13 @@ class AppsWidget extends Widget
                 'color'  => 'primary',
                 'target' => '_blank',
             ],
+            [
+                'label'  => 'HHB-Desante',
+                'url'    => $this->url('hhb-desante'),
+                'icon'   => 'hhb-desante',            // heroicon-o-users
+                'color'  => 'primary',
+                'target' => '_blank',
+            ],
             
             // Add more apps here:
             // [
