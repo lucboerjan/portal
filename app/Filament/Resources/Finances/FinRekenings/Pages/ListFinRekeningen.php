@@ -6,7 +6,7 @@ use App\Filament\Resources\Finances\FinRekenings\FinRekeningResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
-class ListFinRekenings extends ListRecords
+class ListFinRekeningen extends ListRecords
 {
     protected static string $resource = FinRekeningResource::class;
 

@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Investments\Widgets;
 use App\Models\InvestmentFund;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Facades\Log;
 
 class InvestmentOverzichtStat extends BaseWidget
 {
@@ -33,7 +32,6 @@ class InvestmentOverzichtStat extends BaseWidget
                 ->description('Huidige waarde van alle fondsen')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('primary'),
-            //->chart($this->getPortfolioTrendData()),
 
             Stat::make('Totale Aankoopwaarde', '€ ' . number_format($totaalAankoopwaarde, 2, ',', '.'))
                 ->description('Totaal geïnvesteerd bedrag')
@@ -44,16 +42,14 @@ class InvestmentOverzichtStat extends BaseWidget
                 ->description(number_format($totaalRendementPercentage, 2, ',', '.') . '%')
                 ->descriptionIcon($totaalRendement >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($totaalRendement >= 0 ? 'success' : 'danger'),
-            //->chart($this->getRendementTrendData()),
         ];
     }
 
     protected function getPortfolioTrendData(): array
     {
-        // Laatste 7 dagen portfolio waarde
         $data = [];
         for ($i = 600; $i >= 0; $i--) {
-            $datum = now()->subDays($i);
+            $datum     = now()->subDays($i);
             $dagWaarde = 0;
 
             $fondsen = InvestmentFund::with(['InvestmentRate', 'InvestmentPurchase'])->get();
@@ -64,7 +60,6 @@ class InvestmentOverzichtStat extends BaseWidget
                     ->orderBy('datum', 'desc')
                     ->first();
 
-
                 if ($dagkoers) {
                     $dagWaarde += $fonds->getTotalQuantityAttribute() * $dagkoers->dagkoers;
                 }
@@ -74,27 +69,24 @@ class InvestmentOverzichtStat extends BaseWidget
         return $data;
     }
 
-
     protected function getRendementTrendData(): array
     {
-        $data = [];
+        $data    = [];
         $fondsen = InvestmentFund::all();
 
-        // Bereken aankoopwaarde eenmalig
         $totaalAankoopwaarde = 0;
         foreach ($fondsen as $fonds) {
-            $aankopen = $fonds->InvestmentPurchase; // Gebruikt relatie property (zonder ())
+            $aankopen = $fonds->InvestmentPurchase;
             foreach ($aankopen as $aankoop) {
-                $totaalAankoopwaarde += $aankoop->number_of_shares * $aankoop->purchase_price;
+                $totaalAankoopwaarde += $aankoop->number_of_shares * $aankoop->aankoopprijs;
             }
         }
 
         for ($i = 6000; $i >= 0; $i -= 10) {
-            $datum = now()->subDays($i);
+            $datum     = now()->subDays($i);
             $dagWaarde = 0;
 
             foreach ($fondsen as $fonds) {
-                // Gebruik query builder met ()
                 $laatsteKoers = $fonds->InvestmentRate()
                     ->where('datum', '<=', $datum)
                     ->orderBy('datum', 'desc')
@@ -102,12 +94,12 @@ class InvestmentOverzichtStat extends BaseWidget
 
                 if ($laatsteKoers) {
                     $totaalAandelen = $fonds->InvestmentPurchase()->sum('aantal');
-                    $dagWaarde += $totaalAandelen * $laatsteKoers->investment_rate;
+                    $dagWaarde     += $totaalAandelen * $laatsteKoers->dagkoers;
                 }
             }
 
             $rendement = $dagWaarde - $totaalAankoopwaarde;
-            $data[] = round($rendement, 2);
+            $data[]    = round($rendement, 2);
         }
 
         return $data;

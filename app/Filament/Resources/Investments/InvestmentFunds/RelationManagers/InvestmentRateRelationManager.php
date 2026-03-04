@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Investments\InvestmentFunds\RelationManagers;
 
+use Dom\Text;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -132,6 +133,11 @@ class InvestmentRateRelationManager extends RelationManager
                     ->label('Dagkoers')
                     ->money('EUR', true)
                     ->searchable(),
+                TextColumn::make('waarde')
+                    ->label('Totale Waarde')
+                    ->money('EUR', true)
+                    ->searchable()    
+                    ,
             ])
             ->defaultSort('datum', 'desc')
             ->filters([

@@ -8,6 +8,8 @@ enum RekeningType: string
     case Spaarrekening = 'spaarrekening';
     case Kredietkaart = 'kredietkaart';
     case Cash = 'cash';
+    case Pensioenspaarrekening = 'pensioenspaarrekening';
+    case Beleggingsrekening = 'beleggingsrekening';
 
     public function label(): string
     {
@@ -16,6 +18,8 @@ enum RekeningType: string
             self::Spaarrekening => 'Spaarrekening',
             self::Kredietkaart  => 'Kredietkaart',
             self::Cash          => 'Cash',
+            self::Pensioenspaarrekening => 'Pensioenspaarrekening',
+            self::Beleggingsrekening => 'Beleggingsrekening',
         };
     }
 }

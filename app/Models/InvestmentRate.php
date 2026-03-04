@@ -24,4 +24,10 @@ class InvestmentRate extends Model
     {
         return $this->belongsTo(InvestmentFund::class, 'fondsID');
     }
+
+    public function getWaardeAttribute()
+    {
+        $totaalAantal = $this->fund->aandelenAankopen()->sum('aantal');
+        return round($this->dagkoers * $totaalAantal, 2);
+    }
 }
