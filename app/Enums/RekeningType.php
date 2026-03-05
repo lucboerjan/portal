@@ -6,18 +6,16 @@ enum RekeningType: string
 {
     case Zichtrekening = 'zichtrekening';
     case Spaarrekening = 'spaarrekening';
-    case Kredietkaart = 'kredietkaart';
-    case Cash = 'cash';
+    case Maaltijdcheques = 'maaltijdcheques';
     case Pensioenspaarrekening = 'pensioenspaarrekening';
     case Beleggingsrekening = 'beleggingsrekening';
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Zichtrekening => 'Zichtrekening',
             self::Spaarrekening => 'Spaarrekening',
-            self::Kredietkaart  => 'Kredietkaart',
-            self::Cash          => 'Cash',
+            self::Maaltijdcheques => 'Maaltijdcheques',
             self::Pensioenspaarrekening => 'Pensioenspaarrekening',
             self::Beleggingsrekening => 'Beleggingsrekening',
         };

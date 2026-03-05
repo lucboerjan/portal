@@ -41,8 +41,7 @@ class FinRekeningsTable
                     ->color(fn($state) => match($state) {
                         RekeningType::Zichtrekening         => 'info',
                         RekeningType::Spaarrekening         => 'success',
-                        RekeningType::Kredietkaart          => 'warning',
-                        RekeningType::Cash                  => 'gray',
+                        RekeningType::Maaltijdcheques       => 'warning',
                         RekeningType::Beleggingsrekening    => 'primary',
                         RekeningType::Pensioenspaarrekening => 'danger',
                     }),
