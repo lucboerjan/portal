@@ -23,6 +23,7 @@ class FinRekening extends Model
 
     public function transacties(): HasMany
     {
-        return $this->hasMany(FinTransactie::class, 'rekening_id');
+        return $this->hasMany(FinTransactie::class, 'rekening_id')
+        ->count('');
     }
 }

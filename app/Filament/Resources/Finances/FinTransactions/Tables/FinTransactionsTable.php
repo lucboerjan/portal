@@ -1,0 +1,263 @@
+<?php
+
+namespace App\Filament\Resources\Finances\FinTransactions\Tables;
+
+use App\Models\FinRekening;
+use App\Models\FinCategorie;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Support\Icons\Heroicon;
+
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
+use Filament\Forms\Components\Select;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Forms\Components\DatePicker;
+
+class FinTransactionsTable
+{
+
+
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->paginated([10, 20, 50, 75, 100, 200, 'all'])
+            ->defaultPaginationPageOption(100)
+            ->columns([
+                TextColumn::make('datum')
+                    ->label('Datum')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('volgnummer')
+                    ->label('Nr')
+                    ->sortable()
+                    ->width(50),
+
+                TextColumn::make('rekening.omschrijving')
+                    ->label('Rekening')
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('begunstigde.naam')
+                    ->label('Begunstigde')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('omschrijving')
+                    ->label('Omschrijving')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(40),
+
+                TextColumn::make('categorieen.omschrijving')
+                    ->label('Categorie')
+                    ->badge()
+                    ->separator(',')
+                    ->searchable(),
+
+
+                /*                 SelectColumn::make('categorie_id')
+                    ->label('Categorie')
+                    ->options(function () {
+                        return FinCategorie::whereNotNull('parent_id')
+                            ->with('parent')
+                            ->get()
+                            ->mapWithKeys(fn($cat) => [
+                                $cat->id => $cat->parent->omschrijving . ' › ' . $cat->omschrijving
+                            ]);
+                    })
+                    ->searchable(), */
+
+                TextColumn::make('bedrag')
+                    ->label('Bedrag')
+                    ->money('EUR')
+                    ->sortable()
+                    ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
+                    ->alignEnd()
+                    ->searchable(),
+
+
+                TextColumn::make('saldo_na')
+                    ->label('Saldo')
+                    ->money('EUR')
+                    ->sortable()
+                    ->alignEnd()
+                    ->toggleable(),
+
+                IconColumn::make('verwerkt')
+                    ->label('✓')
+                    ->boolean(),
+            ])
+            ->defaultSort(
+                fn(Builder $query) =>
+                $query->orderBy('datum', 'desc')
+                    ->orderBy('volgnummer', 'asc')
+            )
+            ->reorderable('volgnummer')
+            ->filters([
+                SelectFilter::make('rekening_id')
+                    ->label('Rekening')
+                    ->options(
+                        FinRekening::where('actief', true)
+                            ->orderBy('order')
+                            ->pluck('omschrijving', 'id')
+                    ),
+
+                Filter::make('datum')
+                    ->label('Datum')
+                    ->schema([
+                        DatePicker::make('datum')
+                            ->label('Datum')
+                            ->maxDate(now())
+                            ->native(false),   // mooie Filament datepicker ipv browser native
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        return $query
+                            ->when(
+                                $data['datum'],
+                                fn($q) =>
+                                $q->whereDate('datum', $data['datum'])
+                            );
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        if ($data['datum']) {
+                            return ['Datum: ' . \Carbon\Carbon::parse($data['datum'])->format('d/m/Y')];
+                        }
+                        return [];
+                    }),
+                SelectFilter::make('hoofdcategorie')
+                    ->label('Hoofdcategorie')
+                    ->options(
+                        FinCategorie::whereNull('parent_id')
+                            ->orderBy('omschrijving')
+                            ->pluck('omschrijving', 'id')
+                    )
+                    ->query(function (Builder $query, array $data) {
+                        if (!$data['value']) return $query;
+
+                        return $query->whereHas('categorieen', function ($q) use ($data) {
+                            $q->where('fin_categorie.id', $data['value']);
+/*                         return $query->whereHas('categorieen', function ($q) use ($data) {
+                            $q->where('fin_categorie.parent_id', $data['value'])
+                                ->orWhere('fin_categorie.id', $data['value']); */
+                        });
+                    }),
+
+
+            ])
+            ->recordActions([
+                ActionGroup::make([
+
+
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
+
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+
+                    BulkAction::make('wijs_categorie_toe')
+                        ->label('Categorie toewijzen')
+                        ->icon(Heroicon::Tag)
+                        ->schema([
+                            /* Select::make('categorie_id')
+                                ->label('Categorie')
+                                ->options(function () {
+                                    return FinCategorie::whereNotNull('parent_id')
+                                        ->with('parent')
+                                        ->get()
+                                        ->mapWithKeys(fn($cat) => [
+                                            $cat->id => $cat->parent->omschrijving . ' › ' . $cat->omschrijving
+                                        ]);
+                                })
+                                ->required()
+                                ->searchable(),
+ */
+                            Select::make('categorie_id')
+                                ->label('Categorie')
+                                ->options(function () {
+                                    return FinCategorie::whereNotNull('parent_id')
+                                        ->with('parent')
+                                        ->get()
+                                        ->mapWithKeys(fn($cat) => [
+                                            $cat->id => $cat->parent->omschrijving . ' › ' . $cat->omschrijving
+                                        ]);
+                                })
+                                ->required()
+                                ->searchable()
+                                ->createOptionForm([
+                                    Select::make('parent_id')
+                                        ->label('Hoofdcategorie')
+                                        ->options(
+                                            FinCategorie::whereNull('parent_id')
+                                                ->pluck('omschrijving', 'id')
+                                        )
+                                        ->required(),
+
+                                    TextInput::make('omschrijving')
+                                        ->label('Omschrijving')
+                                        ->required()
+                                        ->maxLength(255),
+                                ])
+                                ->createOptionUsing(function (array $data) {
+                                    // Richting overnemen van hoofdcategorie
+                                    $parent = FinCategorie::find($data['parent_id']);
+
+                                    $categorie = FinCategorie::create([
+                                        'parent_id'   => $data['parent_id'],
+                                        'omschrijving' => $data['omschrijving'],
+                                        'richting'    => $parent->richting,
+                                        'actief'      => true,
+                                    ]);
+
+                                    return $categorie->id;
+                                }),
+                            Select::make('actie')
+                                ->label('Wat doen met bestaande categorieën?')
+                                ->options([
+                                    'toevoegen'  => 'Toevoegen aan bestaande',
+                                    'vervangen'  => 'Bestaande vervangen',
+                                ])
+                                ->default('vervangen')
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data) {
+                            foreach ($records as $record) {
+                                if ($data['actie'] === 'vervangen') {
+                                    // Bestaande categorieën verwijderen
+                                    $record->categorieKoppelingen()->delete();
+                                }
+
+                                // Controleer of categorie al gekoppeld is
+                                $bestaatAl = $record->categorieKoppelingen()
+                                    ->where('categorie_id', $data['categorie_id'])
+                                    ->exists();
+
+                                if (!$bestaatAl) {
+                                    $record->categorieKoppelingen()->create([
+                                        'categorie_id' => $data['categorie_id'],
+                                        'bedrag'       => null,
+                                    ]);
+                                }
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                ]),
+            ]);
+    }
+}

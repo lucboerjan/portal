@@ -24,7 +24,7 @@ class EindeLoopbaanBdv extends Widget
 
     private function pensioenDatum()
     {
-        return Carbon::create(2030, 12, 31);
+        return Carbon::create(2029, 12, 31);
     }
 
     private function berekenKalenderDagen()

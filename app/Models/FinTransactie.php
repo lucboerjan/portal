@@ -4,22 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FinTransactie extends Model
 {
     protected $table = 'fin_transactie';
 
     protected $fillable = [
-        'rekening_id', 'begunstigde_id', 'datum',
-        'omschrijving', 'bedrag', 'verwerkt',
+        'rekening_id',
+        'begunstigde_id',
+        'datum',
+        'volgnummer',
+        'omschrijving',
+        'bedrag',
+        'verwerkt',
     ];
 
     protected $casts = [
-        'datum'    => 'date',
-        'bedrag'   => 'decimal:2',
-        'verwerkt' => 'boolean',
+        'datum'     => 'date',
+        'bedrag'    => 'decimal:2',
+        'verwerkt'  => 'boolean',
     ];
 
     public function rekening(): BelongsTo
@@ -32,13 +37,11 @@ class FinTransactie extends Model
         return $this->belongsTo(FinBegunstigde::class, 'begunstigde_id');
     }
 
-    // Via pivot model (met bedrag per categorie)
     public function categorieKoppelingen(): HasMany
     {
         return $this->hasMany(FinTransactieCategorie::class, 'transactie_id');
     }
 
-    // Direct many-to-many (zonder bedrag)
     public function categorieen(): BelongsToMany
     {
         return $this->belongsToMany(

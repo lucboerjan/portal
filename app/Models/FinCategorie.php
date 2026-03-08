@@ -6,13 +6,18 @@ use App\Enums\CategorieRichting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class FinCategorie extends Model
 {
     protected $table = 'fin_categorie';
 
     protected $fillable = [
-        'parent_id', 'omschrijving', 'richting', 'exclude', 'actief',
+        'parent_id',
+        'omschrijving',
+        'richting',
+        'exclude',
+        'actief',
     ];
 
     protected $casts = [
@@ -38,9 +43,15 @@ class FinCategorie extends Model
         return is_null($this->parent_id);
     }
 
-    public function transacties(): HasMany
+    // In FinCategorie.php
+    public function transacties(): BelongsToMany
     {
-        return $this->hasMany(FinTransactieCategorie::class, 'categorie_id');
+        return $this->belongsToMany(
+            FinTransactie::class,
+            'fin_transactie_categorie',
+            'categorie_id',
+            'transactie_id'
+        )->withPivot('bedrag', 'opmerking')->withTimestamps();
     }
 
     // Handige scope: alleen hoofdcategorieën
@@ -53,5 +64,23 @@ class FinCategorie extends Model
     public function scopeSub($query)
     {
         return $query->whereNotNull('parent_id');
+    }
+
+    public function scopeGeordend($query)
+    {
+        return $query
+            ->orderByRaw('COALESCE(fin_categorie.parent_id, fin_categorie.id)')
+            ->orderBy('fin_categorie.parent_id')
+            ->orderBy('fin_categorie.omschrijving');
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('ordered', function ($query) {
+            $query
+                ->orderByRaw('COALESCE(fin_categorie.parent_id, fin_categorie.id)')
+                ->orderBy('parent_id')
+                ->orderBy('omschrijving');
+        });
     }
 }

@@ -13,6 +13,9 @@ return new class extends Migration
             $table->foreignId('rekening_id')->constrained('fin_rekening');
             $table->foreignId('begunstigde_id')->nullable()->constrained('fin_begunstigde')->nullOnDelete();
             $table->date('datum');
+            $table->smallInteger('volgnummer')->default(0); // volgorde op uittreksel
+
+
             $table->string('omschrijving')->nullable();
             $table->decimal('bedrag', 15, 2); // positief = inkomst, negatief = uitgave
             $table->boolean('verwerkt')->default(false);

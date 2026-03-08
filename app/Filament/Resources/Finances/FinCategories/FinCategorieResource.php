@@ -8,6 +8,7 @@ use App\Filament\Resources\Finances\FinCategories\Tables\FinCategorieTable;
 use App\Filament\Resources\Finances\FinCategories\Pages\CreateFinCategorie;
 use App\Filament\Resources\Finances\FinCategories\Pages\EditFinCategorie;
 use App\Filament\Resources\Finances\FinCategories\Pages\ListFinCategories;
+use App\Filament\Resources\Finances\FinCategories\RelationManagers\TransactiesRelationManager;
 
 use App\Models\FinCategorie;
 use BackedEnum;
@@ -48,4 +49,11 @@ class FinCategorieResource extends Resource
             'edit'   => EditFinCategorie::route('/{record}/edit'),
         ];
     }
+
+    public static function getRelations(): array
+{
+    return [
+        TransactiesRelationManager::class,
+    ];
+}
 }

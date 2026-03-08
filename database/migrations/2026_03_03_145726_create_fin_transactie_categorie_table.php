@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('transactie_id')->constrained('fin_transactie')->cascadeOnDelete();
             $table->foreignId('categorie_id')->constrained('fin_categorie');
             $table->decimal('bedrag', 15, 2)->nullable(); // null = volledig bedrag
+            $table->decimal('saldo_na', 15, 2)->nullable(); // saldo na transactie (van uittreksel)
             $table->string('opmerking')->nullable();
             $table->timestamps();
         });
