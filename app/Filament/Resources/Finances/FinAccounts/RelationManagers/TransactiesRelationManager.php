@@ -77,6 +77,7 @@ class TransactiesRelationManager extends RelationManager
                     ->label('Bedrag')
                     ->money('EUR')
                     ->sortable()
+                    ->searchable()
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->alignEnd(),
 
