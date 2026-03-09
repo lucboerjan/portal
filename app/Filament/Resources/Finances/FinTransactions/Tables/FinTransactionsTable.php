@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Finances\FinTransactions\Tables;
 
 use App\Models\FinRekening;
 use App\Models\FinCategorie;
+use App\Models\FinTransactie;
+
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -24,6 +26,8 @@ use Filament\Actions\BulkAction;
 use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Components\DatePicker;
+use Filament\Actions\ReplicateAction;
+use App\Filament\Resources\Finances\FinTransactions\FinTransactionResource;
 
 class FinTransactionsTable
 {
@@ -101,12 +105,20 @@ class FinTransactionsTable
                     ->label('✓')
                     ->boolean(),
             ])
+            ->reorderable('volgnummer')
+            ->modifyQueryUsing(
+                fn($query) =>
+                $query->orderBy('datum', 'desc')
+                    ->orderBy('volgnummer', 'asc')
+            )
+
+
             ->defaultSort(
                 fn(Builder $query) =>
                 $query->orderBy('datum', 'desc')
                     ->orderBy('volgnummer', 'asc')
             )
-            ->reorderable('volgnummer')
+
             ->filters([
                 SelectFilter::make('rekening_id')
                     ->label('Rekening')
@@ -150,7 +162,7 @@ class FinTransactionsTable
 
                         return $query->whereHas('categorieen', function ($q) use ($data) {
                             $q->where('fin_categorie.id', $data['value']);
-/*                         return $query->whereHas('categorieen', function ($q) use ($data) {
+                            /*                         return $query->whereHas('categorieen', function ($q) use ($data) {
                             $q->where('fin_categorie.parent_id', $data['value'])
                                 ->orWhere('fin_categorie.id', $data['value']); */
                         });
@@ -160,7 +172,28 @@ class FinTransactionsTable
             ])
             ->recordActions([
                 ActionGroup::make([
+                    ReplicateAction::make()
+                        ->beforeReplicaSaved(function ($replica) {
+                            $nieuwsteDatum = FinTransactie::where('rekening_id', $replica->rekening_id)
+                                ->max('datum');
 
+                            $replica->datum    = $nieuwsteDatum ?? now();
+                            $replica->verwerkt = false;
+                        })
+                        ->after(function ($replica, $record) {
+                            // Categorieën kopiëren van origineel naar kloon
+                            foreach ($record->categorieKoppelingen as $koppeling) {
+                                $replica->categorieKoppelingen()->create([
+                                    'categorie_id' => $koppeling->categorie_id,
+                                    'bedrag'       => $koppeling->bedrag,
+                                    'opmerking'    => $koppeling->opmerking,
+                                ]);
+                            }
+                        })
+                        ->successRedirectUrl(
+                            fn($replica) =>
+                            FinTransactionResource::getUrl('edit', ['record' => $replica])
+                        ),
 
                     EditAction::make(),
                     DeleteAction::make(),

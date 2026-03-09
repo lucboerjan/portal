@@ -7,6 +7,8 @@ use App\Filament\Resources\Finances\FinAccounts\Pages\EditFinAccount;
 use App\Filament\Resources\Finances\FinAccounts\Pages\ListFinAccounts;
 use App\Filament\Resources\Finances\FinAccounts\Schemas\FinAccountForm;
 use App\Filament\Resources\Finances\FinAccounts\Tables\FinAccountsTable;
+use App\Filament\Resources\Finances\FinAccounts\RelationManagers\TransactiesRelationManager;
+
 use App\Models\FinRekening;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -29,6 +31,11 @@ class FinAccountResource extends Resource
         return 'Financiën';
     }
 
+    public static function form(Schema $schema): Schema
+{
+    return FinAccountForm::configure($schema);
+}
+
     public static function table(Table $table): Table
     {
         return FinAccountsTable::configure($table);
@@ -37,7 +44,7 @@ class FinAccountResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            TransactiesRelationManager::class,
         ];
     }
 
