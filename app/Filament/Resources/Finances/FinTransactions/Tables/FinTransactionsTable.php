@@ -37,7 +37,7 @@ class FinTransactionsTable
     {
         return $table
             ->paginated([10, 20, 50, 75, 100, 200, 'all'])
-            ->defaultPaginationPageOption(100)
+            ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('datum')
                     ->label('Datum')
@@ -150,6 +150,33 @@ class FinTransactionsTable
                         }
                         return [];
                     }),
+
+                Filter::make('datum')
+                    ->label('Periode')
+                    ->schema([
+                        DatePicker::make('van')
+                            ->label('Van')
+                            ->native(false),
+                        DatePicker::make('tot')
+                            ->label('Tot')
+                            ->native(false),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        return $query
+                            ->when($data['van'], fn($q) => $q->whereDate('datum', '>=', $data['van']))
+                            ->when($data['tot'], fn($q) => $q->whereDate('datum', '<=', $data['tot']));
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                        if ($data['van']) {
+                            $indicators[] = 'Van: ' . \Carbon\Carbon::parse($data['van'])->format('d/m/Y');
+                        }
+                        if ($data['tot']) {
+                            $indicators[] = 'Tot: ' . \Carbon\Carbon::parse($data['tot'])->format('d/m/Y');
+                        }
+                        return $indicators;
+                    }),
+                                        
                 SelectFilter::make('hoofdcategorie')
                     ->label('Hoofdcategorie')
                     ->options(
@@ -167,7 +194,22 @@ class FinTransactionsTable
                                 ->orWhere('fin_categorie.id', $data['value']); */
                         });
                     }),
+                SelectFilter::make('rekeningtype')
+                    ->label('Inkomst of uitgave')
+                    ->options([
+                        'inkomsten' => 'Inkomsten',
+                        'uitgaven'  => 'Uitgaven',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if (!$data['value']) return $query;
 
+                        return $query->whereHas('categorieen', function ($q) use ($data) {
+                            $q->where('richting', match ($data['value']) {
+                                'inkomsten' => 'inkomst',
+                                'uitgaven'  => 'uitgave',
+                            });
+                        });
+                    }),
 
             ])
             ->recordActions([
