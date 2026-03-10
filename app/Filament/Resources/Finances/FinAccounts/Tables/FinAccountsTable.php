@@ -12,6 +12,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\Summarizers\Sum;
 
 
 class FinAccountsTable
@@ -19,6 +20,8 @@ class FinAccountsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->paginated([10, 25, 50, 75, 100, 200, 'all'])
+            ->defaultPaginationPageOption(25)
             ->columns([
                 TextColumn::make('order')
                     ->label('#')
@@ -40,7 +43,7 @@ class FinAccountsTable
                 TextColumn::make('rekening_type')
                     ->label('Type')
                     ->badge()
-                    ->color(fn($state) => match($state) {
+                    ->color(fn($state) => match ($state) {
                         RekeningType::Zichtrekening         => 'info',
                         RekeningType::Spaarrekening         => 'success',
                         RekeningType::Maaltijdcheques       => 'warning',
@@ -53,11 +56,18 @@ class FinAccountsTable
                     ->money('EUR')
                     ->sortable()
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
-                    ->alignEnd(),
+                    ->alignEnd()
+                    ->summarize([
+                        Sum::make()
+                            ->label('Totaal')
+                            ->money('EUR'),
+
+                    ]),
 
                 IconColumn::make('actief')
                     ->label('Actief')
-                    ->boolean(),
+                    ->boolean()
+                    ,
             ])
             ->defaultSort('order')
             ->filters([
@@ -72,8 +82,8 @@ class FinAccountsTable
                 ActionGroup::make([
 
 
-                EditAction::make(),
-                DeleteAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
                 ]),
 
             ])
