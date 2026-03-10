@@ -28,6 +28,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Filament\Support\Facades\FilamentView;
 
 class TransactiesRelationManager extends RelationManager
 {
@@ -40,13 +41,13 @@ class TransactiesRelationManager extends RelationManager
             ->paginated([10, 20, 50, 75, 100, 200, 'all'])
             ->defaultPaginationPageOption(10)
             ->defaultSort('datum', 'desc')
-           ->reorderable('volgnummer')
-        ->defaultSort(
-            function (Builder $query) {
-                return $query->orderBy('datum', 'desc')
-                    ->orderBy('volgnummer', 'asc');
-            }
-        )            
+            ->reorderable('volgnummer')
+            ->defaultSort(
+                function (Builder $query) {
+                    return $query->orderBy('datum', 'desc')
+                        ->orderBy('volgnummer', 'asc');
+                }
+            )
             ->columns([
                 TextColumn::make('datum')
                     ->label('Datum')
@@ -77,6 +78,7 @@ class TransactiesRelationManager extends RelationManager
                     ->label('Bedrag')
                     ->money('EUR')
                     ->sortable()
+                    ->searchable()
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->alignEnd(),
 
@@ -151,7 +153,16 @@ class TransactiesRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()
                     ->label('Nieuwe transactie')
-                    ->schema(fn() => $this->getTransactieForm()),
+                    ->schema(fn() => $this->getTransactieForm())
+                    ->successRedirectUrl(
+                        fn() =>
+                        \App\Filament\Resources\Finances\FinAccounts\FinAccountResource::getUrl('edit', [
+                            'record' => $this->getOwnerRecord()->id
+                        ])
+                    )
+                    ->after(function () {
+                        $this->dispatch('recalculate-saldo');
+                    }),
             ])
             ->recordActions([
                 Action::make('categoriseer')
@@ -226,13 +237,19 @@ class TransactiesRelationManager extends RelationManager
                     })
                     ->successRedirectUrl(
                         fn($replica) =>
-                        \App\Filament\Resources\Finances\FinTransactions\FinTransactionResource::getUrl('edit', ['record' => $replica])
+                        \App\Filament\Resources\Finances\FinTransactions\FinTransactionResource::getUrl('edit', [
+                            'record' => $replica->id
+                        ])
                     ),
 
                 EditAction::make()
-                    ->schema(fn() => $this->getTransactieForm()),
-
-                DeleteAction::make(),
+                    ->schema(fn() => $this->getTransactieForm())
+                    ->after(function () {
+                        $this->dispatch('recalculate-saldo');
+                    }),
+                DeleteAction::make()->after(function () {
+                    $this->dispatch('recalculate-saldo');
+                }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -303,7 +320,10 @@ class TransactiesRelationManager extends RelationManager
                         })
                         ->deselectRecordsAfterCompletion(),
 
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->after(function () {
+                            $this->dispatch('recalculate-saldo');
+                        }),
                 ]),
             ]);
     }

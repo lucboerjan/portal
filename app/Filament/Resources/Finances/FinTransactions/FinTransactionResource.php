@@ -20,7 +20,7 @@ class FinTransactionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowsRightLeft;
 
-        protected static ?string $navigationLabel = 'Transacties';
+    protected static ?string $navigationLabel = 'Transacties';
     protected static ?string $modelLabel = 'Transactie';
     protected static ?string $pluralModelLabel = 'Transacties';
     protected static ?int $navigationSort = 100;
@@ -54,5 +54,15 @@ class FinTransactionResource extends Resource
             'create' => CreateFinTransaction::route('/create'),
             'edit' => EditFinTransaction::route('/{record}/edit'),
         ];
+    }
+
+    // In EditFinTransactie.php page:
+    protected function getRedirectUrl(): string
+    {
+        $transactie = $this->getRecord();
+
+        return \App\Filament\Resources\Finances\FinAccounts\FinAccountResource::getUrl('edit', [
+            'record' => $transactie->rekening_id
+        ]);
     }
 }

@@ -61,4 +61,6 @@ class FinTransactie extends Model
     {
         return $this->bedrag < 0;
     }
+
+
 }

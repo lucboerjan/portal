@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class FinRekening extends Model
 {
     protected $table = 'fin_rekening';
+    protected $appends = ['berekend_saldo', 'verschil_saldo'];
 
     protected $fillable = [
         'referentie', 'omschrijving', 'saldo',
@@ -25,5 +26,15 @@ class FinRekening extends Model
     {
         return $this->hasMany(FinTransactie::class, 'rekening_id');
         
+    }
+
+        public function getBerekendSaldoAttribute(): float
+    {
+        return (float) $this->transacties()->sum('bedrag');
+    }
+
+    public function getVerschilSaldoAttribute(): float
+    {
+        return (float) ($this->saldo - $this->berekend_saldo);
     }
 }
