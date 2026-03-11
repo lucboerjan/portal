@@ -53,11 +53,18 @@ class FinRekeningenOverview extends TableWidget
                     ->money('EUR')
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->alignEnd()
+                    ->hidden(),
+
+                TextColumn::make('transacties_sum_bedrag')
+                    ->label('Berekend Saldo')
+                    ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->summarize([
-                        Sum::make('transacties_sum_bedrag')
+                        Sum::make()
                             ->money('EUR')
                             ->label('Totaal saldo'),
-                    ]),
+                    ])
+                    ->alignEnd(),
+
 
 
                 TextColumn::make('verschil_saldo')
@@ -66,6 +73,7 @@ class FinRekeningenOverview extends TableWidget
                     ->color(fn($state) => abs($state) < 0.01 ? 'success' : 'warning')
                     ->alignEnd(),
             ])
+
             ->paginated(false);
     }
 }
