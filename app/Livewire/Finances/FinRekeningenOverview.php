@@ -7,6 +7,7 @@ use Filament\Widgets\TableWidget;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\Summarizers\Sum;
 
 class FinRekeningenOverview extends TableWidget
 {
@@ -20,8 +21,11 @@ class FinRekeningenOverview extends TableWidget
             ->query(
                 FinRekening::query()
                     ->where('actief', true)
+                    ->withSum('transacties', 'bedrag')
+                    ->having('transacties_sum_bedrag', '>', 0)
                     ->orderBy('order')
             )
+
             ->columns([
                 TextColumn::make('omschrijving')
                     ->label('Rekening')
@@ -30,7 +34,7 @@ class FinRekeningenOverview extends TableWidget
                 TextColumn::make('rekening_type')
                     ->label('Type')
                     ->badge()
-                    ->color(fn($state) => match($state->value) {
+                    ->color(fn($state) => match ($state->value) {
                         'zichtrekening'         => 'info',
                         'spaarrekening'         => 'success',
                         'kredietkaart'          => 'warning',
@@ -48,7 +52,13 @@ class FinRekeningenOverview extends TableWidget
                     ->label('Berekend saldo')
                     ->money('EUR')
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
-                    ->alignEnd(),
+                    ->alignEnd()
+                    ->summarize([
+                        Sum::make('transacties_sum_bedrag')
+                            ->money('EUR')
+                            ->label('Totaal saldo'),
+                    ]),
+
 
                 TextColumn::make('verschil_saldo')
                     ->label('Verschil')

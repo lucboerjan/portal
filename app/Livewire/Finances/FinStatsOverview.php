@@ -3,8 +3,10 @@
 namespace App\Livewire\Finances;
 
 use App\Models\FinTransactie;
+use Carbon\Constants\Format;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Carbon\Carbon;
 
 class FinStatsOverview extends StatsOverviewWidget
 {
@@ -13,7 +15,11 @@ class FinStatsOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
+        Carbon::setLocale('nl');
         $jaar = now()->year;
+        $month = now()->month;
+        $datum = Carbon::now();
+
         $inkomsten = FinTransactie::whereYear('datum', $jaar)
             ->whereHas('categorieen', function ($q) {
                 $q->where('richting', 'inkomst')
@@ -46,6 +52,7 @@ class FinStatsOverview extends StatsOverviewWidget
                     ->where('exclude', false);
             })
             ->sum('bedrag');
+        $maandSaldo = $inkomstenMaand + $uitgavenMaand;    
 
         return [
             Stat::make('Inkomsten ' . $jaar, '€ ' . number_format($inkomsten, 2, ',', '.'))
@@ -61,6 +68,11 @@ class FinStatsOverview extends StatsOverviewWidget
             Stat::make('Netto saldo ' . $jaar, '€ ' . number_format($saldo, 2, ',', '.'))
                 ->description($saldo >= 0 ? 'Positief saldo' : 'Negatief saldo')
                 ->color($saldo >= 0 ? 'success' : 'danger')
+                ->icon('heroicon-o-scale'),
+
+            Stat::make('Netto saldo ' . $datum->translatedFormat('F Y'), '€ ' . number_format($maandSaldo, 2, ',', '.'))
+                ->description($maandSaldo >= 0 ? 'Positief saldo' : 'Negatief saldo')
+                ->color($maandSaldo >= 0 ? 'success' : 'danger')
                 ->icon('heroicon-o-scale'),
         ];
     }

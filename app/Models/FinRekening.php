@@ -30,7 +30,9 @@ class FinRekening extends Model
 
         public function getBerekendSaldoAttribute(): float
     {
-        return (float) $this->transacties()->sum('bedrag');
+        //return (float) $this->transacties()->sum('bedrag');
+        return (float) ($this->transacties_sum_bedrag ?? $this->transacties()->sum('bedrag'));
+        
     }
 
     public function getVerschilSaldoAttribute(): float
