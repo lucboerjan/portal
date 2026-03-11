@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Components\DatePicker;
 use Filament\Actions\ReplicateAction;
 use App\Filament\Resources\Finances\FinTransactions\FinTransactionResource;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Columns\Summarizers\Count;
 
 class FinTransactionsTable
 {
@@ -91,7 +93,13 @@ class FinTransactionsTable
                     ->sortable()
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->alignEnd()
-                    ->searchable(),
+                    ->searchable()
+                    ->summarize([
+                        Sum::make()
+                            ->label('Totaal')
+                            ->money('EUR'),
+
+                    ]),
 
 
                 TextColumn::make('saldo_na')
@@ -151,6 +159,7 @@ class FinTransactionsTable
                         return [];
                     }),
 
+
                 Filter::make('datum')
                     ->label('Periode')
                     ->schema([
@@ -176,7 +185,17 @@ class FinTransactionsTable
                         }
                         return $indicators;
                     }),
-                                        
+
+                Filter::make('exclude_categorieen')
+                    ->label('Uitgesloten categorieën verbergen')
+                    ->query(
+                        fn(Builder $query) =>
+                        $query->whereHas('categorieen', function ($q) {
+                            $q->where('exclude', false);
+                        })
+                    )
+                    ->toggle(),
+
                 SelectFilter::make('hoofdcategorie')
                     ->label('Hoofdcategorie')
                     ->options(
