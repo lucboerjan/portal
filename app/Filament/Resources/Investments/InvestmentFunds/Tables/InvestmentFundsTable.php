@@ -10,6 +10,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Support\Icons\Heroicon;
 
 class InvestmentFundsTable
 {
@@ -57,7 +58,7 @@ class InvestmentFundsTable
                     ->money('EUR', true)
                     ->description(fn($record) => number_format($record->rendement_percentage, 2) . '%')
                     ->color(fn($record) => $record->rendement_euro >= 0 ? 'success' : 'danger')
-                    ->icon(fn($record) => $record->rendement_euro >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
+                    ->icon(fn($record) => $record->rendement_euro >= 0 ? Heroicon::OutlinedArrowTrendingUp : Heroicon::OutlinedArrowTrendingDown)
                     ->iconPosition('before'),
 
 /* 
@@ -110,7 +111,7 @@ class InvestmentFundsTable
                     EditAction::make(),
                     Action::make('view_dagkoers')
                         ->label('Dagkoers')
-                        ->icon('heroicon-o-arrow-top-right-on-square')
+                        ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
                         ->url(fn($record) => $record->url)
                         ->openUrlInNewTab()
                         ->visible(fn($record) => !empty($record->url)),

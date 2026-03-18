@@ -19,7 +19,7 @@ class InvestmentFundForm
                 TextInput::make('isin')
                     ->label('ISIN')
                     ->required()
-                    ->maxLength(12),
+                    ->maxLength(20),
                 TextInput::make('url')
                     ->label('Dagkoers URL')
                     ->url()

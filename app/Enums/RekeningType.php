@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Enums;
+use Filament\Support\Contracts\HasLabel;
 
-enum RekeningType: string
+enum RekeningType: string implements HasLabel
 {
     case Zichtrekening = 'zichtrekening';
     case Spaarrekening = 'spaarrekening';
@@ -10,7 +11,7 @@ enum RekeningType: string
     case Pensioenspaarrekening = 'pensioenspaarrekening';
     case Beleggingsrekening = 'beleggingsrekening';
 
-    public function label(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Zichtrekening => 'Zichtrekening',

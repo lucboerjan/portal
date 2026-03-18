@@ -106,7 +106,8 @@ class UtilitySolarPanel extends Page implements HasTable
                     ->label('Datum')
                     ->date('d/m/Y'),
                 TextColumn::make('counter_reading')
-                    ->label('Meterstand (kWh)'),
+                    ->label('Meterstand (kWh)')
+                    ->searchable(),
 
                 TextColumn::make('dagopbrengst')
                     ->label('Dagopbrengst (kWh)')

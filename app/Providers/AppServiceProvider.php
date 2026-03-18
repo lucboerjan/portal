@@ -4,11 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
@@ -21,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         \App\Models\UtilitySolarPanelReading::observe(\App\Observers\SolarPanelReadingObserver::class);
         \App\Models\InvestmentRate::observe(\App\Observers\InvestmentRateObserver::class);
- 
+        \App\Models\FinTransactie::observe(\App\Observers\FinTransactieObserver::class);
+        
     }
 }

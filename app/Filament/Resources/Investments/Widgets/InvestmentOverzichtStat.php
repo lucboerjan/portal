@@ -5,10 +5,11 @@ namespace App\Filament\Resources\Investments\Widgets;
 use App\Models\InvestmentFund;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-
+use Filament\Support\Icons\Heroicon;
 class InvestmentOverzichtStat extends BaseWidget
 {
     protected static ?int $sort = 1;
+    protected ?string $pollingInterval = null;
 
     protected function getStats(): array
     {
@@ -30,17 +31,17 @@ class InvestmentOverzichtStat extends BaseWidget
         return [
             Stat::make('Totale Huidige Waarde', '€ ' . number_format($totaalHuidigeWaarde, 2, ',', '.'))
                 ->description('Huidige waarde van alle fondsen')
-                ->descriptionIcon('heroicon-m-banknotes')
+                ->descriptionIcon(Heroicon::Banknotes)
                 ->color('primary'),
 
             Stat::make('Totale Aankoopwaarde', '€ ' . number_format($totaalAankoopwaarde, 2, ',', '.'))
                 ->description('Totaal geïnvesteerd bedrag')
-                ->descriptionIcon('heroicon-m-arrow-trending-down')
+                ->descriptionIcon(Heroicon::ArrowTrendingDown)
                 ->color('gray'),
 
             Stat::make('Totaal Rendement', '€ ' . number_format($totaalRendement, 2, ',', '.'))
                 ->description(number_format($totaalRendementPercentage, 2, ',', '.') . '%')
-                ->descriptionIcon($totaalRendement >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->descriptionIcon($totaalRendement >= 0 ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown  )
                 ->color($totaalRendement >= 0 ? 'success' : 'danger'),
         ];
     }

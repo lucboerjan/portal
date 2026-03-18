@@ -7,6 +7,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class WaterStatsOverview extends StatsOverviewWidget
 {
+    protected ?string $pollingInterval = null;
     protected function getStats(): array
     {
         return [

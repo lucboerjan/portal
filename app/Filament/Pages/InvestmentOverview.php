@@ -20,6 +20,7 @@ class InvestmentOverview extends Page
     protected function getHeaderWidgets(): array
     {
          return [
+            //\App\Filament\Resources\Investments\Widgets\InvestMentOverzichtWidget::class,
             \App\Filament\Resources\Investments\Widgets\InvestmentOverzichtStat::class,
             \App\Filament\Resources\Investments\Widgets\InvestmentDagverschilStat::class,
             \App\Filament\Resources\Investments\Widgets\InvestmentMaandverschilStat::class,

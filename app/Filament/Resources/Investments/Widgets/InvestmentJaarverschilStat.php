@@ -5,16 +5,34 @@ namespace App\Filament\Resources\Investments\Widgets;
 use App\Models\InvestmentFund;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Support\Icons\Heroicon;
 
 class InvestmentJaarverschilStat extends BaseWidget
 {
     protected static ?int $sort = 3;
+    protected ?string $pollingInterval = null;
+
+
 
     protected function getStats(): array
     {
+        // Haal alle fondsen op
         $fondsen = InvestmentFund::with(['InvestmentRate', 'InvestmentPurchase'])->get();
 
-        return $fondsen->map(fn ($fonds) => $this->getJaarverschilStat($fonds))->toArray();
+        // Maak eerst de individuele stats
+        $stats = $fondsen
+            ->map(fn($fonds) => $this->getJaarverschilStat($fonds))
+            ->toArray();
+
+        // Bereken totaal jaarverschil
+        $totaal = $fondsen->sum(fn($fonds) => $fonds->jaarverschil);
+
+        $stats[] = Stat::make(
+            'Totaal jaarverschil',
+            '€ ' . number_format($totaal, 2, ',', '.')
+        );
+
+        return $stats;
     }
 
     protected function getJaarverschilStat(InvestmentFund $fonds): Stat
@@ -28,7 +46,7 @@ class InvestmentJaarverschilStat extends BaseWidget
         if (! $huidigeKoers) {
             return Stat::make($fonds->naam . ' – Jaarverschil', 'N/B')
                 ->description('Geen koersdata beschikbaar')
-                ->descriptionIcon('heroicon-m-clock')
+                ->descriptionIcon(Heroicon::Clock)
                 ->color('gray');
         }
 
@@ -42,7 +60,7 @@ class InvestmentJaarverschilStat extends BaseWidget
         if (! $vorigeKoers) {
             return Stat::make($fonds->naam . ' – Jaarverschil', 'N/B')
                 ->description('Geen koers vorig jaar')
-                ->descriptionIcon('heroicon-m-clock')
+                ->descriptionIcon(Heroicon::Clock)
                 ->color('gray');
         }
 
@@ -60,11 +78,11 @@ class InvestmentJaarverschilStat extends BaseWidget
         $totDatum = $huidigeKoers->datum->format('d-m-Y');
 
         return Stat::make(
-            $fonds->naam . ' – Maandverschil',
+            $fonds->naam . ' – Jaarverschillen',
             $prefix . '€ ' . number_format($verschilEuro, 2, ',', '.')
         )
             ->description($prefix . number_format($verschilPct, 2, ',', '.') . '% | ' . $vanDatum . ' → ' . $totDatum)
-            ->descriptionIcon($positief ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+            ->descriptionIcon($positief ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown)
             ->color($positief ? 'success' : 'danger');
     }
 }

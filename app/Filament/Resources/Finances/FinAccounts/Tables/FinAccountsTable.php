@@ -75,7 +75,7 @@ class FinAccountsTable
                     ->label('Type')
                     ->options(
                         collect(RekeningType::cases())
-                            ->mapWithKeys(fn($case) => [$case->value => $case->label()])
+                            ->mapWithKeys(fn($case) => [$case->value => $case->getLabel()])
                     ),
             ])
             ->recordActions([

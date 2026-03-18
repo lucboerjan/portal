@@ -2,12 +2,14 @@
 
 namespace App\Enums;
 
-enum CategorieRichting: string
-{
+use Filament\Support\Contracts\HasLabel;
+
+enum CategorieRichting: string implements HasLabel
+ {
     case Inkomst = 'inkomst';
     case Uitgave = 'uitgave';
 
-    public function label(): string
+    public function getLabel(): string
     {
         return match($this) {
             self::Inkomst => 'Inkomst',

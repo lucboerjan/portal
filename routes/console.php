@@ -14,10 +14,14 @@ Artisan::command('inspire', function () {
 // =============================
 // Plan je custom artisan command "backup:conditional"
 Schedule::command('backup:run')
-    ->everyMinute()          // elek minuut controleren of backup nodig is
-    //->dalyAt('05:00')        // dagelijks om 05:00
+    //everyMinute()          // elek minuut controleren of backup nodig is
+    ->dailyAt('05:00')        // dagelijks om 05:00
     ->onOneServer()             // voorkomt dubbel uitvoeren in multi-server setup
     ->withoutOverlapping()      // start geen nieuwe job als vorige nog draait
     ->evenInMaintenanceMode();  // ook tijdens maintenance mode uitvoeren
 //to run en debug chronical on laragon
 //  .\Cronical.exe --console --debug    
+// routes/console.php (Laravel 11)
+Schedule::command('funds:fetch')
+    ->everyFifteenMinutes()
+    ->between('07:00', '22:00');
