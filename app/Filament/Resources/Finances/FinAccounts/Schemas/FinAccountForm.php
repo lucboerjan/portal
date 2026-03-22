@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Finances\FinAccounts\Schemas;
 
 use App\Enums\RekeningType;
-use App\Models\FinTransactie;
+use App\Models\FinCategorie;
 use Filament\Schemas\Components\Text;
 
 use Filament\Forms\Components\Select;
@@ -11,6 +11,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Illuminate\Support\Facades\Log;
 
 class FinAccountForm
 {
@@ -36,7 +39,7 @@ class FinAccountForm
                     ->label('Type')
                     ->options(
                         collect(RekeningType::cases())
-                            ->mapWithKeys(fn($case) => [$case->value => $case->label()])
+                            ->mapWithKeys(fn($case) => [$case->value => $case->getLabel()])
                     )
                     ->required(),
 
@@ -54,11 +57,20 @@ class FinAccountForm
             Section::make('Saldo')->components([
 
                 TextInput::make('saldo')
-                    ->label('Huidig saldo (manueel ingegeven)')
+                    ->label('Huidig saldo (manueel ingeven)')
                     ->numeric()
                     ->prefix('€')
-                    ->default(0),
-                    //->helperText('Manueel ingegeven beginsaldo'),
+                    ->default(0)
+                    ->dehydrated(false)
+                    ->live()
+                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                        if ($state) {
+                            $rekeningstand = (float) $get('berekend_saldo');
+                            $saldo = round($state - $rekeningstand,2);
+                            $set('verschil_saldo', $saldo);
+                        }
+                    }),
+                //->helperText('Manueel ingegeven beginsaldo'),
 
                 TextInput::make('berekend_saldo')
                     ->label('Berekend saldo (som transacties)')

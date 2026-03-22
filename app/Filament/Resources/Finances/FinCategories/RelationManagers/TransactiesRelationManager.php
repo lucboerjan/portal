@@ -6,6 +6,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\TernaryFilter;
 
 class TransactiesRelationManager extends RelationManager
 {
@@ -31,7 +32,8 @@ class TransactiesRelationManager extends RelationManager
 
                 TextColumn::make('rekening.omschrijving')
                     ->label('Rekening')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
 
                 TextColumn::make('begunstigde.naam')
                     ->label('Begunstigde')
@@ -53,6 +55,10 @@ class TransactiesRelationManager extends RelationManager
                     ->label('✓')
                     ->boolean(),
             ])
-            ->defaultSort('datum', 'desc');
+            ->defaultSort('datum', 'desc')
+            ->filters([
+                TernaryFilter::make('verwerkt')
+                    ->label('Verwerkt')
+            ]);
     }
 }

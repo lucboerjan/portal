@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Enums\RekeningType;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FinRekening extends Model
-{
+ {
     protected $table = 'fin_rekening';
     protected $appends = ['berekend_saldo', 'verschil_saldo'];
 

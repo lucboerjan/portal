@@ -16,4 +16,12 @@ class EditInvestmentFund extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $record = $this->getRecord();
+        $data['berekend_saldo'] = number_format($record->rekening->berekend_saldo ?? 0, 2, '.', '');
+        $data['rekening_naam'] = $record->rekening->omschrijving ?? '';
+        return $data;
+    }
 }

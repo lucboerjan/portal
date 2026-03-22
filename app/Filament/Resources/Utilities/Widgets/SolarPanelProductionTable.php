@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use App\Models\UtilityType;
 use App\Models\UtilityReading;
 use App\Models\UtilityCorrection;
+use Filament\Support\Enums\FontWeight;
 
 use Carbon\Carbon;
 use app\Models\UtilitySolarPanelReading;
@@ -30,7 +31,8 @@ class SolarPanelProductionTable extends BaseWidget
             ->columns([
                 Tables\Columns\TextColumn::make('jaar')
                     ->label('Jaar')
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->searchable(false),
                 Tables\Columns\TextColumn::make('jan')
                     ->label('Jan')
                     ->alignCenter(),
@@ -70,7 +72,7 @@ class SolarPanelProductionTable extends BaseWidget
                 Tables\Columns\TextColumn::make('totaal')
                     ->label('Totaal')
                     ->alignCenter()
-                    ->weight('bold'),
+                    ->weight(FontWeight::Bold),
             ])
             ->paginated(false)
             ->recordAction(null)

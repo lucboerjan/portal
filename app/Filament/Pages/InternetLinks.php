@@ -12,13 +12,14 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Livewire\Attributes\On;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 
 
 class InternetLinks extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|\BackedEnum|null $navigationIcon = "heroicon-o-link";
+    protected static string|\BackedEnum|null $navigationIcon = Heroicon::OutlinedLink;
     protected static ?string $navigationLabel = 'Internetlinks';
     protected string $view = 'filament.pages.internet-links';
 

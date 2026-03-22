@@ -80,7 +80,7 @@ class FinCategorieTable
                 SelectFilter::make('richting')
                     ->options(
                         collect(CategorieRichting::cases())
-                            ->mapWithKeys(fn($case) => [$case->value => $case->label()])
+                            ->mapWithKeys(fn($case) => [$case->value => $case->getLabel()])
                     ),
                 SelectFilter::make('parent_id')
                     ->label('Hoofdcategorie')

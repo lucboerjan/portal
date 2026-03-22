@@ -18,6 +18,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Icons\Heroicon;
@@ -29,6 +30,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Support\Facades\FilamentView;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 
 class TransactiesRelationManager extends RelationManager
 {
@@ -68,11 +71,21 @@ class TransactiesRelationManager extends RelationManager
                     ->label('Omschrijving')
                     ->searchable()
                     ->limit(40),
-
+                    
                 TextColumn::make('categorieen.omschrijving')
                     ->label('Categorie')
                     ->badge()
-                    ->separator(','),
+                   // ->separator(',')
+                    ->color(function ($state, $record) {
+                        $categorie = $record->categorieen->first();
+                        if (!$categorie) return 'gray';
+
+                        return match ($categorie->richting->value) {
+                            'inkomst' => 'success',
+                            'uitgave' => 'danger',
+                            default   => 'gray',
+                        };
+                    }),
 
                 TextColumn::make('bedrag')
                     ->label('Bedrag')
@@ -166,6 +179,7 @@ class TransactiesRelationManager extends RelationManager
             ])
             ->recordActions([
                 Action::make('categoriseer')
+                ->visible(fn($record) => !$record->categorieen->isNotEmpty())
                     ->label('Categorie')
                     ->icon(Heroicon::Tag)
                     ->color('gray')
@@ -221,8 +235,8 @@ class TransactiesRelationManager extends RelationManager
 
                 ReplicateAction::make()
                     ->beforeReplicaSaved(function ($replica) {
-                        $nieuwsteDatum = FinTransactie::where('rekening_id', $replica->rekening_id)
-                            ->max('datum');
+                        $nieuwsteDatum = FinTransactie::max('datum');
+
                         $replica->datum    = $nieuwsteDatum ?? now();
                         $replica->verwerkt = false;
                     })
@@ -244,9 +258,33 @@ class TransactiesRelationManager extends RelationManager
 
                 EditAction::make()
                     ->schema(fn() => $this->getTransactieForm())
+                    ->mutateRecordDataUsing(function (array $data, $record) {
+                        $data['categorie_id'] = $record->categorieKoppelingen()->first()?->categorie_id;
+                        return $data;
+                    })
+                    ->using(function ($record, array $data) {
+                        $categorieId = $data['categorie_id'] ?? null;
+                        unset($data['categorie_id']);
+
+                        $record->update($data);
+
+                        $record->categorieKoppelingen()->delete();
+                        if ($categorieId) {
+                            $record->categorieKoppelingen()->create([
+                                'categorie_id' => $categorieId,
+                                'bedrag'       => null,
+                            ]);
+
+                            // Transactie als verwerkt markeren
+                            $record->update(['verwerkt' => true]);
+                        }
+
+                        return $record;
+                    })
                     ->after(function () {
                         $this->dispatch('recalculate-saldo');
                     }),
+
                 DeleteAction::make()->after(function () {
                     $this->dispatch('recalculate-saldo');
                 }),
@@ -254,6 +292,7 @@ class TransactiesRelationManager extends RelationManager
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('wijs_categorie_toe')
+                        ->visible(fn($records) => $records->every(fn($record) => $record->categorieKoppelingen()->isEmpty()))
                         ->label('Categorie toewijzen')
                         ->icon(Heroicon::Tag)
                         ->schema([
@@ -349,8 +388,7 @@ class TransactiesRelationManager extends RelationManager
                     ->native(false)
                     ->default(
                         fn() =>
-                        FinTransactie::where('rekening_id', $this->getOwnerRecord()->id)
-                            ->max('datum') ?? now()
+                        FinTransactie::max('datum') ?? now()
                     ),
 
                 TextInput::make('volgnummer')
@@ -367,8 +405,23 @@ class TransactiesRelationManager extends RelationManager
                     ->label('Bedrag')
                     ->numeric()
                     ->prefix('€')
-                    ->helperText('Negatief voor uitgave, positief voor inkomst')
-                    ->required(),
+                    ->required()
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                        if (!$state) return;
+
+                        $categorieId = $get('categorie_id');
+                        if (!$categorieId) return;
+
+                        $categorie = FinCategorie::find($categorieId);
+                        if (!$categorie) return;
+
+                        // Enkel bij uitgaven automatisch negatief maken
+                        // Bij inkomsten mag het negatief blijven (bvb beleggingen)
+                        if ($categorie->richting->value === 'uitgave' && $state > 0) {
+                            $set('bedrag', -abs($state));
+                        }
+                    }),
 
                 TextInput::make('saldo_na')
                     ->label('Saldo na transactie')
@@ -382,37 +435,55 @@ class TransactiesRelationManager extends RelationManager
             ])->columns(2),
 
             Section::make('Categorisering')->components([
-                Repeater::make('categorieKoppelingen')
-                    ->label('Categorieën')
-                    ->relationship()
-                    ->schema([
-                        Select::make('categorie_id')
-                            ->label('Categorie')
-                            ->options(function () {
-                                return FinCategorie::whereNotNull('parent_id')
-                                    ->with('parent')
-                                    ->get()
-                                    ->mapWithKeys(fn($parent) => [
-                                        $parent->id => $parent->parent->omschrijving . ' › ' . $parent->omschrijving
-                                    ]);
-                            })
+
+
+                Select::make('categorie_id')
+                    ->label('Categorie')
+                    ->options(function () {
+                        return FinCategorie::whereNotNull('parent_id')
+                            ->with('parent')
+                            ->get()
+                            ->mapWithKeys(fn($cat) => [
+                                $cat->id => $cat->parent->omschrijving . ' › ' . $cat->omschrijving
+                            ]);
+                    })
+                    ->searchable()
+                    ->default(fn($record) => $record?->categorieKoppelingen()->first()?->categorie_id)
+                    ->live()
+                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                        if (!$state) return;
+                        $categorie = FinCategorie::find($state);
+                        $bedrag    = $get('bedrag');
+                        if (!$bedrag) return;
+                        if ($categorie->richting->value === 'uitgave' && $bedrag > 0) {
+                            $set('bedrag', -abs($bedrag));
+                        } elseif ($categorie->richting->value === 'inkomst' && $bedrag < 0) {
+                            $set('bedrag', $bedrag);
+                        }
+                    })
+                    ->createOptionForm([
+                        Select::make('parent_id')
+                            ->label('Hoofdcategorie')
+                            ->options(
+                                FinCategorie::whereNull('parent_id')->pluck('omschrijving', 'id')
+                            )
+                            ->required(),
+                        TextInput::make('omschrijving')
+                            ->label('Omschrijving')
                             ->required()
-                            ->searchable(),
-
-                        TextInput::make('bedrag')
-                            ->label('Bedrag')
-                            ->numeric()
-                            ->prefix('€')
-                            ->helperText('Leeg = volledig bedrag'),
-
-                        TextInput::make('opmerking')
-                            ->label('Opmerking')
                             ->maxLength(255),
                     ])
-                    ->columns(3)
-                    ->addActionLabel('+ Categorie toevoegen')
-                    ->defaultItems(1),
-            ]),
+                    ->createOptionUsing(function (array $data) {
+                        $parent = FinCategorie::find($data['parent_id']);
+                        $categorie = FinCategorie::create([
+                            'parent_id'    => $data['parent_id'],
+                            'omschrijving' => $data['omschrijving'],
+                            'richting'     => $parent->richting,
+                            'actief'       => true,
+                        ]);
+                        return $categorie->id;
+                    }),
+            ])->columns(1),
         ];
     }
 }

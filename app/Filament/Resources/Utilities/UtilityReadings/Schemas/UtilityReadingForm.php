@@ -10,6 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use App\Models\UtilityType;
 use App\Models\UtilityReading;
+use Illuminate\Support\Facades\Log;
 
 class UtilityReadingForm
 {
@@ -34,7 +35,7 @@ class UtilityReadingForm
                     ->native(false)
                     ->displayFormat('d-m-Y')
                     ->default(now()),
-                    //->maxDate(now()),
+                //->maxDate(now()),
 
                 TextInput::make('meter_stand')
                     ->label('Meterstand')
@@ -59,7 +60,16 @@ class UtilityReadingForm
 
                         return 'Laatste: ' . $lastReading->meter_stand;
                     })
-                    ->hintColor('primary'),
+                    ->hintColor('primary')
+                    ->live(onBlur: true)
+
+
+                    ->afterStateUpdated(function ($state, callable $set, ?UtilityReading  $record) {
+
+                        if ($state <> $record->meter_stand) {
+                            $set('reading_date', today()->format('Y-m-d'));
+                        }
+                    }),
 
                 Textarea::make('notes')
                     ->label('Notities')

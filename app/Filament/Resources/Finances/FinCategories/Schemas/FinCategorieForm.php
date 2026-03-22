@@ -9,6 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Set;
 
 class FinCategorieForm
 {
@@ -24,7 +25,7 @@ class FinCategorieForm
                         ->pluck('omschrijving', 'id')
                 )
                 ->live()
-                ->afterStateUpdated(function ($state, callable $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
                     if ($state) {
                         $parent = FinCategorie::find($state);
                         $set('richting', $parent?->richting?->value);
@@ -41,7 +42,7 @@ class FinCategorieForm
                 ->label('Richting')
                 ->options(
                     collect(CategorieRichting::cases())
-                        ->mapWithKeys(fn($case) => [$case->value => $case->label()])
+                        ->mapWithKeys(fn($case) => [$case->value => $case->getLabel()])
                 )
                 ->required()
                 ->disabled(fn(Get $get) => filled($get('parent_id'))),

@@ -62,5 +62,8 @@ class FinTransactie extends Model
         return $this->bedrag < 0;
     }
 
-
+    public function getCategorieIdAttribute(): ?int
+    {
+        return $this->categorieKoppelingen()->first()?->categorie_id;
+    }
 }

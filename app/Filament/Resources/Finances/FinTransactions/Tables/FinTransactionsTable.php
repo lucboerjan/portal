@@ -30,6 +30,7 @@ use Filament\Actions\ReplicateAction;
 use App\Filament\Resources\Finances\FinTransactions\FinTransactionResource;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\Summarizers\Count;
+use Illuminate\Support\Facades\Log;
 
 class FinTransactionsTable
 {
@@ -37,6 +38,7 @@ class FinTransactionsTable
 
     public static function configure(Table $table): Table
     {
+
         return $table
             ->paginated([10, 20, 50, 75, 100, 200, 'all'])
             ->defaultPaginationPageOption(50)
@@ -57,10 +59,24 @@ class FinTransactionsTable
                     ->sortable()
                     ->toggleable(),
 
+                TextColumn::make('categorieen.omschrijving')
+                    ->label('Categorie')
+                    ->badge()
+                    //->separator(',')
+                    ->color(function ($state, $record) {
+                        $categorie = $record->categorieen->first();
+                        if (!$categorie) return 'gray';
+                        return match ($categorie->richting->value) {
+                            'inkomst' => 'success',
+                            'uitgave' => 'danger',
+                            default   => 'gray',
+                        };
+                    }),
+                /* 
                 TextColumn::make('begunstigde.naam')
                     ->label('Begunstigde')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable(), */
 
                 TextColumn::make('omschrijving')
                     ->label('Omschrijving')
@@ -68,11 +84,6 @@ class FinTransactionsTable
                     ->sortable()
                     ->limit(40),
 
-                TextColumn::make('categorieen.omschrijving')
-                    ->label('Categorie')
-                    ->badge()
-                    ->separator(',')
-                    ->searchable(),
 
 
                 /*                 SelectColumn::make('categorie_id')
@@ -206,11 +217,11 @@ class FinTransactionsTable
                     ->query(function (Builder $query, array $data) {
                         if (!$data['value']) return $query;
 
+                        /* return $query->whereHas('categorieen', function ($q) use ($data) {
+                            $q->where('fin_categorie.id', $data['value']);*/
                         return $query->whereHas('categorieen', function ($q) use ($data) {
-                            $q->where('fin_categorie.id', $data['value']);
-                            /*                         return $query->whereHas('categorieen', function ($q) use ($data) {
                             $q->where('fin_categorie.parent_id', $data['value'])
-                                ->orWhere('fin_categorie.id', $data['value']); */
+                                ->orWhere('fin_categorie.id', $data['value']);
                         });
                     }),
                 SelectFilter::make('rekeningtype')
@@ -266,6 +277,7 @@ class FinTransactionsTable
                     DeleteBulkAction::make(),
 
                     BulkAction::make('wijs_categorie_toe')
+                        ->visible(true)
                         ->label('Categorie toewijzen')
                         ->icon(Heroicon::Tag)
                         ->schema([
