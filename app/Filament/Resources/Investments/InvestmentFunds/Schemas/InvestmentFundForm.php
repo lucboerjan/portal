@@ -29,7 +29,7 @@ class InvestmentFundForm
                     ->label('Website')
                     ->suffixAction(
                         Action::make('open')
-                            ->icon('heroicon-o-arrow-top-right-on-square')
+                            ->icon('heroicon::external-link')
                             ->url(fn($state) => $state)
                             ->openUrlInNewTab()
                     ),

@@ -5,10 +5,12 @@ namespace App\Filament\Resources\Investments\Widgets;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\InvestmentFund;
+use Filament\Support\Icons\Heroicon;
 
 class InvestMentOverzichtWidget extends StatsOverviewWidget
 {
     protected int|array|null $columns = 4;
+    protected ?string $pollingInterval = null;
 
     protected function getStats(): array
     {
@@ -30,7 +32,7 @@ class InvestMentOverzichtWidget extends StatsOverviewWidget
         )
         ->description('Vandaag vs gisteren')
         ->color($totaalDag >= 0 ? 'success' : 'danger')
-        ->icon($totaalDag >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
+        ->icon($totaalDag >= 0 ? 'heroicon::trending-up' : 'heroicon::trending-down')
         ->extraAttributes(['class' => 'col-span-4']);
 
         foreach ($fondsen as $fonds) {
@@ -43,7 +45,7 @@ class InvestMentOverzichtWidget extends StatsOverviewWidget
                 '% | ' . $fonds->dag_start . ' → ' . $fonds->dag_eind
             )
             ->color($fonds->dagverschil >= 0 ? 'success' : 'danger')
-            ->icon($fonds->dagverschil >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
+            ->icon($fonds->dagverschil >= 0 ? 'heroicon::trending-up' : 'heroicon::trending-down')
             ->extraAttributes(['class' => 'col-span-1']);
         }
 
@@ -61,7 +63,7 @@ class InvestMentOverzichtWidget extends StatsOverviewWidget
         )
         ->description('Deze maand')
         ->color($totaalMaand >= 0 ? 'success' : 'danger')
-        ->icon($totaalMaand >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
+        ->icon($totaalMaand >= 0 ? 'heroicon::trending-up' : 'heroicon::trending-down')
         ->extraAttributes(['class' => 'col-span-4']);
 
         foreach ($fondsen as $fonds) {
@@ -74,7 +76,7 @@ class InvestMentOverzichtWidget extends StatsOverviewWidget
                 '% | ' . $fonds->maand_start . ' → ' . $fonds->maand_eind
             )
             ->color($fonds->maandverschil >= 0 ? 'success' : 'danger')
-            ->icon($fonds->maandverschil >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
+            ->icon($fonds->maandverschil >= 0 ? 'heroicon::trending-up' : 'heroicon::trending-down')
             ->extraAttributes(['class' => 'col-span-1']);
         }
 
@@ -92,7 +94,7 @@ class InvestMentOverzichtWidget extends StatsOverviewWidget
         )
         ->description('Dit jaar')
         ->color($totaalJaar >= 0 ? 'success' : 'danger')
-        ->icon($totaalJaar >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
+        ->icon($totaalJaar >= 0 ? 'heroicon::trending-up' : 'heroicon::trending-down')
         ->extraAttributes(['class' => 'col-span-4']);
 
         foreach ($fondsen as $fonds) {
@@ -105,7 +107,7 @@ class InvestMentOverzichtWidget extends StatsOverviewWidget
                 '% | ' . $fonds->jaar_start . ' → ' . $fonds->jaar_eind
             )
             ->color($fonds->jaarverschil >= 0 ? 'success' : 'danger')
-            ->icon($fonds->jaarverschil >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
+            ->icon($fonds->jaarverschil >= 0 ? 'heroicon::trending-up' : 'heroicon::trending-down')
             ->extraAttributes(['class' => 'col-span-1']);
         }
 

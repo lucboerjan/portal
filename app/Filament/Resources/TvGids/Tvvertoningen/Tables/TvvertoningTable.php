@@ -4,13 +4,14 @@ namespace App\Filament\Resources\TvGids\Tvvertoningen\Tables;
 
 use App\Models\Vertoning;
 use Filament\Forms\Components\DatePicker;
-use Filament\Tables;
+use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+
 
 
 class TvvertoningTable
@@ -35,7 +36,8 @@ class TvvertoningTable
                     ->label('Rating'),
                 TextColumn::make('vertoningen_count')
                     ->label('###')
-                    ->getStateUsing(fn (vertoning $r) =>
+                    ->getStateUsing(
+                        fn(vertoning $r) =>
                         $r->imdbrating?->vertoningen()->count() ?? 0
                     )
                     ->badge()
@@ -43,25 +45,33 @@ class TvvertoningTable
             ])
             ->defaultSort('datum', 'desc')
             ->filters([
-                Filter::make('datum')
-                    ->form([
-                        DatePicker::make('datum')
-                            ->label('Filter op datum')
-                            ->displayFormat('d/m/Y'),
-                    ])
-                    ->query(fn ($query, array $data) =>
-                        $query->when(
-                            $data['datum'] ?? null,
-                            fn ($q, $v) => $q->where('datum', $v)
-                        )
-                    ),
-            ])
+    Filter::make('datum')
+        ->schema([
+            DatePicker::make('datum')
+                ->label('Filter op datum')
+                ->displayFormat('d/m/Y'),
+        ])
+        ->indicateUsing(function (array $data): ?string {
+            if (!$data['datum']) {
+                return null;
+            }
+            return 'Datum: ' . \Carbon\Carbon::parse($data['datum'])->format('d/m/Y');
+        })
+        ->query(
+            fn ($query, array $data) =>
+            $query->when(
+                $data['datum'] ?? null,
+                fn ($q, $v) => $q->where('datum', $v)
+            )
+        ),
+])
             ->recordActions([
                 Action::make('imdb_link')
-                    ->label('')
-                    ->icon('heroicon-o-link')
+                    ->iconButton()
+                    ->icon('heroicon::link')
+                    ->visible(fn() => $this->record->status === 'active')
                     ->color('success')
-                    ->url(fn (vertoning $r) => $r->imdbrating?->imdburl ?? '#')
+                    ->url(fn(vertoning $r) => $r->imdbrating?->imdburl ?? '#')
                     ->openUrlInNewTab(),
                 EditAction::make()->button()->color('info'),
                 DeleteAction::make()->button()->color('warning'),

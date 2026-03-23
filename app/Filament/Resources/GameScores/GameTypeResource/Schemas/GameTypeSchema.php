@@ -25,7 +25,7 @@ class GameTypeSchema
                                 ->required()
                                 ->maxLength(255)
                                 ->live(onBlur: true)
-                                ->afterStateUpdated(fn (Set $set, ?string $state) =>
+                                ->afterStateUpdated(fn (Set $set, ?string $UtilityReadingFormstate) =>
                                     $set('slug', Str::slug($state ?? ''))
                                 )
                                 ->columnSpan(1),
@@ -33,7 +33,7 @@ class GameTypeSchema
                             TextInput::make('slug')
                                 ->label('Slug')
                                 ->required()
-                                ->unique(ignoreRecord: true)
+                                ->unique()
                                 ->maxLength(255)
                                 ->columnSpan(1),
 

@@ -27,7 +27,7 @@ class FinAccountForm
                     ->label('Rekeningnummer / Referentie')
                     ->required()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true)
+                    ->unique()
                     ->columnSpanFull(),
 
                 TextInput::make('omschrijving')

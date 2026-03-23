@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Collection;
+use Filament\Support\Icons\Heroicon;    
 
 class GameScoreboard extends Page
 {
@@ -61,7 +62,7 @@ class GameScoreboard extends Page
             // "Spelronde toevoegen" als echte Filament Action met modal
             Action::make('addRound')
                 ->label('Spelronde toevoegen')
-                ->icon('heroicon-m-plus')
+                ->icon('heroicon::plus-circle')
                 ->color('primary')
                 ->visible(fn() => $this->record->status === 'active')
                 ->schema($this->getRoundFormSchema())
@@ -73,12 +74,12 @@ class GameScoreboard extends Page
 
             Action::make('edit')
                 ->label('Spel bewerken')
-                ->icon('heroicon-o-pencil')
+                ->icon('heroicon::pencil')
                 ->url(GameResource::getUrl('edit', ['record' => $this->record])),
 
             Action::make('finish')
                 ->label('Spel afsluiten')
-                ->icon('heroicon-o-flag')
+                ->icon('heroicon::flag')
                 ->color('success')
                 ->requiresConfirmation()
                 ->action('finishGame')
@@ -87,7 +88,7 @@ class GameScoreboard extends Page
 
             Action::make('reopen')
                 ->label('Heropenen')
-                ->icon('heroicon-o-arrow-path')
+                ->icon('heroicon::arrow-path')
                 ->color('warning')
                 ->action('reopenGame')
                 ->visible(fn() => $this->record->status === 'finished'),
@@ -99,8 +100,9 @@ class GameScoreboard extends Page
     public function editRoundAction(): Action
     {
         return Action::make('editRound')
-            ->label('')
-            ->icon('heroicon-m-pencil-square')
+            ->iconButton()
+            ->icon('heroicon::pencil-square')
+            ->visible(fn() => $this->record->status === 'active')
             ->color('primary')
             ->schema(fn(array $arguments) => $this->getRoundFormSchema($arguments['roundId'] ?? null))
             ->fillForm(function (array $arguments): array {
@@ -118,8 +120,9 @@ class GameScoreboard extends Page
     public function deleteRoundAction(): Action
     {
         return Action::make('deleteRound')
-            ->label('')
-            ->icon('heroicon-m-scissors')
+            ->iconButton()
+            ->icon('heroicon::scissors')
+            ->visible(fn() => $this->record->status === 'active')
             ->color('warning')
             ->requiresConfirmation()
             ->action(function (array $arguments): void {

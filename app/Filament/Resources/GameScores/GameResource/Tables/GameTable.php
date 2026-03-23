@@ -10,6 +10,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+
 class GameTable
 {
     public static function configure(Table $table): Table
@@ -72,7 +73,8 @@ class GameTable
                 ActionGroup::make([
                     Action::make('scorebord')
                         ->label('Scorebord')
-                        ->icon('heroicon-o-rocket-launch')
+                        ->icon('heroicon::rocket-launch')
+                        ->visible(fn() => $this->record->status === 'active')
                         ->color('success')
                         ->url(fn(Game $record) => GameResource::getUrl('scorebord', ['record' => $record])),
 

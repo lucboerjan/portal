@@ -28,7 +28,9 @@ class TvvertoningSchema
             Select::make('imdbratingID')
                 ->label('Titel van de film')
                 ->options(
-                    Imdbrating::orderBy('titel')->pluck('titel', 'id')
+                    Imdbrating::orderBy('titel')
+                        ->whereNotNull('titel')  // ← filter null waarden uit
+                        ->pluck('titel', 'id')
                 )
                 ->required()
                 ->searchable(),
