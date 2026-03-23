@@ -73,8 +73,8 @@ class GameTable
                 ActionGroup::make([
                     Action::make('scorebord')
                         ->label('Scorebord')
-                        ->icon('heroicon::rocket-launch')
-                        ->visible(fn() => $this->record->status === 'active')
+                        ->icon('heroicon-o-rocket-launch')
+                        ->visible(fn(Game $record) => $record->status === 'active')
                         ->color('success')
                         ->url(fn(Game $record) => GameResource::getUrl('scorebord', ['record' => $record])),
 

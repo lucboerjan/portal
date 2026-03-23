@@ -27,8 +27,12 @@ Schedule::command('funds:fetch')
     ->everyFifteenMinutes()
     ->between('06:00', '23:00');
 
-Schedule::command('fin:rekening-standen-opslaan')->monthlyOn(1, '04:00');    
+Schedule::command('fin:rekening-standen-opslaan')->monthlyOn(1, '04:00');
 Schedule::command('app:update-fund-fin-account')
     ->lastDayOfMonth()
     ->everyFifteenMinutes()
     ->between('20:00', '23:59');
+
+Schedule::command('p1:fetch')
+    ->everyFiveMinutes()
+    ->withoutOverlapping();

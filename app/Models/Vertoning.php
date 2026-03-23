@@ -17,6 +17,6 @@ class Vertoning extends Model
 
     public function imdbrating()
     {
-        return $this->belongsTo(Imdbrating::class, 'imdbratingID');
+        return $this->belongsTo(ImdbRating::class, 'imdbratingID');
     }
 }

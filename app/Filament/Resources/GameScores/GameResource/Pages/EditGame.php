@@ -15,7 +15,7 @@ class EditGame extends EditRecord
         return [
             Actions\Action::make('scorebord')
                 ->label('Scorebord')
-                ->icon('heroicon::rocket-launch')
+                ->icon('heroicon-o-rocket-launch')
                 ->color('success')
                 ->hidden(fn () => $this->getRecord()->status !== 'active')
                 ->url(fn () => GameResource::getUrl('scorebord', ['record' => $this->getRecord()])),
