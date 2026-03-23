@@ -19,7 +19,7 @@ class SendBackupSuccessMail
             ->disk()
             ->path($backup->path());
 
-        $to = env('BACKUP_NOTIFICATION_EMAIL');
+        $to = config('backup.notifications.mail.to');
         Mail::to($to)->send(new BackupCompletedMail($absolutePath));
     }
 }
