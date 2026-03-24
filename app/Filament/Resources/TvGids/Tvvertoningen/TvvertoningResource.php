@@ -10,7 +10,7 @@ use Filament\Support\Icons\Heroicon;
 class TvvertoningResource extends Resource
 {
     protected static ?string $model = Vertoning::class;
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendar;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFilm;
     protected static ?string $navigationLabel = 'TV Vertoningen';
     protected static ?string $modelLabel = 'TV Vertoning';
     protected static ?string $pluralModelLabel = 'TV Vertoningen';

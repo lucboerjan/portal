@@ -12,6 +12,6 @@ class Imdbrating extends Model
 
     public function vertoningen()
     {
-        return $this->hasMany(vertoning::class, 'imdbratingID');
+        return $this->hasMany(vertoning::class, 'imdbrating_id');
     }
 }

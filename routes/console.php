@@ -35,4 +35,6 @@ Schedule::command('app:update-fund-fin-account')
 
 Schedule::command('p1:fetch')
     ->everyFiveMinutes()
+    ->between('08:05', '23:00')
+    ->timezone('Europe/Brussels')
     ->withoutOverlapping();

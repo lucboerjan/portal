@@ -62,7 +62,7 @@ class GameScoreboard extends Page
             // "Spelronde toevoegen" als echte Filament Action met modal
             Action::make('addRound')
                 ->label('Spelronde toevoegen')
-                ->icon('heroicon::plus-circle')
+                ->icon(heroicon::OutlinedPlusCircle)
                 ->color('primary')
                 ->visible(fn() => $this->record->status === 'active')
                 ->schema($this->getRoundFormSchema())
@@ -74,12 +74,12 @@ class GameScoreboard extends Page
 
             Action::make('edit')
                 ->label('Spel bewerken')
-                ->icon('heroicon::pencil')
+                ->icon(heroicon::OutlinedPencilSquare)
                 ->url(GameResource::getUrl('edit', ['record' => $this->record])),
 
             Action::make('finish')
                 ->label('Spel afsluiten')
-                ->icon('heroicon::flag')
+                ->icon(heroicon::OutlinedFlag)
                 ->color('success')
                 ->requiresConfirmation()
                 ->action('finishGame')
@@ -88,7 +88,7 @@ class GameScoreboard extends Page
 
             Action::make('reopen')
                 ->label('Heropenen')
-                ->icon('heroicon::arrow-path')
+                ->icon(heroicon::OutlinedArrowPath)
                 ->color('warning')
                 ->action('reopenGame')
                 ->visible(fn() => $this->record->status === 'finished'),
@@ -101,7 +101,7 @@ class GameScoreboard extends Page
     {
         return Action::make('editRound')
             ->iconButton()
-            ->icon('heroicon::pencil-square')
+            ->icon(heroicon::OutlinedPencilSquare)
             ->visible(fn() => $this->record->status === 'active')
             ->color('primary')
             ->schema(fn(array $arguments) => $this->getRoundFormSchema($arguments['roundId'] ?? null))
@@ -121,7 +121,7 @@ class GameScoreboard extends Page
     {
         return Action::make('deleteRound')
             ->iconButton()
-            ->icon('heroicon::scissors')
+            ->icon(heroicon::OutlinedScissors)
             ->visible(fn() => $this->record->status === 'active')
             ->color('warning')
             ->requiresConfirmation()
