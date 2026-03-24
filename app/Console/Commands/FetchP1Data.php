@@ -46,7 +46,7 @@ foreach ($readings as $typeId => $value) {
         'meter_stand'     => $value,
     ]);
 }
-
+    Log::info('P1 data opgeslagen: ' . $readingDate);
     $this->info('P1 data opgeslagen: ' . $readingDate);
   }
 }
