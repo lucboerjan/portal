@@ -9,8 +9,10 @@ use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\Action;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+ 
 
 
 
@@ -45,34 +47,34 @@ class TvvertoningTable
             ])
             ->defaultSort('datum', 'desc')
             ->filters([
-    Filter::make('datum')
-        ->schema([
-            DatePicker::make('datum')
-                ->label('Filter op datum')
-                ->displayFormat('d/m/Y'),
-        ])
-        ->indicateUsing(function (array $data): ?string {
-            if (!$data['datum']) {
-                return null;
-            }
-            return 'Datum: ' . \Carbon\Carbon::parse($data['datum'])->format('d/m/Y');
-        })
-        ->query(
-            fn ($query, array $data) =>
-            $query->when(
-                $data['datum'] ?? null,
-                fn ($q, $v) => $q->where('datum', $v)
-            )
-        ),
-])
+                Filter::make('datum')
+                    ->schema([
+                        DatePicker::make('datum')
+                            ->label('Filter op datum')
+                            ->displayFormat('d/m/Y'),
+                    ])
+                    ->indicateUsing(function (array $data): ?string {
+                        if (!$data['datum']) {
+                            return null;
+                        }
+                        return 'Datum: ' . \Carbon\Carbon::parse($data['datum'])->format('d/m/Y');
+                    })
+                    ->query(
+                        fn($query, array $data) =>
+                        $query->when(
+                            $data['datum'] ?? null,
+                            fn($q, $v) => $q->where('datum', $v)
+                        )
+                    ),
+            ])
             ->recordActions([
                 Action::make('imdb_link')
                     ->iconButton()
-                    ->icon('heroicon::link')
-                    ->visible(fn() => $this->record->status === 'active')
+                    ->icon(Heroicon::OutlinedLink)
                     ->color('success')
                     ->url(fn(vertoning $r) => $r->imdbrating?->imdburl ?? '#')
-                    ->openUrlInNewTab(),
+                    ->openUrlInNewTab()
+                    ->visible(fn(vertoning $r) => !empty($r->imdbrating?->imdburl)),
                 EditAction::make()->button()->color('info'),
                 DeleteAction::make()->button()->color('warning'),
             ]);

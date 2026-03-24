@@ -10,6 +10,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Support\Icons\Heroicon;   
 
 class GameTable
 {
@@ -73,7 +74,7 @@ class GameTable
                 ActionGroup::make([
                     Action::make('scorebord')
                         ->label('Scorebord')
-                        ->icon('heroicon-o-rocket-launch')
+                        ->icon(Heroicon::OutlinedRocketLaunch)
                         ->visible(fn(Game $record) => $record->status === 'active')
                         ->color('success')
                         ->url(fn(Game $record) => GameResource::getUrl('scorebord', ['record' => $record])),

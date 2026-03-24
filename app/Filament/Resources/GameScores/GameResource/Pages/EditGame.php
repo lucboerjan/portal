@@ -5,6 +5,7 @@ namespace App\Filament\Resources\GameScores\GameResource\Pages;
 use App\Filament\Resources\GameScores\GameResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Icons\Heroicon;    
 
 class EditGame extends EditRecord
 {
@@ -15,12 +16,13 @@ class EditGame extends EditRecord
         return [
             Actions\Action::make('scorebord')
                 ->label('Scorebord')
-                ->icon('heroicon-o-rocket-launch')
+                ->icon(Heroicon::OutlinedRocketLaunch)
                 ->color('success')
                 ->hidden(fn () => $this->getRecord()->status !== 'active')
                 ->url(fn () => GameResource::getUrl('scorebord', ['record' => $this->getRecord()])),
 
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+            ->icon(Heroicon::OutlinedScissors),
         ];
     }
 }

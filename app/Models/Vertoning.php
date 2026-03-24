@@ -8,15 +8,15 @@ class Vertoning extends Model
 {
     protected $table = 'vertoningen';
 
-    protected $fillable = ['tvzenderID', 'imdbratingID', 'datum'];
+    protected $fillable = ['tvzender_id', 'imdbrating_id', 'datum'];
 
     public function tvzender()
     {
-        return $this->belongsTo(Tvzender::class, 'tvzenderID');
+        return $this->belongsTo(Tvzender::class, 'tvzender_id');
     }
 
     public function imdbrating()
     {
-        return $this->belongsTo(ImdbRating::class, 'imdbratingID');
+        return $this->belongsTo(ImdbRating::class, 'imdbrating_id');
     }
 }

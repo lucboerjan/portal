@@ -25,7 +25,7 @@ class TvvertoningSchema
                 )
                 ->required()
                 ->searchable(),
-            Select::make('imdbratingID')
+            Select::make('imdbrating_id')
                 ->label('Titel van de film')
                 ->options(
                     Imdbrating::orderBy('titel')

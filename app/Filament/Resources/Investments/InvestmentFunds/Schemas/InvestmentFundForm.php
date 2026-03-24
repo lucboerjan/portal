@@ -10,6 +10,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Hidden;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Support\Icons\Heroicon;
 
 class InvestmentFundForm
 {
@@ -29,7 +30,7 @@ class InvestmentFundForm
                     ->label('Website')
                     ->suffixAction(
                         Action::make('open')
-                            ->icon('heroicon-o-link')
+                            ->icon(Heroicon::OutlinedLink)
                             ->url(fn($state) => $state)
                             ->openUrlInNewTab()
                     ),
@@ -51,7 +52,6 @@ class InvestmentFundForm
                 TextInput::make('rekening_naam')
                     ->hidden()
                     ->dehydrated(false),
-
             ]);
     }
 }
