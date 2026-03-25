@@ -13,10 +13,16 @@ class BackupCompletedMail extends Mailable
     use Queueable, SerializesModels;
 
     public string $backupPath;
+    public string $filename;
+    public string $size;
 
     public function __construct(string $backupPath)
     {
         $this->backupPath = $backupPath;
+        $this->filename   = basename($backupPath);
+        $this->size       = file_exists($backupPath)
+            ? round(filesize($backupPath) / 1048576, 2) . ' MB'
+            : 'onbekend';
     }
 
     public function envelope(): Envelope
@@ -26,19 +32,15 @@ class BackupCompletedMail extends Mailable
         );
     }
 
-    public function content(): Content
-    {
-        return new Content(
-            view: 'emails.backup_completed',
-        );
-    }
+public function content(): Content
+{
+    return new Content(
+        markdown: 'emails.backup_completed',
+    );
+}
 
     public function attachments(): array
     {
-        return [
-            \Illuminate\Mail\Mailables\Attachment::fromPath($this->backupPath)
-                ->as(basename($this->backupPath))
-                ->withMime('application/zip'),
-        ];
+        return []; // Zip-bijlage verwijderd — SMTP blokkeert .zip bestanden
     }
 }
