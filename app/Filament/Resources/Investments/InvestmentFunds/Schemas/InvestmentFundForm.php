@@ -31,6 +31,7 @@ class InvestmentFundForm
                     ->suffixAction(
                         Action::make('open')
                             ->icon(Heroicon::OutlinedLink)
+                            ->visible(fn($state)=>($state != ''))
                             ->url(fn($state) => $state)
                             ->openUrlInNewTab()
                     ),
