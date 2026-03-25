@@ -16,6 +16,7 @@ return [
     |
     */
     'too-many-columns' => [
+        'enabled' => false,
         'max_columns' => 15,
     ],
 
