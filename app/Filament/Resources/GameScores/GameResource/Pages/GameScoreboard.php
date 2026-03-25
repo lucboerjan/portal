@@ -74,6 +74,7 @@ class GameScoreboard extends Page
 
             Action::make('edit')
                 ->label('Spel bewerken')
+                ->visible(fn() => $this->record->status === 'active')
                 ->icon(heroicon::OutlinedPencilSquare)
                 ->url(GameResource::getUrl('edit', ['record' => $this->record])),
 
