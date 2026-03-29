@@ -28,7 +28,7 @@ class ElectricityConsumptionChart extends ChartWidget
 
         // Loop door laatste 12 maanden
         for ($i = 12; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
+            $month = now()->startOfMonth()->subMonths($i);
             $months->push($month->format('M Y'));
 
             $consumptionData[] = $this->calculateMonthlyConsumption(

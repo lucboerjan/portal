@@ -24,6 +24,7 @@ class TvvertoningTable
             ->columns([
                 TextColumn::make('datum')
                     ->label('Datum')
+                    ->date('d-m-Y')
                     ->sortable(),
                 TextColumn::make('tvzender.naam')
                     ->label('Zender')

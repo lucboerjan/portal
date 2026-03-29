@@ -4,20 +4,22 @@ namespace App\Listeners;
 
 use Spatie\Backup\Events\BackupWasSuccessful;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Mail\BackupCompletedMail;
-use Illuminate\Support\Facades\Log;
 
 class SendBackupSuccessMail
 {
     public function handle(BackupWasSuccessful $event): void
     {
-        // Haal de meest recente backup op
-        $backup = $event->backupDestination->newestBackup();
-
-        // Maak van de relatieve path een absolute path
-        $absolutePath = $event->backupDestination
-            ->disk()
-            ->path($backup->path());
+        $disk = Storage::disk($event->diskName);
+        
+        // Haal alle bestanden op in de backup folder
+        $files = $disk->files($event->backupName);
+        
+        // Meest recente = laatste in de lijst
+        $latestBackup = collect($files)->sortDesc()->first();
+        
+        $absolutePath = $disk->path($latestBackup);
 
         $to = config('backup.notifications.mail.to');
         Mail::to($to)->send(new BackupCompletedMail($absolutePath));

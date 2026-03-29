@@ -59,7 +59,7 @@ class AppsWidget extends Widget
                 'color'  => 'primary',
                 'target' => '_blank',
             ],
-            
+
             [
                 'label'  => 'Contacts',
                 'url'    => $this->url('cdb'),
@@ -74,15 +74,15 @@ class AppsWidget extends Widget
                 'color'  => 'primary',
                 'target' => '_blank',
             ],
-            
-            // Add more apps here:
-            // [
-            //     'label'  => 'Nieuwe App',
-            //     'url'    => 'https://nieuweapp.example.com',
-            //     'icon'   => 'globe-alt',
-            //     'color'  => 'success',
-            //     'target' => '_blank',
-            // ],
+
+            [
+                'label'  => 'Rekenrakkers',
+                'url'    => 'https://rekenrakkertjes.ok29.eu',
+                'icon'   => null,
+                'emoji'  => '🧮',
+                'color'  => 'success',
+                'target' => '_blank',
+            ],
             // Add more apps here:
             // [
             //     'label'  => 'Nieuwe App',
@@ -95,10 +95,10 @@ class AppsWidget extends Widget
     }
 
     private function url(string $subdomain): string
-{
-    if (env('APP_ENV') === 'local') {
-        return 'http://' . $subdomain . '.' . env('APP_DOMAIN', 'local');
-    }   
-    return 'https://' . $subdomain . '.' . env('APP_DOMAIN', 'local');
-}
+    {
+        if (env('APP_ENV') === 'local') {
+            return 'http://' . $subdomain . '.' . env('APP_DOMAIN', 'local');
+        }
+        return 'https://' . $subdomain . '.' . env('APP_DOMAIN', 'local');
+    }
 }

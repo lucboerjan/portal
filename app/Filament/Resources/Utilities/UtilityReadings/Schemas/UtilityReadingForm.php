@@ -10,7 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use App\Models\UtilityType;
 use App\Models\UtilityReading;
-use Filament\Schemas\Components\Utilities\Set;  
+use Filament\Schemas\Components\Utilities\Set;
 
 use Illuminate\Support\Facades\Log;
 
@@ -68,8 +68,12 @@ class UtilityReadingForm
 
                     ->afterStateUpdated(function ($state, Set $set, ?UtilityReading  $record) {
 
-                        if ($state <> $record->meter_stand) {
-                            $set('reading_date', today()->format('Y-m-d'));
+                        
+                        if ($record) {
+
+                            if ($state <> $record->meter_stand && $record) {
+                                $set('reading_date', today()->format('Y-m-d'));
+                            }
                         }
                     }),
 

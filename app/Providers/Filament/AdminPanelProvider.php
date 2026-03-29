@@ -92,6 +92,13 @@ class AdminPanelProvider extends PanelProvider
 
 
             ])
+            ->renderHook(
+                'panels::body.end',
+                fn() => view('filament.collapse-nav')
+            )
+            ->assets([
+                Js::make('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
+            ])
 
             ->navigationGroups([
                 NavigationGroup::make('Investments')
@@ -109,7 +116,7 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 
-    public function boot()
+    /* public function boot()
     {
         Filament::registerRenderHook(
             'panels::body.end',
@@ -119,5 +126,5 @@ class AdminPanelProvider extends PanelProvider
         FilamentAsset::register([
             Js::make('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
         ]);
-    }
+    } */
 }

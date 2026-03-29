@@ -10,7 +10,7 @@ use App\Models\UtilityCorrection;
 class GasConsumptionChart extends ChartWidget
 {
     protected ?string $heading = 'Gas Verbruik (laatste 12 maanden)';
-    
+protected ?string $pollingInterval = null; 
     protected function getData(): array
     {
         // Haal alle benodigde utility types op
@@ -21,7 +21,7 @@ class GasConsumptionChart extends ChartWidget
         
         // Loop door laatste 12 maanden
         for ($i = 12; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
+            $month = now()->startOfMonth()->subMonths($i);
             $months->push($month->format('M Y'));
             
             $consumptionData[] = $this->calculateMonthlyConsumption(

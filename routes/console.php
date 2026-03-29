@@ -14,7 +14,7 @@ Artisan::command('inspire', function () {
 // =======================================
 // Plan je custom artisan command "backup:conditional"
 Schedule::command('backup:run')
-    //everyMinute()          // elek minuut controleren of backup nodig is
+    //->everyMinute()          // elek minuut controleren of backup nodig is
     ->dailyAt('02:00')        // dagelijks om 05:00
     ->onOneServer()             // voorkomt dubbel uitvoeren in multi-server setup
     ->withoutOverlapping()      // start geen nieuwe job als vorige nog draait
@@ -26,8 +26,8 @@ Schedule::command('backup:clean')->dailyAt('03:00');
 // Scrapen Funds en bijwerken belegginsrekenigen
 // =============================================
 Schedule::command('funds:fetch')
-    //->everyFifteenMinutes()
     ->everyFifteenMinutes()
+    //->everyMinute()
     ->between('06:00', '23:00');
 
 Schedule::command('app:update-fund-fin-account')
@@ -44,8 +44,9 @@ Schedule::command('fin:rekening-standen-opslaan')->monthlyOn(1, '04:00');
 // Utilly Readings uitlezen en wegschrijven
 // ========================================    
 Schedule::command('p1:fetch')
+    //->everyMinute()
     ->everyThirtyMinutes()
-    ->between('08:05', '23:00')
+    ->between('08:05', '23:55')
     ->timezone('Europe/Brussels')
     ->withoutOverlapping();
 
