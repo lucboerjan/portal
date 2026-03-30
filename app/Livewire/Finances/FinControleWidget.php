@@ -7,15 +7,17 @@ use App\Models\FinRekeningStand;
 use App\Models\FinTransactie;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Log;
 
 class FinControleWidget extends StatsOverviewWidget
 {
     protected static ?int $sort = 4;
     protected int|string|array $columnSpan = 'full';
+    protected ?string $pollingInterval = null;
 
     protected function getStats(): array
     {
-        $vorigeMaand = now()->subMonth();
+        $vorigeMaand = \Carbon\Carbon::create(now()->year, now()->month, 1)->subMonth();
 
         $eindeVorigeMaand = FinRekeningStand::where('jaar', $vorigeMaand->year)
             ->where('maand', $vorigeMaand->month)

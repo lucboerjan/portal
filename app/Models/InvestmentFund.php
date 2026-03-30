@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-use Illuminate\Support\Facades\Log;
 
 class InvestmentFund extends Model
 {
@@ -24,6 +23,10 @@ class InvestmentFund extends Model
         'fondsType' => 'string',
     ];
 
+    // -------------------------------------------------------------------------
+    // Relaties
+    // -------------------------------------------------------------------------
+
     public function InvestmentPurchase(): HasMany
     {
         return $this->hasMany(InvestmentPurchase::class, 'fondsID');
@@ -36,47 +39,71 @@ class InvestmentFund extends Model
 
     public function rekening(): BelongsTo
     {
-        return $this->BelongsTo(FinRekening::class, 'rekening_id');
+        return $this->belongsTo(FinRekening::class, 'rekening_id');
     }
 
-    // Helper functions for calculations
+    public function aandelenAankopen(): HasMany
+    {
+        return $this->hasMany(InvestmentPurchase::class, 'fondsID');
+    }
+
+    // -------------------------------------------------------------------------
+    // Huidige waarde & aantallen
+    // -------------------------------------------------------------------------
+
+    /**
+     * Totaal aantal aandelen (som van alle aankopen).
+     */
     public function getTotalQuantityAttribute(): float
     {
         return $this->InvestmentPurchase->sum('aantal');
     }
 
+    /**
+     * Huidige waarde = meest recente dagkoers × totaal aantal aandelen.
+     */
+    public function getHuidigeWaardeAttribute(): float
+    {
+        $latestRate = $this->InvestmentRate()->latest('datum')->first();
+        if (! $latestRate) {
+            return 0;
+        }
+        return $this->InvestmentPurchase()->sum('aantal') * $latestRate->dagkoers;
+    }
+
+    // -------------------------------------------------------------------------
+    // Aankoopwaarde & rendement
+    // -------------------------------------------------------------------------
+
+    /**
+     * Som van (aantal × aankoopprijs) voor alle aankopen.
+     */
+    public function getTotaleInvestering(): float
+    {
+        return $this->aandelenAankopen()
+            ->get()
+            ->sum(fn($aankoop) => $aankoop->aantal * $aankoop->aankoopprijs);
+    }
+
     public function getPurchaseAmountAttribute(): float
     {
-        return $this->InvestmentPurchase->sum(function ($purchase) {
-            return $purchase->aantal * $purchase->aankoopprijs;
-        });
+        return $this->InvestmentPurchase->sum(
+            fn($purchase) => $purchase->aantal * $purchase->aankoopprijs
+        );
     }
 
-    public function getCurrentValueAttribute(): float
+    public function getRendementEuroAttribute(): float
     {
-        $latestRate = $this->rates()->latest('datum')->first();
-        if (!$latestRate) {
-            return 0;
-        }
-        return $this->total_quantity * $latestRate->dagkoers;
+        return $this->getHuidigeWaardeAttribute() - $this->getTotaleInvestering();
     }
 
-    public function getMinValueAttribute(): float
+    public function getRendementPercentageAttribute(): float
     {
-        $minRate = $this->rates()->min('dagkoers');
-        if (!$minRate) {
+        $totaleInvestering = $this->getTotaleInvestering();
+        if ($totaleInvestering <= 0) {
             return 0;
         }
-        return $this->total_quantity * $minRate;
-    }
-
-    public function getMaxValueAttribute(): float
-    {
-        $maxRate = $this->rates()->max('dagkoers');
-        if (!$maxRate) {
-            return 0;
-        }
-        return $this->total_quantity * $maxRate;
+        return ($this->getRendementEuroAttribute() / $totaleInvestering) * 100;
     }
 
     public function getReturnEuroAttribute(): float
@@ -92,6 +119,31 @@ class InvestmentFund extends Model
         return (($this->current_value - $this->purchase_amount) / $this->purchase_amount) * 100;
     }
 
+    // -------------------------------------------------------------------------
+    // Min / max / breakeven
+    // -------------------------------------------------------------------------
+
+    public function getCurrentValueAttribute(): float
+    {
+        $latestRate = $this->InvestmentRate()->latest('datum')->first();
+        if (! $latestRate) {
+            return 0;
+        }
+        return $this->total_quantity * $latestRate->dagkoers;
+    }
+
+    public function getMinValueAttribute(): float
+    {
+        $minRate = $this->InvestmentRate()->min('dagkoers');
+        return $minRate ? $this->total_quantity * $minRate : 0;
+    }
+
+    public function getMaxValueAttribute(): float
+    {
+        $maxRate = $this->InvestmentRate()->max('dagkoers');
+        return $maxRate ? $this->total_quantity * $maxRate : 0;
+    }
+
     public function getBreakevenAttribute(): float
     {
         if ($this->total_quantity == 0) {
@@ -100,160 +152,104 @@ class InvestmentFund extends Model
         return $this->purchase_amount / $this->total_quantity;
     }
 
+    // -------------------------------------------------------------------------
+    // Koers helpers
+    // -------------------------------------------------------------------------
+
     public function getDailyRateAttribute(): float
     {
-        $latestRate = $this->rates()->latest('datum')->first();
+        $latestRate = $this->InvestmentRate()->latest('datum')->first();
         return $latestRate ? $latestRate->dagkoers : 0;
     }
 
     public function getLastUpdatedAttribute(): ?string
     {
-        $latestRate = $this->rates()->latest('datum')->first();
+        $latestRate = $this->InvestmentRate()->latest('datum')->first();
         return $latestRate ? $latestRate->datum->format('d-m') : null;
     }
 
-    // In je Fund model
-    public function getHuidigeWaardeAttribute(): float
+    public function getLaatsteKoersAttribute(): ?InvestmentRate
     {
-        $latestRate = $this->InvestmentRate()->latest('datum')->first();
-        if (!$latestRate) {
-            return 0;
-        }
-        return $this->InvestmentPurchase()->sum('aantal') * $latestRate->dagkoers;
-    }
-
-
-    public function aandelenAankopen()
-    {
-        return $this->hasMany(InvestmentPurchase::class, 'fondsID');
-    }
-
-    // App\Models\InvestmentFund.php
-
-    public function getLaatsteKoersAttribute()
-    {
-        return $this->investmentRate()
+        return $this->InvestmentRate()
             ->orderBy('datum', 'desc')
             ->first();
     }
 
+    // -------------------------------------------------------------------------
+    // Verschil-attributen (dag / maand / jaar)
+    // -------------------------------------------------------------------------
 
-    public function getTotaleInvestering()
+    /**
+     * Waardeverschil tussen de laatste twee beschikbare dagkoersen.
+     */
+    public function getDagverschilAttribute(): float
     {
-        // Som van (aantal * prijs_per_aandeel) voor alle aankopen
-        return $this->aandelenAankopen()
-            ->get()
-            ->sum(function ($aankoop) {
-                return $aankoop->aantal * $aankoop->aankoopprijs;
-            });
+        $rates = $this->InvestmentRate
+            ->sortByDesc('datum')
+            ->take(2);
+
+        $huidigeKoers  = $rates->first()?->dagkoers ?? 0;
+        $vorigeKoers   = $rates->skip(1)->first()?->dagkoers ?? $huidigeKoers;
+        $aandelenNu    = $this->InvestmentPurchase->sum('aantal');
+
+        return ($aandelenNu * $huidigeKoers) - ($aandelenNu * $vorigeKoers);
     }
 
-    public function getRendementEuroAttribute()
+    /**
+     * Waardeverschil t.o.v. de laatste bekende koers van de vorige kalendermaand.
+     */
+    public function getMaandverschilAttribute(): float
     {
-        return $this->getHuidigeWaardeAttribute() - $this->getTotaleInvestering();
-    }
-
-    public function getRendementPercentageAttribute()
-    {
-        $totaleInvestering = $this->getTotaleInvestering();
-
-        if ($totaleInvestering > 0) {
-            return ($this->getRendementEuroAttribute() / $totaleInvestering) * 100;
-        }
-
-        return 0;
-    }
-
-
-    public function getJaarverschilAttribute()
-    {
-        // 1. Laatste dagkoers nu
-        $laatsteRateNu = $this->InvestmentRate
+        $huidigeKoers = $this->InvestmentRate
             ->sortByDesc('datum')
             ->first()?->dagkoers ?? 0;
 
-        // 2. Einde vorig jaar
-        $eindeVorigJaar = now()->subYear()->endOfYear();
+        // Expliciet: laatste dag van vorige kalendermaand
+        $eindeVorigeMaand = now()->startOfMonth()->subDay(); // bv. 28-02-2026
 
-        // 3. Laatste dagkoers vóór / op einde vorig jaar
-        $laatsteRateVorigJaar = $this->InvestmentRate
-            ->where('datum', '<=', $eindeVorigJaar)
-            ->sortByDesc('datum')
-            ->first()?->dagkoers ?? 0;
-
-        // 4. Aandelen nu
-        $aandelenNu = $this->InvestmentPurchase->sum('aantal');
-
-        // 5. Aandelen op einde vorig jaar
-        $aandelenVorigJaar = $this->InvestmentPurchase
-            ->where('datum', '<=', $eindeVorigJaar)
-            ->sum('aantal');
-
-        // Debug
-        //Log::info("dagkoersNu: $laatsteRateNu, dagkoersVorigJaar: $laatsteRateVorigJaar, aandelenNu: $aandelenNu, aandelenVorigJaar: $aandelenVorigJaar");
-
-        // 6. Waarde nu en waarde einde vorig jaar
-        $waardeNu = $aandelenNu * $laatsteRateNu;
-        $waardeVorigJaar = $aandelenVorigJaar * $laatsteRateVorigJaar;
-
-        return $waardeNu - $waardeVorigJaar;
-    }
-
-
-    public function getMaandverschilAttribute()
-    {
-        // 1. Laatste dagkoers nu
-        $laatsteRateNu = $this->InvestmentRate
-            ->sortByDesc('datum')
-            ->first()?->dagkoers ?? 0;
-
-        // 2. Einde vorige maand
-        $eindeVorigeMaand = now()->subMonth()->endOfMonth();
-
-        // 3. Laatste dagkoers vóór / op einde vorige maand
-        $laatsteRateVorigeMaand = $this->InvestmentRate
+        $vorigeKoers = $this->InvestmentRate
             ->where('datum', '<=', $eindeVorigeMaand)
             ->sortByDesc('datum')
             ->first()?->dagkoers ?? 0;
 
-        // 4. Aandelen nu
-        $aandelenNu = $this->InvestmentPurchase->sum('aantal');
-
-        // 5. Aandelen op einde vorig jaar
+        $aandelenNu          = $this->InvestmentPurchase->sum('aantal');
         $aandelenVorigeMaand = $this->InvestmentPurchase
             ->where('datum', '<=', $eindeVorigeMaand)
             ->sum('aantal');
 
-        // Debug
-        //Log::info("dagkoersNu: $laatsteRateNu, dagkoersVorigJaar: $laatsteRateVorigeMaand, aandelenNu: $aandelenNu, aandelenVorigeMaand: $aandelenVorigeMaand");
+        Log::info("Maandverschil debug voor fonds {$this->naam}", [
+            'huidigeKoers'        => $huidigeKoers,
+            'vorigeKoers'         => $vorigeKoers,
+            'eindeVorigeMaand'    => $eindeVorigeMaand->format('d-m-Y'),
+            'aandelenNu'          => $aandelenNu,
+            'aandelenVorigeMaand' => $aandelenVorigeMaand,
+            'resultaat'           => ($aandelenNu * $huidigeKoers) - ($aandelenVorigeMaand * $vorigeKoers),
+        ]);
 
-        // 6. Waarde nu en waarde einde vorig jaar
-        $waardeNu = $aandelenNu * $laatsteRateNu;
-        $waardeVorigeMaand = $aandelenVorigeMaand * $laatsteRateVorigeMaand;
-
-        return $waardeNu - $waardeVorigeMaand;
+        return ($aandelenNu * $huidigeKoers) - ($aandelenVorigeMaand * $vorigeKoers);
     }
 
-       public function getDagverschilAttribute()
-{
-    // 1. Haal de laatste 2 dagkoersen op
-    $rates = $this->InvestmentRate
-        ->sortByDesc('datum')
-        ->take(2);
+    /**
+     * Waardeverschil t.o.v. de laatste bekende koers van het vorige kalenderjaar.
+     */
+    public function getJaarverschilAttribute(): float
+    {
+        $huidigeKoers = $this->InvestmentRate
+            ->sortByDesc('datum')
+            ->first()?->dagkoers ?? 0;
 
-    $laatsteRateNu = $rates->first()?->dagkoers ?? 0;
-    $laatsteRateGisteren = $rates->skip(1)->first()?->dagkoers ?? $laatsteRateNu;
+        $eindeVorigJaar = now()->subYear()->endOfYear();
 
-    // 2. Aandelen vandaag
-    $aandelenNu = $this->InvestmentPurchase->sum('aantal');
+        $vorigeKoers = $this->InvestmentRate
+            ->where('datum', '<=', $eindeVorigJaar)
+            ->sortByDesc('datum')
+            ->first()?->dagkoers ?? 0;
 
-    // 3. Waarde vandaag en gisteren
-    $waardeNu = $aandelenNu * $laatsteRateNu;
-    $waardeGisteren = $aandelenNu * $laatsteRateGisteren;
+        $aandelenNu         = $this->InvestmentPurchase->sum('aantal');
+        $aandelenVorigJaar  = $this->InvestmentPurchase
+            ->where('datum', '<=', $eindeVorigJaar)
+            ->sum('aantal');
 
-    // Debug
-    //Log::info("dagkoersNu: $laatsteRateNu, dagkoersGisteren: $laatsteRateGisteren, aandelenNu: $aandelenNu");
-
-    return $waardeNu - $waardeGisteren;
-}
+        return ($aandelenNu * $huidigeKoers) - ($aandelenVorigJaar * $vorigeKoers);
+    }
 }

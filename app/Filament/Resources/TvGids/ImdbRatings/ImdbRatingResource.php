@@ -18,9 +18,11 @@ class ImdbRatingResource extends Resource
 {
     protected static ?string $model = ImdbRating::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
+    protected static ?int $navigationSort = 3;
 
         public static function getNavigationGroup(): ?string
+        
     {
         return 'TV Gids';
     }

@@ -6,6 +6,7 @@ use App\Models\InvestmentFund;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Support\Icons\Heroicon;
+
 class InvestmentOverzichtStat extends BaseWidget
 {
     protected static ?int $sort = 1;
@@ -13,6 +14,7 @@ class InvestmentOverzichtStat extends BaseWidget
 
     protected function getStats(): array
     {
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\InvestmentFund> $fondsen */
         $fondsen = InvestmentFund::with(['InvestmentRate', 'InvestmentPurchase'])->get();
 
         $totaalHuidigeWaarde = 0;
@@ -41,7 +43,7 @@ class InvestmentOverzichtStat extends BaseWidget
 
             Stat::make('Totaal Rendement', '€ ' . number_format($totaalRendement, 2, ',', '.'))
                 ->description(number_format($totaalRendementPercentage, 2, ',', '.') . '%')
-                ->descriptionIcon($totaalRendement >= 0 ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown  )
+                ->descriptionIcon($totaalRendement >= 0 ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown)
                 ->color($totaalRendement >= 0 ? 'success' : 'danger'),
         ];
     }
@@ -53,6 +55,7 @@ class InvestmentOverzichtStat extends BaseWidget
             $datum     = now()->subDays($i);
             $dagWaarde = 0;
 
+            /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\InvestmentFund> $fondsen */
             $fondsen = InvestmentFund::with(['InvestmentRate', 'InvestmentPurchase'])->get();
 
             foreach ($fondsen as $fonds) {
@@ -73,13 +76,15 @@ class InvestmentOverzichtStat extends BaseWidget
     protected function getRendementTrendData(): array
     {
         $data    = [];
+
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\InvestmentFund> $fondsen */
         $fondsen = InvestmentFund::all();
 
         $totaalAankoopwaarde = 0;
         foreach ($fondsen as $fonds) {
             $aankopen = $fonds->InvestmentPurchase;
             foreach ($aankopen as $aankoop) {
-                $totaalAankoopwaarde += $aankoop->number_of_shares * $aankoop->aankoopprijs;
+                $totaalAankoopwaarde += $aankoop->aantal * $aankoop->aankoopprijs;
             }
         }
 

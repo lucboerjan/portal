@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use Livewire\Attributes\Url;
 use BackedEnum;
 use Filament\Support\Icons\Heroicon;
-
+use Filament\Support\Enums\Width;
 
 class TvGids extends Page
 {
@@ -22,12 +22,18 @@ class TvGids extends Page
     protected static ?int $navigationSort = 0;
     protected string $view = 'filament.pages.tv-gids.tv-gids';
 
+
     // Nieuwe film velden
     public bool $showNieuweFilm = false;
     public string $nieuweFilmTitel = '';
     public ?int $nieuweFilmJaar = null;
     public string $nieuweFilmUrl = '';
     public float $nieuweFilmRating = 0.0;
+
+    public function getMaxContentWidth(): Width
+    {
+        return Width::Full;
+    }
 
     public static function getNavigationGroup(): ?string
     {
@@ -90,7 +96,10 @@ class TvGids extends Page
         return Imdbrating::orderBy('titel')
             ->whereNotNull('titel')
             ->when($this->zoekTitel, fn($q) => $q->where('titel', 'like', "%{$this->zoekTitel}%"))
-            ->pluck('titel', 'id');
+            ->get()
+            ->mapWithKeys(fn($film) => [
+                $film->id => "{$film->titel} ({$film->jaar}) ★ {$film->imdbrating}"
+            ]);
     }
 
     // Bewaren

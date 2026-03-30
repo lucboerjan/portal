@@ -1,8 +1,8 @@
 <x-filament-panels::page>
-    <div class="flex gap-4">
+    <div class="flex gap-4 w-full min-w-0">
 
         {{-- LINKER KOLOM: Tabel --}}
-        <div class="flex-1 overflow-x-auto">
+        <div class="flex-1 min-w-0 overflow-x-auto" style="width: 800px;">
 
             {{-- Datumnavigatie --}}
             <div class="flex items-center gap-2 mb-4">
@@ -89,7 +89,7 @@
         </div>
 
         {{-- RECHTER KOLOM: Formulier --}}
-        <div class="w-80 shrink-0">
+        <div class="shrink-0 w-96">
             <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-4">
 
                 <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -123,7 +123,7 @@
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white">
                         <option value="">-- Kies een film --</option>
                         @foreach($this->films as $id => $titel)
-                            <option value="{{ $id }}">{{ $titel }}</option>
+                            <option value="{{ $id }}">{{ $titel  }}</option>
                         @endforeach
                     </select>
                     @error('imdbrating_id')

@@ -11,24 +11,23 @@ class InvestmentMaandverschilStat extends BaseWidget
 {
     protected static ?int $sort = 3;
     protected ?string $pollingInterval = null;
+
     protected function getStats(): array
     {
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\InvestmentFund> $fondsen */
         $fondsen = InvestmentFund::with(['InvestmentRate', 'InvestmentPurchase'])->get();
 
-        $stats = $fondsen
-            ->map(fn($fonds) => $this->getMaandverschilStat($fonds))
-            ->toArray();
+        $stats =  $fondsen->map(fn(InvestmentFund $fonds) => $this->getMaandverschilStat($fonds))->toArray();
 
-        $totaal = $fondsen->sum(fn($fonds) => $fonds->maandverschil);
+        // Bereken totaal maandverschil
+        $totaal = $fondsen->sum(fn($fonds) => $fonds->Maandverschil);
 
         $stats[] = Stat::make(
-            'Totaal Maandverschil',
+            'Totaal maandverschil',
             '€ ' . number_format($totaal, 2, ',', '.')
         );
 
         return $stats;
-
-        return $fondsen->map(fn($fonds) => $this->getMaandverschilStat($fonds))->toArray();
     }
 
     protected function getMaandverschilStat(InvestmentFund $fonds): Stat
