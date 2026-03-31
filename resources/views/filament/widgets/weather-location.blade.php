@@ -11,37 +11,61 @@
                 </div>
 
                 {{-- Onderste rij: icoon, temp, details --}}
-                <div class="flex items-center gap-6">
-                    <img src="https://openweathermap.org/img/wn/{{ $current['weather'][0]['icon'] }}@2x.png"
-                        class="w-16 h-16 shrink-0" alt="{{ $current['weather'][0]['description'] }}">
-                    <div class="shrink-0">
-                        <div class="text-3xl font-bold text-gray-900 dark:text-white">
-                            {{ round($current['temp']) }}°C
-                        </div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400 capitalize">
-                            {{ $current['weather'][0]['description'] }}
+                <div class="flex items-center w-full">
+
+                    {{-- Linkerblok --}}
+                    <div class="flex items-center gap-4">
+                        <img src="https://openweathermap.org/img/wn/{{ $current['weather'][0]['icon'] }}@2x.png"
+                            class="w-16 h-16 shrink-0" alt="{{ $current['weather'][0]['description'] }}">
+
+                        <div>
+                            <div class="text-3xl font-bold text-gray-900 dark:text-white">
+                                {{ round($current['temp']) }}°C
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400 capitalize">
+                                {{ $current['weather'][0]['description'] }}
+                            </div>
                         </div>
                     </div>
 
-                    <div class="w-px h-10 bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                    {{-- Middenblok (divider) --}}
+                    <div class="flex justify-center flex-1">
+                        <div class="w-px h-10 bg-gray-200 dark:bg-gray-700"></div>
+                    </div>
 
-                    <div class="flex gap-8 text-sm">
+                    {{-- Rechterblok --}}
+                    <div class="flex items-center gap-8 text-sm">
+
                         <div>
                             <div class="text-xs text-gray-400 mb-0.5">Voelt als</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
-                                {{ round($current['feels_like']) }}°C</div>
+                                {{ round($current['feels_like']) }}°C
+                            </div>
                         </div>
+
                         <div>
                             <div class="text-xs text-gray-400 mb-0.5">Vochtigheid</div>
-                            <div class="font-medium text-gray-700 dark:text-gray-300">{{ $current['humidity'] }}%</div>
+                            <div class="font-medium text-gray-700 dark:text-gray-300">
+                                {{ $current['humidity'] }}%
+                            </div>
                         </div>
+
                         <div>
                             <div class="text-xs text-gray-400 mb-0.5">Wind</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
-                                {{ round($current['wind_speed'] * 3.6) }} km/u</div>
+                                {{ round($current['wind_speed'] * 3.6) }} km/u
+                            </div>
                         </div>
+
                     </div>
+
                 </div>
+
+
+
+
+
+
 
             </div>
         @endif
