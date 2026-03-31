@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\Log;
+
+use Carbon\Carbon;
 
 // Voorbeeld standaard command (zit er meestal al in)
 Artisan::command('inspire', function () {
@@ -20,7 +23,7 @@ Schedule::command('backup:run')
     ->withoutOverlapping()      // start geen nieuwe job als vorige nog draait
     ->evenInMaintenanceMode();  // ook tijdens maintenance mode uitvoeren
 
-Schedule::command('backup:clean')->dailyAt('03:00');    
+Schedule::command('backup:clean')->dailyAt('03:00');
 
 // =============================================
 // Scrapen Funds en bijwerken belegginsrekenigen
@@ -28,12 +31,17 @@ Schedule::command('backup:clean')->dailyAt('03:00');
 Schedule::command('funds:fetch')
     ->everyFifteenMinutes()
     //->everyMinute()
-    ->between('06:00', '23:00');
+    ->between('06:00', '23:00')
+    ->withoutOverlapping();
 
 Schedule::command('app:update-fund-fin-account')
-    ->lastDayOfMonth()
-    ->everyFifteenMinutes()
-    ->between('20:00', '23:59');    
+    ->everyTwoMinutes()
+    ->between('16:45', '23:59')
+    ->when(function () {
+        return \Carbon\Carbon::now()->endOfMonth()->isToday();
+    })
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/scheduler-fund.log'));
 
 // ===============================================
 // Rekeningstanden overzetten naar overzichtstabel
@@ -51,6 +59,9 @@ Schedule::command('p1:fetch')
     ->withoutOverlapping();
 
 
+Schedule::call(function () {
+    Log::info('Scheduler is loaded');
+})->everyMinute();
 
 //to run en debug chronical on laragon
 //  .\Cronical.exe --console --debug    

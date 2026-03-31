@@ -18,7 +18,7 @@
                         <img src="https://openweathermap.org/img/wn/{{ $current['weather'][0]['icon'] }}@2x.png"
                             class="w-16 h-16 shrink-0" alt="{{ $current['weather'][0]['description'] }}">
 
-                        <div>
+                        <div style="padding-right: 15px">
                             <div class="text-3xl font-bold text-gray-900 dark:text-white">
                                 {{ round($current['temp']) }}°C
                             </div>
@@ -34,23 +34,23 @@
                     </div>
 
                     {{-- Rechterblok --}}
-                    <div class="flex items-center gap-8 text-sm">
+                    <div class="flex items-center gap-8 text-sm" >
 
-                        <div>
+                        <div style="text-align: center; padding-right: 15px;">
                             <div class="text-xs text-gray-400 mb-0.5">Voelt als</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
                                 {{ round($current['feels_like']) }}°C
                             </div>
                         </div>
 
-                        <div>
+                        <div style="text-align: center; padding-right: 15px;">
                             <div class="text-xs text-gray-400 mb-0.5">Vochtigheid</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
                                 {{ $current['humidity'] }}%
                             </div>
                         </div>
 
-                        <div>
+                        <div style="text-align: center;">
                             <div class="text-xs text-gray-400 mb-0.5">Wind</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
                                 {{ round($current['wind_speed'] * 3.6) }} km/u
