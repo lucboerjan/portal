@@ -38,7 +38,7 @@ Schedule::command('app:update-fund-fin-account')
     ->everyTwoMinutes()
     ->between('16:45', '23:59')
     ->when(function () {
-        return \Carbon\Carbon::now()->endOfMonth()->isToday();
+        return now()->endOfMonth()->isToday();
     })
     ->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/scheduler-fund.log'));
@@ -59,9 +59,9 @@ Schedule::command('p1:fetch')
     ->withoutOverlapping();
 
 
-Schedule::call(function () {
+/* Schedule::call(function () {
     Log::info('Scheduler is loaded');
-})->everyMinute();
+})->everyMinute(); */
 
 //to run en debug chronical on laragon
 //  .\Cronical.exe --console --debug    

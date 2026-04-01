@@ -42,17 +42,19 @@ class FundEndofMonthResult
         $aangroeiBedrag = round($huidigeWaarde - $rekeningStand, 2);
         $datum = Carbon::now()->lastOfMonth()->toDateString();
 
-        // Transactie aanmaken of bijwerken
-        $transactie = FinTransactie::updateOrCreate(
-            [
-                'rekening_id' => $rekening->id,
-                'datum'       => $datum,
-                'omschrijving' => 'Aangroei',
-            ],
-            [
-                'bedrag' => $aangroeiBedrag,
-            ]
-        );
+        // Transactie aanmaken of bijwerken indien het verschil niet nul is
+        if ($aangroeiBedrag != 0) {
+            $transactie = FinTransactie::updateOrCreate(
+                [
+                    'rekening_id' => $rekening->id,
+                    'datum'       => $datum,
+                    'omschrijving' => 'Aangroei',
+                ],
+                [
+                    'bedrag' => $aangroeiBedrag,
+                ]
+            );
+        }
 
         Log::info("Transactie verwerkt voor {$fund->naam}", [
             'transactie_id' => $transactie->id,
