@@ -5,9 +5,9 @@
             <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
 
                 {{-- Bovenste rij: stad + datum --}}
-                <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center justify-between mb-3 px-2" style="margin-left: 15px; margin-right: 150px;">
                     <div class="text-xl font-bold text-gray-700 dark:text-gray-300">{{ $city }}</div>
-                    <div class="text-xs text-gray-400">{{ now()->format('d/m/Y H:i') }}</div>
+                    <div class="text-xs font-bold text-gray-500">{{ now()->format('d/m/Y H:i') }}</div>
                 </div>
 
                 {{-- Onderste rij: icoon, temp, details --}}
@@ -29,21 +29,21 @@
                     </div>
 
                     {{-- Middenblok (divider) --}}
-                    <div class="flex justify-center flex-1">
+                    <div class="flex justify-center flex-1 mx-4">
                         <div class="w-px h-10 bg-gray-200 dark:bg-gray-700"></div>
                     </div>
 
                     {{-- Rechterblok --}}
-                    <div class="flex items-center gap-8 text-sm" >
+                    <div class="flex items-center gap-8 text-sm" style="margin-left:40px;" >
 
-                        <div style="text-align: center; padding-right: 15px;">
+                        <div style="text-align: center; padding-right: 25px;">
                             <div class="text-xs text-gray-400 mb-0.5">Voelt als</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
                                 {{ round($current['feels_like']) }}°C
                             </div>
                         </div>
 
-                        <div style="text-align: center; padding-right: 15px;">
+                        <div style="text-align: center; padding-right: 25px;">
                             <div class="text-xs text-gray-400 mb-0.5">Vochtigheid</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
                                 {{ $current['humidity'] }}%
