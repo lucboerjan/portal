@@ -46,7 +46,7 @@ Schedule::command('app:update-fund-fin-account')
 // ===============================================
 // Rekeningstanden overzetten naar overzichtstabel
 // ===============================================    
-Schedule::command('fin:rekening-standen-opslaan')->monthlyOn(1, '04:00');
+Schedule::command('fin:rekening-standen-opslaan')->dailyAt('06:00');
 
 // ========================================
 // Utilly Readings uitlezen en wegschrijven
@@ -57,11 +57,6 @@ Schedule::command('p1:fetch')
     ->between('08:05', '23:55')
     ->timezone('Europe/Brussels')
     ->withoutOverlapping();
-
-
-/* Schedule::call(function () {
-    Log::info('Scheduler is loaded');
-})->everyMinute(); */
 
 //to run en debug chronical on laragon
 //  .\Cronical.exe --console --debug    

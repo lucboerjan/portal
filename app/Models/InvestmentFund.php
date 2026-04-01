@@ -217,14 +217,14 @@ class InvestmentFund extends Model
             ->where('datum', '<=', $eindeVorigeMaand)
             ->sum('aantal');
 
-        Log::info("Maandverschil debug voor fonds {$this->naam}", [
+/*         Log::info("Maandverschil debug voor fonds {$this->naam}", [
             'huidigeKoers'        => $huidigeKoers,
             'vorigeKoers'         => $vorigeKoers,
             'eindeVorigeMaand'    => $eindeVorigeMaand->format('d-m-Y'),
             'aandelenNu'          => $aandelenNu,
             'aandelenVorigeMaand' => $aandelenVorigeMaand,
             'resultaat'           => ($aandelenNu * $huidigeKoers) - ($aandelenVorigeMaand * $vorigeKoers),
-        ]);
+        ]); */
 
         return ($aandelenNu * $huidigeKoers) - ($aandelenVorigeMaand * $vorigeKoers);
     }

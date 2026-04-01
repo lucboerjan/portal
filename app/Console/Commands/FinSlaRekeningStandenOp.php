@@ -6,6 +6,7 @@ use App\Models\FinRekening;
 use App\Models\FinRekeningStand;
 use App\Models\FinTransactie;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class FinSlaRekeningStandenOp extends Command
 {
@@ -15,7 +16,8 @@ class FinSlaRekeningStandenOp extends Command
     public function handle(): void
     {
         // Vorige maand berekenen
-        $datum = now()->subMonth();
+        //$datum = now()->subMonth();
+        $datum = now();
         $jaar  = $datum->year;
         $maand = $datum->month;
 
@@ -26,7 +28,7 @@ class FinSlaRekeningStandenOp extends Command
 
         foreach ($rekeningen as $rekening) {
             $saldo = FinTransactie::where('rekening_id', $rekening->id)
-                ->whereDate('datum', '<=', $eindeDatum)
+                //->whereDate('datum', '<=', $eindeDatum)
                 ->sum('bedrag');
 
             FinRekeningStand::updateOrCreate(
@@ -44,5 +46,6 @@ class FinSlaRekeningStandenOp extends Command
         }
 
         $this->info('✅ Rekeningsstanden opgeslagen voor ' . $maand . '/' . $jaar);
+        Log::info('Rekeningsstanden opgeslagen voor ' . $maand . '/' . $jaar);
     }
 }
