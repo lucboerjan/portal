@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\Widget;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
@@ -25,6 +26,8 @@ class WeatherBredeneWidget extends Widget
                 'exclude' => 'minutely,hourly,alerts',
             ])->json();
         });
+        //Log::channel('weather')->info('Weather data for Bredene', ['data' => $data]);
+        //dd($data);
 
         return $this->formatData($data, 'Bredene');
     }
@@ -45,13 +48,39 @@ class WeatherBredeneWidget extends Widget
                 'icon' => $day['weather'][0]['icon'],
                 'desc' => $day['weather'][0]['description'],
                 'rain' => $day['pop'] ? round($day['pop'] * 100) : 0,
+                'wind_speed'    => round($day['wind_speed'] * 3.6),
+                'wind_richting' => $this->windRichting($day['wind_deg'] ?? 0),
             ])
             ->values();
-
-        return [
-            'city'    => $city,
-            'current' => $current,
-            'days'    => $days,
+        return  [
+            'city'          => $city,
+            'current'       => $current,
+            'wind_richting' => $this->windRichting($current['wind_deg'] ?? 0),
+            'days'          => $days,
         ];
+    }
+
+    protected function windRichting(int $deg): string
+    {
+        $richtingen = [
+            'N',
+            'NNO',
+            'NO',
+            'ONO',
+            'O',
+            'OZO',
+            'ZO',
+            'ZZO',
+            'Z',
+            'ZZW',
+            'ZW',
+            'WZW',
+            'W',
+            'WNW',
+            'NW',
+            'NNW',
+        ];
+
+        return $richtingen[round($deg / 22.5) % 16];
     }
 }

@@ -34,7 +34,7 @@
                     </div>
 
                     {{-- Rechterblok --}}
-                    <div class="flex items-center gap-8 text-sm" >
+                    <div class="flex items-center gap-8 text-sm">
 
                         <div style="text-align: center; padding-right: 15px;">
                             <div class="text-xs text-gray-400 mb-0.5">Voelt als</div>
@@ -50,10 +50,10 @@
                             </div>
                         </div>
 
-                        <div style="text-align: center;">
+                        <div style="text-align: center; ">
                             <div class="text-xs text-gray-400 mb-0.5">Wind</div>
                             <div class="font-medium text-gray-700 dark:text-gray-300">
-                                {{ round($current['wind_speed'] * 3.6) }} km/u
+                                {{ round($current['wind_speed'] * 3.6) }} km/u {{ $wind_richting }}
                             </div>
                         </div>
 
@@ -87,6 +87,7 @@
                         {{ $day['max'] }}°C&nbsp;&nbsp;&nbsp;</div>
                     <div class="text-xs text-gray-400">{{ $day['min'] }}°C&nbsp;&nbsp;&nbsp;</div>
                     <div class="text-xs text-blue-400">🌧 {{ $day['rain'] }}%</div>
+                    <div class="text-xs text-gray-400">🌬 {{ $day['wind_speed'] }} km/u {{ $day['wind_richting'] }}</div>
                 </div>
             @endforeach
         </div>
