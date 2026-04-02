@@ -35,7 +35,7 @@ Schedule::command('funds:fetch')
     ->withoutOverlapping();
 
 Schedule::command('app:update-fund-fin-account')
-    ->everyTwoMinutes()
+    ->everyFifteenMinutes()
     ->between('16:45', '23:59')
     ->when(function () {
         return now()->endOfMonth()->isToday();
@@ -54,7 +54,7 @@ Schedule::command('fin:rekening-standen-opslaan')->dailyAt('06:00');
 Schedule::command('p1:fetch')
     //->everyMinute()
     ->everyThirtyMinutes()
-    ->between('08:05', '23:55')
+    ->between('08:05', '23:50')
     ->timezone('Europe/Brussels')
     ->withoutOverlapping();
 
