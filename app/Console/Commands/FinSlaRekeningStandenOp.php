@@ -20,6 +20,7 @@ class FinSlaRekeningStandenOp extends Command
         $datum = now();
         $jaar  = $datum->year;
         $maand = $datum->month;
+        $dag   = $datum->day;
 
         // Einde van vorige maand
         $eindeDatum = $datum->endOfMonth()->format('Y-m-d');
@@ -45,7 +46,7 @@ class FinSlaRekeningStandenOp extends Command
             $this->info("{$rekening->omschrijving}: € " . number_format($saldo, 2, ',', '.'));
         }
 
-        $this->info('✅ Rekeningsstanden opgeslagen voor ' . $maand . '/' . $jaar);
-        Log::info('Rekeningsstanden opgeslagen voor ' . $maand . '/' . $jaar);
+        $this->info('✅ Rekeningstanden opgeslagen voor ' . $maand . '/' . $jaar);
+        Log::channel('financial')->info('Rekeningstanden opgeslagen ', ['datum' => $dag . '/' . $maand . '/' . $jaar]);
     }
 }

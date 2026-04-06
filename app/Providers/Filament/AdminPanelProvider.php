@@ -23,6 +23,7 @@ use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Assets\Js;
 use Filament\Navigation\NavigationGroup;
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -113,6 +114,9 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Financiën')
                     ->collapsed(), // Collapses this group by default
 
+            ])
+            ->plugins([
+                FilamentLogViewer::make(),
             ]);
     }
 
