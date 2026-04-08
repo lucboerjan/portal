@@ -131,8 +131,6 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Systeembeheer')
                     ->collapsed(), // Collapses this group by default
 
-
-
             ]);
     }
 

@@ -26,7 +26,7 @@ class WeatherBredeneWidget extends Widget
                 'exclude' => 'minutely,hourly,alerts',
             ])->json();
         });
-        //Log::channel('weather')->info('Weather data for Bredene', ['data' => $data]);
+
         //dd($data);
 
         return $this->formatData($data, 'Bredene');

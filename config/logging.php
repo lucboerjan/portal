@@ -65,9 +65,9 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'weather' => [
+        'financial' => [
             'driver' => 'single',
-            'path' => storage_path('logs/weather.log'),
+            'path' => storage_path('logs/financial.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],

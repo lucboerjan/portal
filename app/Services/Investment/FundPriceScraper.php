@@ -49,7 +49,7 @@ class FundPriceScraper
             'dagkoers' => $koers,
         ]);
 
-        Log::info("Nieuwe koers opgeslagen: {$fund->naam} - {$koers} EUR op {$datum}");
+        Log::channel('financial')->info("Nieuwe koers opgeslagen, [{$fund->naam} => {$koers} EUR op {$datum}] ");
 
         return [
             'status'   => 'nieuw',
