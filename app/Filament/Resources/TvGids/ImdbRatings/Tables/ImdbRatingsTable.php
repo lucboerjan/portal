@@ -34,7 +34,9 @@ class ImdbRatingsTable
                     ->label('IMDB Rating')
                     ->sortable(),
                 TextColumn::make('imdburl')
-                    ->label('IMDB URL'),
+                    ->label('IMDB URL')
+                    ->url(fn(Imdbrating $r) => $r->imdburl)
+                    ->openUrlInNewTab(),
                 TextColumn::make('vertoningen_count')
                     ->label('# vertoningen')
                     ->sortable(),

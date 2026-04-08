@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\TvGids\Tvvertoningen\Schemas;
 
-use App\Models\ImdbRating;
+use App\Models\Imdbrating;
 use App\Models\Tvzender;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;

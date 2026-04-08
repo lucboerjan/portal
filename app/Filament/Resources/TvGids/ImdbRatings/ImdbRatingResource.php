@@ -7,7 +7,7 @@ use App\Filament\Resources\TvGids\ImdbRatings\Pages\EditImdbRating;
 use App\Filament\Resources\TvGids\ImdbRatings\Pages\ListImdbRatings;
 use App\Filament\Resources\TvGids\ImdbRatings\Schemas\ImdbRatingForm;
 use App\Filament\Resources\TvGids\ImdbRatings\Tables\ImdbRatingsTable;
-use App\Models\ImdbRating;
+use App\Models\Imdbrating;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,7 +16,7 @@ use Filament\Tables\Table;
 
 class ImdbRatingResource extends Resource
 {
-    protected static ?string $model = ImdbRating::class;
+    protected static ?string $model = Imdbrating::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
     protected static ?int $navigationSort = 3;
