@@ -15,6 +15,16 @@ class RunBackup extends Page
     protected static ?string $navigationLabel = 'Backup uitvoeren';
     protected static ?string $title = 'Backup uitvoeren';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Systeembeheer';
+    }
+    public static function getNavigationSort(): ?int
+    {
+        return 10002; //parent::getNavigationSort();
+    }
+
+
     public function runBackup()
     {
         Artisan::call('backup:run');

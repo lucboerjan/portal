@@ -20,7 +20,7 @@ class UtilityTypeResource extends Resource
     protected static ?string $model = UtilityType::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::RectangleGroup;
-    protected static ?int $navigationSort = 30;
+
     protected static ?string $navigationLabel = 'Soorten Utilities';
     protected static ?string $title = 'Soorten Utilities';
     protected static ?string $pluralLabel = 'Soorten Utilities';
@@ -56,4 +56,8 @@ class UtilityTypeResource extends Resource
     {
         return 'Utilities';
     }
+        public static function getNavigationSort(): ?int
+        {
+            return 150;
+        }
 }

@@ -20,10 +20,20 @@ class UtilityReadingResource extends Resource
     protected static ?string $model = UtilityReading::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChartBar;
-    protected static ?int $navigationSort = 120;
+
         protected static ?string $navigationLabel = 'Meterstanden Utilities';
-        protected static ?string $title = 'Meterstanden Utilities';
-        protected static ?string $pluralLabel = 'Meterstanden Utilities';
+    protected static ?string $title = 'Meterstanden Utilities';
+    protected static ?string $pluralLabel = 'Meterstanden Utilities';
+
+
+            public static function getNavigationGroup(): ?string
+    {
+        return 'Utilities';
+    }
+        public static function getNavigationSort(): ?int
+        {
+            return 110;
+        }
 
     public static function form(Schema $schema): Schema
     {
@@ -49,10 +59,5 @@ class UtilityReadingResource extends Resource
             'create' => CreateUtilityReading::route('/create'),
             'edit' => EditUtilityReading::route('/{record}/edit'),
         ];
-    }
-
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Utilities';
     }
 }

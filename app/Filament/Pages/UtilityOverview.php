@@ -11,12 +11,18 @@ class UtilityOverview extends Page
 {
     protected string $view = 'filament.pages.utility-overview';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Utilities';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::PresentationChartLine;
-    protected static ?int $navigationSort = 50;
+
     protected static ?string $navigationLabel = 'Overzicht Utilities';
     protected static ?string $title = 'Overzicht Utilities';
-
+        public static function getNavigationGroup(): ?string
+    {
+        return 'Utilities';
+    }
+        public static function getNavigationSort(): ?int
+        {
+            return 130;
+        }
     protected function getHeaderWidgets(): array
     {
         return [

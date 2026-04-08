@@ -26,13 +26,20 @@ class UtilitySolarPanel extends Page implements HasTable
     protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedSun;
 
     // protected static ?string $navigationGroup = 'Utilities';
-    protected static string | UnitEnum | null $navigationGroup = 'Utilities';
-    protected static ?int $navigationSort = 100;
     protected static ?string $navigationLabel = 'Meterstanden Zonnepanelen';
     protected static ?string $title = 'Meterstanden Zonnepanelen';
 
 
     protected string $view = 'filament.pages.solar-panel-counter';
+
+            public static function getNavigationGroup(): ?string
+    {
+        return 'Utilities';
+    }
+        public static function getNavigationSort(): ?int
+        {
+            return 100;
+        }
 
 
     public ?array $data = [];
@@ -143,4 +150,5 @@ class UtilitySolarPanel extends Page implements HasTable
                 DeleteAction::make(),
             ]);
     }
+
 }

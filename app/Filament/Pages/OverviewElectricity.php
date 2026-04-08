@@ -14,11 +14,17 @@ class OverviewElectricity extends Page
 {
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedBolt;
     protected  string $view = 'filament.pages.overview-electricity';
-    protected static string | UnitEnum | null $navigationGroup = 'Utilities';
     protected static ?string $navigationLabel = 'Overzicht Electriciteit';
     protected static ?string $title = 'Elektriciteitsverbruik';
-    
-    protected static ?int $navigationSort = 100;
+
+            public static function getNavigationGroup(): ?string
+    {
+        return 'Utilities';
+    }
+        public static function getNavigationSort(): ?int
+        {
+            return 120;
+        }
     protected function getHeaderWidgets(): array
     {
         return [

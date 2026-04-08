@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Vertoning;
 
 class Imdbrating extends Model
 {
@@ -12,6 +13,6 @@ class Imdbrating extends Model
 
     public function vertoningen()
     {
-        return $this->hasMany(vertoning::class, 'imdbrating_id');
+        return $this->hasMany(vertoning::class, 'imdbrating_id')->withCount('imdbrating');
     }
 }

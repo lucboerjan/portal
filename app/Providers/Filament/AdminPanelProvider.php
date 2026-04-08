@@ -23,6 +23,7 @@ use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Assets\Js;
 use Filament\Navigation\NavigationGroup;
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -99,19 +100,38 @@ class AdminPanelProvider extends PanelProvider
             ->assets([
                 Js::make('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
             ])
+            ->plugins([
+                FilamentLogViewer::make()
+                    ->navigationGroup('Systeembeheer')
+                    ->navigationSort(10001), // hoog getal = onderaan,
+            ])
 
             ->navigationGroups([
-                NavigationGroup::make('Investments')
-                    ->label('Investments')
+                NavigationGroup::make('Beleggingen')
+                    ->label('Beleggingen')
+                    ->collapsed(), // Collapses this group by default
+
+                NavigationGroup::make('Financiën')
+                    ->label('Financiën')
                     ->collapsed(), // Collapses this group by default
 
                 NavigationGroup::make('Utilities')
                     ->label('Utilities')
                     ->collapsed(), // Collapses this group by default
 
-                NavigationGroup::make('Financiën')
-                    ->label('Financiën')
+                NavigationGroup::make('TV Gids')
+                    ->label('TV Gids')
                     ->collapsed(), // Collapses this group by default
+
+                NavigationGroup::make('Game Scores')
+                    ->label('Game Scores')
+                    ->collapsed(), // Collapses this group by default
+
+                NavigationGroup::make('Systeembeheer')
+                    ->label('Systeembeheer')
+                    ->collapsed(), // Collapses this group by default
+
+
 
             ]);
     }
