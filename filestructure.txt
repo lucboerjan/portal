@@ -1,249 +1,286 @@
 Folder PATH listing
 Volume serial number is D8B9-D311
-C:\USERS\LUC.BOERJAN\DOCUMENTS\LARAGON\WWW\PORTAL\APP
-¦   sync.ffs_db
-¦   
-+---Enums
-¦       CategorieRichting.php
-¦       RekeningType.php
+C:\USERS\LUC.BOERJAN\DOCUMENTS\LARAGON\WWW\PORTAL\APP\FILAMENT
++---Actions
+¦       MergeImdbRatingsAction.php
 ¦       
-+---Filament
-¦   +---Pages
-¦   ¦       ElectricityOverview.php
-¦   ¦       InternetLinks.php
-¦   ¦       InvestmentOverview.php
-¦   ¦       OverviewElectricity.php
-¦   ¦       RunBackup.php
-¦   ¦       UtilityOverview.php
-¦   ¦       UtilitySolarPanel.php
-¦   ¦       
-¦   +---Resources
-¦   ¦   +---Finances
-¦   ¦   ¦   +---FinBegunstigdes
-¦   ¦   ¦   ¦   ¦   FinBegunstigdeResource.php
-¦   ¦   ¦   ¦   ¦   
-¦   ¦   ¦   ¦   +---Pages
-¦   ¦   ¦   ¦   ¦       CreateFinBegunstigde.php
-¦   ¦   ¦   ¦   ¦       EditFinBegunstigde.php
-¦   ¦   ¦   ¦   ¦       ListFinBegunstigdes.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Schemas
-¦   ¦   ¦   ¦   ¦       FinBegunstigdeForm.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Tables
-¦   ¦   ¦   ¦           FinBegunstigdesTable.php
-¦   ¦   ¦   ¦           
-¦   ¦   ¦   +---FinCategories
-¦   ¦   ¦   ¦   ¦   FinCategorieResource.php
-¦   ¦   ¦   ¦   ¦   
-¦   ¦   ¦   ¦   +---Pages
-¦   ¦   ¦   ¦   ¦       CreateFinCategorie.php
-¦   ¦   ¦   ¦   ¦       EditFinCategorie.php
-¦   ¦   ¦   ¦   ¦       ListFinCategories.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Schemas
-¦   ¦   ¦   ¦   ¦       FinCategorieForm.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Tables
-¦   ¦   ¦   ¦           FinCategoriesTable.php
-¦   ¦   ¦   ¦           
-¦   ¦   ¦   +---FinRekenings
-¦   ¦   ¦   ¦   ¦   FinRekeningResource.php
-¦   ¦   ¦   ¦   ¦   
-¦   ¦   ¦   ¦   +---Pages
-¦   ¦   ¦   ¦   ¦       CreateFinRekening.php
-¦   ¦   ¦   ¦   ¦       EditFinRekening.php
-¦   ¦   ¦   ¦   ¦       ListFinRekeningen.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Schemas
-¦   ¦   ¦   ¦   ¦       FinRekeningsForm.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Tables
-¦   ¦   ¦   ¦           FinRekeningsTable.php
-¦   ¦   ¦   ¦           
-¦   ¦   ¦   +---FinTransacties
-¦   ¦   ¦       ¦   FinTransactieResource.php
-¦   ¦   ¦       ¦   
-¦   ¦   ¦       +---Pages
-¦   ¦   ¦       ¦       CreateFinTransactie.php
-¦   ¦   ¦       ¦       EditFinTransactie.php
-¦   ¦   ¦       ¦       ListFinTransacties.php
-¦   ¦   ¦       ¦       
-¦   ¦   ¦       +---Schemas
-¦   ¦   ¦       ¦       FinTransactieForm.php
-¦   ¦   ¦       ¦       
-¦   ¦   ¦       +---Tables
-¦   ¦   ¦               FinTransactiesTable.php
-¦   ¦   ¦               
-¦   ¦   +---Investments
-¦   ¦   ¦   +---InvestmentFunds
-¦   ¦   ¦   ¦   ¦   InvestmentFundResource.php
-¦   ¦   ¦   ¦   ¦   
-¦   ¦   ¦   ¦   +---Pages
-¦   ¦   ¦   ¦   ¦       CreateInvestmentFund.php
-¦   ¦   ¦   ¦   ¦       EditInvestmentFund.php
-¦   ¦   ¦   ¦   ¦       ListInvestmentFunds.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---RelationManagers
-¦   ¦   ¦   ¦   ¦       InvestmentPurchaseRelationManager.php
-¦   ¦   ¦   ¦   ¦       InvestmentRateRelationManager.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Schemas
-¦   ¦   ¦   ¦   ¦       InvestmentFundForm.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Tables
-¦   ¦   ¦   ¦           InvestmentFundsTable.php
-¦   ¦   ¦   ¦           
-¦   ¦   ¦   +---InvestmentPurchases
-¦   ¦   ¦   ¦   ¦   InvestmentPurchaseResource.php
-¦   ¦   ¦   ¦   ¦   
-¦   ¦   ¦   ¦   +---Pages
-¦   ¦   ¦   ¦   ¦       CreateInvestmentPurchase.php
-¦   ¦   ¦   ¦   ¦       EditInvestmentPurchase.php
-¦   ¦   ¦   ¦   ¦       ListInvestmentPurchases.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Schemas
-¦   ¦   ¦   ¦   ¦       InvestmentPurchaseForm.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Tables
-¦   ¦   ¦   ¦           InvestmentPurchasesTable.php
-¦   ¦   ¦   ¦           
-¦   ¦   ¦   +---InvestmentRates
-¦   ¦   ¦   ¦   ¦   InvestmentRateResource.php
-¦   ¦   ¦   ¦   ¦   
-¦   ¦   ¦   ¦   +---Pages
-¦   ¦   ¦   ¦   ¦       CreateInvestmentRate.php
-¦   ¦   ¦   ¦   ¦       EditInvestmentRate.php
-¦   ¦   ¦   ¦   ¦       ListInvestmentRates.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Schemas
-¦   ¦   ¦   ¦   ¦       InvestmentRateForm.php
-¦   ¦   ¦   ¦   ¦       
-¦   ¦   ¦   ¦   +---Tables
-¦   ¦   ¦   ¦           InvestmentRatesTable.php
-¦   ¦   ¦   ¦           
-¦   ¦   ¦   +---Widgets
-¦   ¦   ¦           FondsKoersontwikkelingChart.php
-¦   ¦   ¦           FondsKoersontwikkelingWidget.php
-¦   ¦   ¦           InvestmentDagverschilStat.php
-¦   ¦   ¦           InvestmentJaarverschilStat.php
-¦   ¦   ¦           InvestmentMaandverschilStat.php
-¦   ¦   ¦           InvestmentOverzichtStat.php
-¦   ¦   ¦           
-¦   ¦   +---Utilities
-¦   ¦       +---Pages
-¦   ¦       +---UtilityCorrections
-¦   ¦       ¦   ¦   UtilityCorrectionResource.php
-¦   ¦       ¦   ¦   
-¦   ¦       ¦   +---Pages
-¦   ¦       ¦   ¦       CreateUtilityCorrection.php
-¦   ¦       ¦   ¦       EditUtilityCorrection.php
-¦   ¦       ¦   ¦       ListUtilityCorrections.php
-¦   ¦       ¦   ¦       
-¦   ¦       ¦   +---Schemas
-¦   ¦       ¦   ¦       UtilityCorrectionForm.php
-¦   ¦       ¦   ¦       
-¦   ¦       ¦   +---Tables
-¦   ¦       ¦           UtilityCorrectionsTable.php
-¦   ¦       ¦           
-¦   ¦       +---UtilityReadings
-¦   ¦       ¦   ¦   UtilityReadingResource.php
-¦   ¦       ¦   ¦   
-¦   ¦       ¦   +---Pages
-¦   ¦       ¦   ¦       CreateUtilityReading.php
-¦   ¦       ¦   ¦       EditUtilityReading.php
-¦   ¦       ¦   ¦       ListUtilityReadings.php
-¦   ¦       ¦   ¦       
-¦   ¦       ¦   +---Schemas
-¦   ¦       ¦   ¦       UtilityReadingForm.php
-¦   ¦       ¦   ¦       
-¦   ¦       ¦   +---Tables
-¦   ¦       ¦           UtilityReadingsTable.php
-¦   ¦       ¦           
-¦   ¦       +---UtilitySolaPanelReadings
-¦   ¦       ¦   +---Pages
-¦   ¦       +---UtilityTypes
-¦   ¦       ¦   ¦   UtilityTypeResource.php
-¦   ¦       ¦   ¦   
-¦   ¦       ¦   +---Pages
-¦   ¦       ¦   ¦       CreateUtilityType.php
-¦   ¦       ¦   ¦       EditUtilityType.php
-¦   ¦       ¦   ¦       ListUtilityTypes.php
-¦   ¦       ¦   ¦       
-¦   ¦       ¦   +---Schemas
-¦   ¦       ¦   ¦       UtilityTypeForm.php
-¦   ¦       ¦   ¦       
-¦   ¦       ¦   +---Tables
-¦   ¦       ¦           UtilityTypesTable.php
-¦   ¦       ¦           
-¦   ¦       +---Widgets
-¦   ¦               ElectricityConsumptionChart.php
-¦   ¦               ElectricityConsumptionTable.php
-¦   ¦               GasConsumptionChart.php
-¦   ¦               GasConsumptionTable.php
-¦   ¦               SolarPanelChartLastMonth.php
-¦   ¦               SolarPanelProductionTable.php
-¦   ¦               SolarPerYearChart.php
-¦   ¦               SolarYearlyTotalChart.php
-¦   ¦               WaterConsumptionChart.php
-¦   ¦               WaterConsumptionTable.php
-¦   ¦               WaterStatsOverview.php
-¦   ¦               
-¦   +---Widgets
-¦           AppsWidget.php
-¦           EindeLoopbaanBdv.php
-¦           EindeLoopbaanLbj.php
-¦           ElectricityStatsOverview.php
-¦           
-+---Http
-¦   +---Controllers
-¦           Controller.php
-¦           
-+---Listeners
-¦       SendBackupSuccessMail.php
-¦       
-+---Livewire
-¦   +---App
-¦       +---Filament
-¦           +---Resources
-¦               +---Investments
-¦                   +---InvestmentFunds
-¦                   ¦   +---Widgets
-¦                   +---Widgets
-+---Mail
-¦       BackupCompletedMail.php
-¦       DailyBirthdaysMail.php
-¦       
-+---Models
-¦       FinBegunstigde.php
-¦       FinCategorie.php
-¦       FinRekening.php
-¦       FinTransactie.php
-¦       FinTransactieCategorie.php
-¦       InternetGroup.php
-¦       InternetLink.php
-¦       InvestmentFund.php
-¦       InvestmentPurchase.php
-¦       InvestmentRate.php
-¦       User.php
-¦       UtilityCorrection.php
-¦       UtilityReading.php
-¦       UtilitySolarPanelReading.php
-¦       UtilityType.php
-¦       
-+---Observers
-¦       InvestmentRateObserver.php
-¦       SolarPanelReadingObserver.php
-¦       
-+---Providers
-¦   ¦   AppServiceProvider.php
++---Pages
+¦   ¦   ElectricityOverview.php
+¦   ¦   InternetLinks.php
+¦   ¦   InvestmentOverview.php
+¦   ¦   OverviewElectricity.php
+¦   ¦   RunBackup.php
+¦   ¦   UtilityOverview.php
+¦   ¦   UtilitySolarPanel.php
 ¦   ¦   
-¦   +---Filament
-¦           AdminPanelProvider.php
+¦   +---Finances
+¦   ¦       FinDashboard.php
+¦   ¦       FinJaaroverzicht.php
+¦   ¦       FinRekeningStanden.php
+¦   ¦       
+¦   +---GameScores
+¦   ¦       MedalStanding.php
+¦   ¦       
+¦   +---TvGids
+¦           ListTvvertoningen.php
+¦           TvGids.php
 ¦           
-+---Services
-    ¦   ElectricityStatsService.php
-    ¦   
-    +---Utility
-            UtilityConsumptionService.php
-            
++---Resources
+¦   +---Finances
+¦   ¦   +---FinAccounts
+¦   ¦   ¦   ¦   FinAccountResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateFinAccount.php
+¦   ¦   ¦   ¦       EditFinAccount.php
+¦   ¦   ¦   ¦       ListFinAccounts.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---RelationManagers
+¦   ¦   ¦   ¦       TransactiesRelationManager.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       FinAccountForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           FinAccountsTable.php
+¦   ¦   ¦           
+¦   ¦   +---FinBeneficiaries
+¦   ¦   ¦   ¦   FinBeneficiaryResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateFinBeneficiary.php
+¦   ¦   ¦   ¦       EditFinBeneficiary.php
+¦   ¦   ¦   ¦       ListFinBeneficiaries.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       FinBeneficiaryForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           FinBeneficiariesTable.php
+¦   ¦   ¦           
+¦   ¦   +---FinCategories
+¦   ¦   ¦   ¦   FinCategorieResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateFinCategorie.php
+¦   ¦   ¦   ¦       EditFinCategorie.php
+¦   ¦   ¦   ¦       ListFinCategories.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---RelationManagers
+¦   ¦   ¦   ¦       TransactiesRelationManager.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       FinCategorieForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           FinCategorieTable.php
+¦   ¦   ¦           
+¦   ¦   +---FinTransactions
+¦   ¦       ¦   FinTransactionResource.php
+¦   ¦       ¦   
+¦   ¦       +---Pages
+¦   ¦       ¦       CreateFinTransaction.php
+¦   ¦       ¦       EditFinTransaction.php
+¦   ¦       ¦       ListFinTransactions.php
+¦   ¦       ¦       
+¦   ¦       +---Schemas
+¦   ¦       ¦       FinTransactionForm.php
+¦   ¦       ¦       
+¦   ¦       +---Tables
+¦   ¦               FinTransactionsTable.php
+¦   ¦               
+¦   +---GameScores
+¦   ¦   ¦   GameResource.php
+¦   ¦   ¦   GameTypeResource.php
+¦   ¦   ¦   
+¦   ¦   +---GameResource
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateGame.php
+¦   ¦   ¦   ¦       EditGame.php
+¦   ¦   ¦   ¦       GameScoreboard.php
+¦   ¦   ¦   ¦       ListGames.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       GameSchema.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           GameTable.php
+¦   ¦   ¦           
+¦   ¦   +---GameTypeResource
+¦   ¦       +---Pages
+¦   ¦       ¦       CreateGameType.php
+¦   ¦       ¦       EditGameType.php
+¦   ¦       ¦       ListGameTypes.php
+¦   ¦       ¦       
+¦   ¦       +---Schemas
+¦   ¦       ¦       GameTypeSchema.php
+¦   ¦       ¦       
+¦   ¦       +---Tables
+¦   ¦               GameTypeTable.php
+¦   ¦               
+¦   +---Investments
+¦   ¦   +---InvestmentFunds
+¦   ¦   ¦   ¦   InvestmentFundResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateInvestmentFund.php
+¦   ¦   ¦   ¦       EditInvestmentFund.php
+¦   ¦   ¦   ¦       ListInvestmentFunds.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---RelationManagers
+¦   ¦   ¦   ¦       InvestmentPurchaseRelationManager.php
+¦   ¦   ¦   ¦       InvestmentRateRelationManager.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       InvestmentFundForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           InvestmentFundsTable.php
+¦   ¦   ¦           
+¦   ¦   +---InvestmentPurchases
+¦   ¦   ¦   ¦   InvestmentPurchaseResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateInvestmentPurchase.php
+¦   ¦   ¦   ¦       EditInvestmentPurchase.php
+¦   ¦   ¦   ¦       ListInvestmentPurchases.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       InvestmentPurchaseForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           InvestmentPurchasesTable.php
+¦   ¦   ¦           
+¦   ¦   +---InvestmentRates
+¦   ¦   ¦   ¦   InvestmentRateResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateInvestmentRate.php
+¦   ¦   ¦   ¦       EditInvestmentRate.php
+¦   ¦   ¦   ¦       ListInvestmentRates.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       InvestmentRateForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           InvestmentRatesTable.php
+¦   ¦   ¦           
+¦   ¦   +---Widgets
+¦   ¦           FondsKoersontwikkelingChart.php
+¦   ¦           FondsKoersontwikkelingWidget.php
+¦   ¦           InvestmentDagverschilStat.php
+¦   ¦           InvestmentJaarverschilStat.php
+¦   ¦           InvestmentMaandverschilStat.php
+¦   ¦           InvestmentOverzichtStat.php
+¦   ¦           InvestMentOverzichtWidget.php
+¦   ¦           
+¦   +---TvGids
+¦   ¦   +---ImdbRatings
+¦   ¦   ¦   ¦   ImdbRatingResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateImdbRating.php
+¦   ¦   ¦   ¦       EditImdbRating.php
+¦   ¦   ¦   ¦       ListImdbRatings.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       ImdbRatingForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           ImdbRatingsTable.php
+¦   ¦   ¦           
+¦   ¦   +---Tvvertoningen
+¦   ¦   ¦   ¦   TvvertoningResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateTvvertoning.php
+¦   ¦   ¦   ¦       EditTvvertoning.php
+¦   ¦   ¦   ¦       ListTvvertoningen.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       TvvertoningSchema.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           TvvertoningTable.php
+¦   ¦   ¦           
+¦   ¦   +---Tvzenders
+¦   ¦       ¦   TvzenderResource.php
+¦   ¦       ¦   
+¦   ¦       +---Pages
+¦   ¦       ¦       CreateTvzender.php
+¦   ¦       ¦       EditTvzender.php
+¦   ¦       ¦       ListTvzenders.php
+¦   ¦       ¦       
+¦   ¦       +---Schemas
+¦   ¦       ¦       TvzenderForm.php
+¦   ¦       ¦       
+¦   ¦       +---Tables
+¦   ¦               TvzendersTable.php
+¦   ¦               
+¦   +---Utilities
+¦       +---Pages
+¦       +---UtilityCorrections
+¦       ¦   ¦   UtilityCorrectionResource.php
+¦       ¦   ¦   
+¦       ¦   +---Pages
+¦       ¦   ¦       CreateUtilityCorrection.php
+¦       ¦   ¦       EditUtilityCorrection.php
+¦       ¦   ¦       ListUtilityCorrections.php
+¦       ¦   ¦       
+¦       ¦   +---Schemas
+¦       ¦   ¦       UtilityCorrectionForm.php
+¦       ¦   ¦       
+¦       ¦   +---Tables
+¦       ¦           UtilityCorrectionsTable.php
+¦       ¦           
+¦       +---UtilityReadings
+¦       ¦   ¦   UtilityReadingResource.php
+¦       ¦   ¦   
+¦       ¦   +---Pages
+¦       ¦   ¦       CreateUtilityReading.php
+¦       ¦   ¦       EditUtilityReading.php
+¦       ¦   ¦       ListUtilityReadings.php
+¦       ¦   ¦       
+¦       ¦   +---Schemas
+¦       ¦   ¦       UtilityReadingForm.php
+¦       ¦   ¦       
+¦       ¦   +---Tables
+¦       ¦           UtilityReadingsTable.php
+¦       ¦           
+¦       +---UtilitySolaPanelReadings
+¦       ¦   +---Pages
+¦       +---UtilityTypes
+¦       ¦   ¦   UtilityTypeResource.php
+¦       ¦   ¦   
+¦       ¦   +---Pages
+¦       ¦   ¦       CreateUtilityType.php
+¦       ¦   ¦       EditUtilityType.php
+¦       ¦   ¦       ListUtilityTypes.php
+¦       ¦   ¦       
+¦       ¦   +---Schemas
+¦       ¦   ¦       UtilityTypeForm.php
+¦       ¦   ¦       
+¦       ¦   +---Tables
+¦       ¦           UtilityTypesTable.php
+¦       ¦           
+¦       +---Widgets
+¦               ElectricityConsumptionChart.php
+¦               ElectricityConsumptionTable.php
+¦               GasConsumptionChart.php
+¦               GasConsumptionTable.php
+¦               SolarPanelChartLastMonth.php
+¦               SolarPanelProductionTable.php
+¦               SolarPerYearChart.php
+¦               SolarYearlyTotalChart.php
+¦               WaterConsumptionChart.php
+¦               WaterConsumptionTable.php
+¦               WaterStatsOverview.php
+¦               
++---Widgets
+        AppsWidget.php
+        EindeLoopbaanBdv.php
+        EindeLoopbaanLbj.php
+        ElectricityStatsOverview.php
+        WeatherBredeneWidget.php
+        WeatherManhayWidget.php
+        
