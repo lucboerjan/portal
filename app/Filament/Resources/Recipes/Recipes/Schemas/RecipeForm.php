@@ -5,12 +5,13 @@ namespace App\Filament\Resources\Recipes\Recipes\Schemas;
 use App\Models\Recipes\Ingredient;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
+
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 class RecipeForm
 {
 public static function configure(Schema $schema): Schema
