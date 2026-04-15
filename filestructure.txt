@@ -33,6 +33,7 @@ C:\USERS\LUC.BOERJAN\DOCUMENTS\LARAGON\WWW\PORTAL\APP\FILAMENT
 ¦   ¦   ¦   +---Pages
 ¦   ¦   ¦   ¦       CreateFinAccount.php
 ¦   ¦   ¦   ¦       EditFinAccount.php
+¦   ¦   ¦   ¦       ListCookingMethods.php
 ¦   ¦   ¦   ¦       ListFinAccounts.php
 ¦   ¦   ¦   ¦       
 ¦   ¦   ¦   +---RelationManagers
@@ -174,6 +175,64 @@ C:\USERS\LUC.BOERJAN\DOCUMENTS\LARAGON\WWW\PORTAL\APP\FILAMENT
 ¦   ¦           InvestmentOverzichtStat.php
 ¦   ¦           InvestMentOverzichtWidget.php
 ¦   ¦           
+¦   +---Recipes
+¦   ¦   +---Categories
+¦   ¦   ¦   ¦   CategoryResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateCategory.php
+¦   ¦   ¦   ¦       EditCategory.php
+¦   ¦   ¦   ¦       ListCategories.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       CategoryForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           CategoriesTable.php
+¦   ¦   ¦           
+¦   ¦   +---CookingMethods
+¦   ¦   ¦   ¦   CookingMethodResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateCookingMethod.php
+¦   ¦   ¦   ¦       EditCookingMethod.php
+¦   ¦   ¦   ¦       ListCookingMethods.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       CookingMethodForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           CookingMethodsTable.php
+¦   ¦   ¦           
+¦   ¦   +---Ingredients
+¦   ¦   ¦   ¦   IngredientResource.php
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---Pages
+¦   ¦   ¦   ¦       CreateIngredient.php
+¦   ¦   ¦   ¦       EditIngredient.php
+¦   ¦   ¦   ¦       ListIngredients.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Schemas
+¦   ¦   ¦   ¦       IngredientForm.php
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---Tables
+¦   ¦   ¦           IngredientsTable.php
+¦   ¦   ¦           
+¦   ¦   +---Recipes
+¦   ¦       ¦   RecipeResource.php
+¦   ¦       ¦   
+¦   ¦       +---Pages
+¦   ¦       ¦       CreateRecipe.php
+¦   ¦       ¦       EditRecipe.php
+¦   ¦       ¦       ListRecipes.php
+¦   ¦       ¦       ViewRecipe.php
+¦   ¦       ¦       
+¦   ¦       +---Schemas
+¦   ¦       ¦       RecipeForm.php
+¦   ¦       ¦       
+¦   ¦       +---Tables
+¦   ¦               RecipesTable.php
+¦   ¦               
 ¦   +---TvGids
 ¦   ¦   +---ImdbRatings
 ¦   ¦   ¦   ¦   ImdbRatingResource.php

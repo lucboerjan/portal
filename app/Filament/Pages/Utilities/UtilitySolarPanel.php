@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Pages\Utilities;
 
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;

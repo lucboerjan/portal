@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Pages\Utilities;
 
 use Filament\Pages\Page;
 use UnitEnum;

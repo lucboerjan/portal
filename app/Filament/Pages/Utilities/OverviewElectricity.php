@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Pages\Utilities;
 
 use App\Filament\Widgets\ElectricityStatsOverview;
 use Filament\Pages\Page;
