@@ -7,6 +7,7 @@ use App\Filament\Resources\Recipes\Recipes\Pages\EditRecipe;
 use App\Filament\Resources\Recipes\Recipes\Pages\ListRecipes;
 use App\Filament\Resources\Recipes\Recipes\Pages\ViewRecipe;
 use App\Filament\Resources\Recipes\Recipes\Schemas\RecipeForm;
+use App\Filament\Resources\Recipes\Recipes\Schemas\RecipeWizardSteps;
 use App\Filament\Resources\Recipes\Recipes\Tables\RecipesTable;
 use App\Models\Recipes\Recipe;
 use Filament\Schemas\Schema;
@@ -33,6 +34,7 @@ class RecipeResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return RecipeForm::configure($schema);
+        //return RecipeWizardSteps::configure($schema);
     }
 
     public static function table(Table $table): Table

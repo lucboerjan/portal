@@ -12,11 +12,53 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-class RecipeForm
+use Filament\Schemas\Components\Wizard\Step;
+use Filament\Support\Icons\Heroicon;
+
+class RecipeWizardSteps
 {
-public static function configure(Schema $schema): Schema
+
+public static function getGeneralInofStep(): Step
     {
-        return  $schema->components([
+        return Step::make('Receptgegevens')
+            ->description('Algemene informatie')
+            ->icon(Heroicon::OutlinedUser)
+            ->schema([
+                Section::make()
+                    ->schema([
+
+                        TextInput::make('title'),
+                        TextInput::make('category_id'),
+                        TextInput::make('cooking_method_id'),
+                        Textarea::make('description'),
+                    ])
+            ])
+            ->columnSpanFull();
+    }
+
+    public static function getIngredientsStep(): Step
+    {
+        return Step::make('Ingrediënten')
+            ->description('Ingrediënten en hoeveelheden')
+            ->icon(Heroicon::OutlinedUser)
+            ->schema([
+                Section::make()
+                    ->schema([
+
+                        TextInput::make('titel'),
+                        TextInput::make('category_id'),
+                        TextInput::make('cooking_method_id'),
+                        Textarea::make('description'),
+                    ])
+            ])
+            ->columnSpanFull();
+    }
+
+    /*public static function configure(Schema $schema): Schema
+    {
+
+
+    return  $schema->components([
 
             // ── Basisinfo ───────────────────────────────────────────────────
             Section::make('Basisinformatie')
@@ -210,25 +252,6 @@ public static function configure(Schema $schema): Schema
                         ->rows(3)
                         ->columnSpanFull(),
                 ]),
-        ]);
-    }
-
-        public static function getTitleField(): Select
-    {
-        return Select::make('title')
-            /* ->relationship('customer', 'name')
-            ->searchable()
-            ->required()
-            ->live()
-            ->afterStateUpdated(function (Set $set, ?int $state) {
-                $set('vehicle_id', null);
-
-                if ($state) {
-                    $vehicles = Vehicle::where('customer_id', $state)->get();
-                    if ($vehicles->count() === 1) {
-                        $set('vehicle_id', $vehicles->first()->id);
-                    }
-                }
-            }) */;
-    }
+        ]); 
+    } */
 }
