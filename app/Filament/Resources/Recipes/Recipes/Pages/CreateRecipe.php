@@ -14,8 +14,9 @@ class CreateRecipe extends CreateRecord
     protected function getSteps(): array
     {
         return [
-            RecipeWizardSteps::getGeneralInofStep(),
+            RecipeWizardSteps::getGeneralInfoStep(),
             RecipeWizardSteps::getIngredientsStep(),
+            RecipeWizardSteps::getBereidingStep(),
 
         ];
     }
