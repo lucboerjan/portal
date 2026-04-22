@@ -12,9 +12,10 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
+
 class RecipeForm
 {
-public static function configure(Schema $schema): Schema
+    public static function configure(Schema $schema): Schema
     {
         return  $schema->components([
 
@@ -94,24 +95,14 @@ public static function configure(Schema $schema): Schema
             Section::make('Ingrediënten')
                 ->icon('heroicon-o-list-bullet')
                 ->schema([
-                    Repeater::make('ingredients')
+                    Repeater::make('ingredients_data')  // gewone array, geen relatie
                         ->label('')
-                        ->relationship()
                         ->schema([
                             Select::make('ingredient_id')
                                 ->label('Ingrediënt')
                                 ->options(Ingredient::orderBy('name')->pluck('name', 'id'))
                                 ->searchable()
                                 ->required()
-                                ->createOptionForm([
-                                    TextInput::make('name')->label('Naam')->required(),
-                                ])
-                                ->createOptionUsing(function (array $data) {
-                                    return Ingredient::create([
-                                        'name' => $data['name'],
-                                        'slug' => Str::slug($data['name']),
-                                    ])->id;
-                                })
                                 ->columnSpan(3),
 
                             TextInput::make('quantity')
@@ -141,11 +132,14 @@ public static function configure(Schema $schema): Schema
                                 ->placeholder('bijv. fijngesneden')
                                 ->columnSpan(2),
                         ])
-                        ->columns(8)
-                        ->reorderable('sort_order')
-                        ->addActionLabel('Ingrediënt toevoegen')
-                        ->defaultItems(0),
-                ]),
+                
+
+                ->columns(8)
+                ->reorderable()
+                ->addActionLabel('Ingrediënt toevoegen')
+                ->defaultItems(0)
+                ])
+                ->columnSpanFull(),
 
             // ── Bereiding ───────────────────────────────────────────────────
             Section::make('Bereiding')
@@ -163,7 +157,8 @@ public static function configure(Schema $schema): Schema
                         ->addActionLabel('Stap toevoegen')
                         ->defaultItems(1)
                         ->columnSpanFull(),
-                ]),
+                ])
+                ->columnSpanFull(),
 
             // ── Bron & afbeelding ───────────────────────────────────────────
             Section::make('Bron & afbeelding')
@@ -181,7 +176,7 @@ public static function configure(Schema $schema): Schema
                     TextInput::make('source_value')
                         ->label('Bron (URL of omschrijving)')
                         ->maxLength(500)
-                        ->url(fn ($get) => $get('source_type') === 'url'),
+                        ->url(fn($get) => $get('source_type') === 'url'),
 
                     FileUpload::make('image')
                         ->label('Foto')
@@ -213,7 +208,7 @@ public static function configure(Schema $schema): Schema
         ]);
     }
 
-        public static function getTitleField(): Select
+    public static function getTitleField(): Select
     {
         return Select::make('title')
             /* ->relationship('customer', 'name')

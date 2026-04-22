@@ -14,11 +14,23 @@ class Recipe extends Model
     protected $table = 'recipes';
 
     protected $fillable = [
-        'title', 'slug', 'category_id', 'cooking_method_id',
-        'description', 'instructions', 'prep_time', 'cook_time',
-        'servings', 'difficulty', 'source_type', 'source_value',
-        'image', 'notes',
+        'title',
+        'slug',
+        'category_id',
+        'cooking_method_id',
+        'description',
+        'instructions',
+        'prep_time',
+        'cook_time',
+        'servings',
+        'difficulty',
+        'source_type',
+        'source_value',
+        'image',
+        'notes',
     ];
+
+
 
     protected $casts = [
         'instructions' => 'array',
@@ -26,8 +38,8 @@ class Recipe extends Model
 
     protected static function booted(): void
     {
-        static::creating(fn ($m) => $m->slug ??= Str::slug($m->title));
-        static::updating(fn ($m) => $m->slug = Str::slug($m->title));
+        static::creating(fn($m) => $m->slug ??= Str::slug($m->title));
+        static::updating(fn($m) => $m->slug = Str::slug($m->title));
     }
 
     // ── Computed ─────────────────────────────────────────────────────────────
@@ -62,5 +74,11 @@ class Recipe extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'recipe_tag');
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        unset($data['ingredients_data']);
+        return $data;
     }
 }
