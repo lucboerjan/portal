@@ -57,7 +57,7 @@ class ImdbRatingsTable
                     MergeImdbRatingsAction::make()
                         ->label('Titels samenvoegen')
                         ->color('success')
-                        ->icon('heroicon-o-link')
+                        ->icon('Heroicon::OutlinedLink')
 
                         ->before(function (\Illuminate\Support\Collection $records, BulkAction $action): void {
                             \Illuminate\Support\Facades\Log::info('Before hook', ['count' => $records->count()]);

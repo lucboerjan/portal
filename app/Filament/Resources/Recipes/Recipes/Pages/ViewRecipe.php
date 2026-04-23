@@ -38,7 +38,7 @@ class ViewRecipe extends ViewRecord
 
             // ── Basisinfo ─────────────────────────────────────────────────────
             Section::make('Basisinformatie')
-                ->icon('heroicon-o-information-circle')
+                ->icon('Heroicon::OutlinedInformationCircle')
                 ->schema([
                     TextEntry::make('title')
                         ->label('Titel')
@@ -63,7 +63,7 @@ class ViewRecipe extends ViewRecord
 
             // ── Tijden & porties ──────────────────────────────────────────────
             Section::make('Tijden & porties')
-                ->icon('heroicon-o-clock')
+                ->icon('Heroicon::OutlinedClock')
                 ->schema([
                     TextEntry::make('prep_time')
                         ->label('Voorbereidingstijd')
@@ -106,10 +106,10 @@ class ViewRecipe extends ViewRecord
 
             // ── Ingrediënten ──────────────────────────────────────────────────
             Section::make('Ingrediënten')
-                ->icon('heroicon-o-list-bullet')
+                ->icon('Heroicon::OutlinedListBullet')
                 ->schema([
                     RepeatableEntry::make('ingredients')
-                        ->label('')
+                        ->hiddenLabel()
                         ->schema([
                             TextEntry::make('quantity')
                                 ->label('Hoeveelheid')
@@ -142,10 +142,10 @@ class ViewRecipe extends ViewRecord
 
             // ── Bereiding ─────────────────────────────────────────────────────
             Section::make('Bereiding')
-                ->icon('heroicon-o-document-text')
+                ->icon('Heroicon::OutlinedDocumentText')
                 ->schema([
                     RepeatableEntry::make('instructions')
-                        ->label('')
+                        ->hiddenLabel()
                         ->schema([
                             TextEntry::make('step')
                                 ->hiddenLabel()
@@ -158,7 +158,7 @@ class ViewRecipe extends ViewRecord
 
             // ── Bron ──────────────────────────────────────────────────────────
             Section::make('Bron')
-                ->icon('heroicon-o-link')
+                ->icon('Heroicon::OutlinedLink')
                 ->schema([
                     TextEntry::make('source_type')
                         ->label('Type')
@@ -182,7 +182,7 @@ class ViewRecipe extends ViewRecord
 
             // ── Tags & notities ───────────────────────────────────────────────
             Section::make('Tags & notities')
-                ->icon('heroicon-o-tag')
+                ->icon('Heroicon::OutlinedTag')
                 ->schema([
                     TextEntry::make('tags.name')
                         ->label('Tags')

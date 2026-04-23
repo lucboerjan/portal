@@ -17,7 +17,7 @@ class CookingMethodForm
 
             TextInput::make('icon')
                 ->label('Heroicon naam')
-                ->placeholder('heroicon-o-fire')
+                ->placeholder('Heroicon::OutlinedFire')
                 ->maxLength(255),
         ]);
     }

@@ -18,7 +18,7 @@ use BackedEnum;
 class RecipeResource extends Resource
 {
     protected static ?string $model = Recipe::class;
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-book-open';
+    protected static string|BackedEnum|null $navigationIcon = 'Heroicon::OutlinedBookOpen';
 
     protected static ?int $navigationSort = 1;
     protected static ?string $modelLabel = 'Recept';

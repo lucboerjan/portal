@@ -25,7 +25,7 @@ class RecipesTable
                     ->label('Titel')
                     ->searchable()
                     ->sortable()
-                    ->weight('bold'),
+                    ->weight('FontWeight::Bold'),
 
                 TextColumn::make('category.name')
                     ->label('Categorie')

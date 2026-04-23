@@ -22,10 +22,10 @@ class MergeImdbRatingsAction extends BulkAction
 
         $this
             ->label('Films samenvoegen')
-            ->icon('heroicon-o-arrows-pointing-in')
+            ->icon('Heroicon::OutlinedArrowsPointingIn')
             ->color('warning')
             ->requiresConfirmation(false) // We tonen eigen modal
-            ->form(fn (Collection $records) => [
+            ->schema(fn (Collection $records) => [
                 Radio::make('master_id')
                     ->label('Welke film is de master record?')
                     ->helperText('Alle vertoningen worden hieraan gekoppeld. De andere records worden verwijderd.')

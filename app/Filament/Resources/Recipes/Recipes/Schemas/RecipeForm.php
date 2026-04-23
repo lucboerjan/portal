@@ -21,7 +21,7 @@ class RecipeForm
 
             // ── Basisinfo ───────────────────────────────────────────────────
             Section::make('Basisinformatie')
-                ->icon('heroicon-o-information-circle')
+                ->icon('Heroicon::OutlinedInformationCircle')
                 ->schema([
                     TextInput::make('title')
                         ->label('Titel')
@@ -58,7 +58,7 @@ class RecipeForm
 
             // ── Tijden & porties ────────────────────────────────────────────
             Section::make('Tijden & porties')
-                ->icon('heroicon-o-clock')
+                ->icon('Heroicon::OutlinedClock')
                 ->schema([
                     TextInput::make('prep_time')
                         ->label('Voorbereidingstijd')
@@ -93,10 +93,10 @@ class RecipeForm
 
             // ── Ingrediënten ────────────────────────────────────────────────
             Section::make('Ingrediënten')
-                ->icon('heroicon-o-list-bullet')
+                ->icon('Heroicon::OutlinedListBullet')
                 ->schema([
                     Repeater::make('ingredients_data')  // gewone array, geen relatie
-                        ->label('')
+                        ->hiddenLabel()
                         ->schema([
                             Select::make('ingredient_id')
                                 ->label('Ingrediënt')
@@ -143,7 +143,7 @@ class RecipeForm
 
             // ── Bereiding ───────────────────────────────────────────────────
             Section::make('Bereiding')
-                ->icon('heroicon-o-document-text')
+                ->icon('Heroicon::OutlinedDocumentText')
                 ->schema([
                     Repeater::make('instructions')
                         ->label('Stappen')
@@ -162,7 +162,7 @@ class RecipeForm
 
             // ── Bron & afbeelding ───────────────────────────────────────────
             Section::make('Bron & afbeelding')
-                ->icon('heroicon-o-photo')
+                ->icon('Heroicon::OutlinedPhoto')
                 ->schema([
                     Select::make('source_type')
                         ->label('Brontype')
@@ -182,13 +182,14 @@ class RecipeForm
                         ->label('Foto')
                         ->image()
                         ->directory('recipes')
+                        ->maxSize(1024)
                         ->columnSpanFull(),
                 ])
                 ->columns(2),
 
             // ── Tags & notities ─────────────────────────────────────────────
             Section::make('Tags & notities')
-                ->icon('heroicon-o-tag')
+                ->icon('Heroicon::OutlinedTag')
                 ->schema([
                     Select::make('tags')
                         ->label('Tags')

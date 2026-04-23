@@ -16,7 +16,7 @@ class RecipeWizardSteps
     public static function getGeneralInfoStep(): Step
     {
         return Step::make('Basisinformatie')
-            ->icon('heroicon-o-information-circle')
+            ->icon('Heroicon::OutlinedInformationCircle')
             ->schema([
                 Section::make()
                     ->schema([
@@ -53,12 +53,12 @@ class RecipeWizardSteps
     {
         return Step::make('Ingrediënten')
             ->description('Ingrediënten en hoeveelheden')
-            ->icon('heroicon-o-list-bullet')
+            ->icon('Heroicon::OutlinedListBullet')
             ->schema([
                 Section::make()
                     ->schema([
                         Repeater::make('ingredients_data')  // gewone array, GEEN ->relationship()
-                            ->label('')
+                            ->hiddenLabel()
                             ->schema([
                                 Select::make('ingredient_id')
                                     ->label('Ingrediënt')
@@ -115,7 +115,7 @@ class RecipeWizardSteps
     {
         return Step::make('Bereiding')
             ->description('Bereidingsinstructies')
-            ->icon('heroicon-o-document-text')
+            ->icon('Heroicon::OutlinedDocumentText')
             ->schema([
                 Section::make()
                     ->schema([
