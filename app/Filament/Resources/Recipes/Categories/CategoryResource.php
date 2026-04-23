@@ -12,11 +12,12 @@ use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use BackedEnum;
+use Filament\Support\Icons\Heroicon;
 
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
-    protected static string|BackedEnum|null $navigationIcon = 'Heroicon::OutlinedTag';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
 
 

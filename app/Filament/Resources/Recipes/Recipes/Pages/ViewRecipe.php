@@ -182,7 +182,7 @@ class ViewRecipe extends ViewRecord
 
             // ── Tags & notities ───────────────────────────────────────────────
             Section::make('Tags & notities')
-                ->icon('Heroicon::OutlinedTag')
+                ->icon('Heroicon::o-tag')
                 ->schema([
                     TextEntry::make('tags.name')
                         ->label('Tags')

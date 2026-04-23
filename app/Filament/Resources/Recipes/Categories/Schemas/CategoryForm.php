@@ -19,7 +19,7 @@ class CategoryForm
 
             TextInput::make('icon')
                 ->label('Heroicon naam')
-                ->placeholder('Heroicon::OutlinedFire')
+                ->placeholder('heroicon-o-fire')
                 ->maxLength(255),
 
             ColorPicker::make('color')

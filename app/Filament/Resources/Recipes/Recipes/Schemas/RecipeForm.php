@@ -189,7 +189,7 @@ class RecipeForm
 
             // ── Tags & notities ─────────────────────────────────────────────
             Section::make('Tags & notities')
-                ->icon('Heroicon::OutlinedTag')
+                ->icon('Heroicon::o-tag')
                 ->schema([
                     Select::make('tags')
                         ->label('Tags')

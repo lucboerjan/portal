@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Recipes\CookingMethods\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
+use Filament\Support\Icons\Heroicon;
+
 class CookingMethodForm
 {
     public static function configure(Schema $schema): Schema
@@ -17,7 +19,7 @@ class CookingMethodForm
 
             TextInput::make('icon')
                 ->label('Heroicon naam')
-                ->placeholder('Heroicon::OutlinedFire')
+                ->placeholder('Heroicon::o-fire')
                 ->maxLength(255),
         ]);
     }
