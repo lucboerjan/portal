@@ -18,7 +18,7 @@ class TvvertoningSchema
                 ->required()
                 ->displayFormat('d/m/Y')
                 ->format('Y-m-d'),
-            Select::make('tvzenderID')
+            Select::make('tvzender_id')
                 ->label('Televisiezender')
                 ->options(
                     Tvzender::orderBy('volgnummer')->pluck('naam', 'id')
