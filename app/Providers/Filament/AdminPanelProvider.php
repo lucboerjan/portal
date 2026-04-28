@@ -21,7 +21,10 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
+use Illuminate\Contracts\View\View;
+use Filament\View\PanelsRenderHook;
 use Filament\Navigation\NavigationGroup;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
 
@@ -99,7 +102,13 @@ class AdminPanelProvider extends PanelProvider
             )
             ->assets([
                 Js::make('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
+                Css::make('privacy-mode', asset('css/filament/privacy-mode.css')),
+                Js::make('privacy-mode', asset('js/filament/privacy-mode.js')),
             ])
+            ->renderHook(
+                PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
+                fn(): View => view('filament.components.privacy-toggle'),
+            )
             ->plugins([
                 FilamentLogViewer::make()
                     ->navigationGroup('Systeembeheer')

@@ -57,10 +57,12 @@ class FinAccountsTable
                     ->sortable()
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->alignEnd()
+                    ->extraAttributes(['class' => 'privacy-sensitive'])
                     ->summarize([
                         Sum::make()
                             ->label('Totaal')
-                            ->money('EUR'),
+                            ->money('EUR')
+                            ->extraAttributes(['class' => 'privacy-sensitive']),
 
                     ]),
 

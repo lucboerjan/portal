@@ -47,7 +47,8 @@ class FinControleWidget extends StatsOverviewWidget
             )
                 ->description('Cumulatief saldo alle rekeningen')
                 ->color('gray')
-                ->icon('heroicon-o-archive-box'),
+                ->icon('heroicon-o-archive-box')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make(
                 'Transacties ' . now()->format('m/Y'),
@@ -55,7 +56,8 @@ class FinControleWidget extends StatsOverviewWidget
             )
                 ->description('Excl. transfers eigen rekeningen')
                 ->color($transactiesNormaal >= 0 ? 'success' : 'danger')
-                ->icon('heroicon-o-arrows-right-left'),
+                ->icon('heroicon-o-arrows-right-left')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make(
                 'Verwacht saldo',
@@ -63,7 +65,8 @@ class FinControleWidget extends StatsOverviewWidget
             )
                 ->description('Stand + transacties')
                 ->color('gray')
-                ->icon('heroicon-o-calculator'),
+                ->icon('heroicon-o-calculator')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make(
                 'Actueel saldo',
@@ -71,7 +74,8 @@ class FinControleWidget extends StatsOverviewWidget
             )
                 ->description($controle1Ok ? '✅ Klopt met verwacht saldo' : '⚠️ Wijkt af van verwacht saldo')
                 ->color($controle1Ok ? 'success' : 'danger')
-                ->icon('heroicon-o-banknotes'),
+                ->icon('heroicon-o-banknotes')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make(
                 'Verschil normale transacties',
@@ -79,7 +83,8 @@ class FinControleWidget extends StatsOverviewWidget
             )
                 ->description($controle1Ok ? 'Geen afwijking' : 'Afwijking gedetecteerd!')
                 ->color($controle1Ok ? 'success' : 'danger')
-                ->icon($controle1Ok ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'),
+                ->icon($controle1Ok ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make(
                 'Transfers eigen rekeningen',
@@ -87,7 +92,8 @@ class FinControleWidget extends StatsOverviewWidget
             )
                 ->description($controle2Ok ? 'Alle transfers zijn volledig' : '⚠️ Ontbrekende tegenboeking!')
                 ->color($controle2Ok ? 'success' : 'danger')
-                ->icon($controle2Ok ? 'heroicon-o-check-circle' : 'heroicon-o-exclamation-triangle'),
+                ->icon($controle2Ok ? 'heroicon-o-check-circle' : 'heroicon-o-exclamation-triangle')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
         ];
     }
 }

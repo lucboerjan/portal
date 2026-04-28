@@ -58,22 +58,26 @@ class FinStatsOverview extends StatsOverviewWidget
             Stat::make('Inkomsten ' . $jaar, '€ ' . number_format($inkomsten, 2, ',', '.'))
                 ->description('Deze maand: € ' . number_format($inkomstenMaand, 2, ',', '.'))
                 ->color('success')
-                ->icon('heroicon-o-arrow-trending-up'),
+                ->icon('heroicon-o-arrow-trending-up')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make('Uitgaven ' . $jaar, '€ ' . number_format(abs($uitgaven), 2, ',', '.'))
                 ->description('Deze maand: € ' . number_format(abs($uitgavenMaand), 2, ',', '.'))
                 ->color('danger')
-                ->icon('heroicon-o-arrow-trending-down'),
+                ->icon('heroicon-o-arrow-trending-down')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make('Netto saldo ' . $jaar, '€ ' . number_format($saldo, 2, ',', '.'))
                 ->description($saldo >= 0 ? 'Positief saldo' : 'Negatief saldo')
                 ->color($saldo >= 0 ? 'success' : 'danger')
-                ->icon('heroicon-o-scale'),
+                ->icon('heroicon-o-scale')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
 
             Stat::make('Netto saldo ' . $datum->translatedFormat('F Y'), '€ ' . number_format($maandSaldo, 2, ',', '.'))
                 ->description($maandSaldo >= 0 ? 'Positief saldo' : 'Negatief saldo')
                 ->color($maandSaldo >= 0 ? 'success' : 'danger')
-                ->icon('heroicon-o-scale'),
+                ->icon('heroicon-o-scale')
+                ->extraAttributes(['class' => 'privacy-sensitive']),
         ];
     }
 }

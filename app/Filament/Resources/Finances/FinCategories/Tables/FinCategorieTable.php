@@ -74,7 +74,15 @@ class FinCategorieTable
                     ->sortable()
                     ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->alignEnd()
-                    ->summarize(Sum::make()->money('EUR')),
+                    ->extraAttributes(['class' => 'privacy-sensitive'])
+                    ->summarize([
+                        Sum::make()
+                            ->label('Totaal')
+                            ->money('EUR')
+                            ->extraAttributes(['class' => 'privacy-sensitive']),
+
+                    ]),
+
             ])
             ->filters([
                 SelectFilter::make('richting')

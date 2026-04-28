@@ -46,7 +46,8 @@ class FinRekeningenOverview extends TableWidget
                 TextColumn::make('saldo')
                     ->label('Manueel saldo')
                     ->money('EUR')
-                    ->alignEnd(),
+                    ->alignEnd()
+                    ->extraAttributes(['class' => 'privacy-sensitive']),
 
                 TextColumn::make('berekend_saldo')
                     ->label('Berekend saldo')
@@ -61,9 +62,11 @@ class FinRekeningenOverview extends TableWidget
                     ->summarize([
                         Sum::make()
                             ->money('EUR')
-                            ->label('Totaal saldo'),
+                            ->label('Totaal saldo')
+                            ->extraAttributes(['class' => 'privacy-sensitive']),
                     ])
-                    ->alignEnd(),
+                    ->alignEnd()
+                    ->extraAttributes(['class' => 'privacy-sensitive']),
 
 
 
