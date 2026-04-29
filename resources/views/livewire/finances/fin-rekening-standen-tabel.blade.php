@@ -12,7 +12,7 @@
                             Rekening
                         </th>
                         @foreach($maanden as $maand)
-                            <th style="padding: 10px 16px; text-align: right; font-weight: 600; white-space: nowrap; min-width: 130px;">
+                            <th  style="padding: 10px 16px; text-align: right; font-weight: 600; white-space: nowrap; min-width: 130px;">
                                 {{ $maand['label'] }}
                             </th>
                         @endforeach
@@ -29,7 +29,7 @@
                                     $key   = $rekening->id . '_' . $maand['jaar'] . '_' . $maand['maand'];
                                     $saldo = $saldi->get($key)?->saldo;
                                 @endphp
-                                <td style="padding: 10px 16px; text-align: right; font-family: monospace; white-space: nowrap; color: {{ $saldo === null ? '#d1d5db' : ($saldo < 0 ? '#dc2626' : '#111827') }};">
+                                <td class="privacy-sensitive" style="padding: 10px 16px; text-align: right; font-family: monospace; white-space: nowrap; color: {{ $saldo === null ? '#d1d5db' : ($saldo < 0 ? '#dc2626' : '#111827') }};">
                                     {{ $saldo !== null ? '€ ' . number_format($saldo, 2, ',', '.') : '—' }}
                                 </td>
                             @endforeach
@@ -48,7 +48,7 @@
                                     return $saldi->get($key)?->saldo ?? 0;
                                 });
                             @endphp
-                            <td style="padding: 10px 16px; text-align: right; font-family: monospace; font-weight: 700; white-space: nowrap; color: {{ $totaal >= 0 ? '#16a34a' : '#dc2626' }};">
+                            <td class="privacy-sensitive" style="padding: 10px 16px; text-align: right; font-family: monospace; font-weight: 700; white-space: nowrap; color: {{ $totaal >= 0 ? '#16a34a' : '#dc2626' }};">
                                 € {{ number_format($totaal, 2, ',', '.') }}
                             </td>
                         @endforeach

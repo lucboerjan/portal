@@ -44,11 +44,11 @@
                     <tr style="border-bottom: 1px solid #f3f4f6; background-color: {{ $loop->even ? '#f9fafb' : 'white' }};">
                         <td style="padding: 7px 12px; font-weight: 500;">{{ $categorie }}</td>
                         @foreach($maandLabels as $m => $label)
-                            <td style="padding: 7px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
+                            <td class="privacy-sensitive" style="padding: 7px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
                                 {{ isset($maandBedragen[$m]) ? number_format($maandBedragen[$m], 2, ',', '.') : '' }}
                             </td>
                         @endforeach
-                        <td style="padding: 7px 12px; text-align: right; font-family: monospace; font-weight: 600; white-space: nowrap;">
+                        <td class="privacy-sensitive" style="padding: 7px 12px; text-align: right; font-family: monospace; font-weight: 600; white-space: nowrap;">
                             {{ number_format($totaal, 2, ',', '.') }}
                         </td>
                     </tr>
@@ -57,11 +57,11 @@
                 <tr style="background-color: #1e3a5f; color: white; font-weight: 700;">
                     <td style="padding: 8px 12px;">TOTAAL</td>
                     @foreach($maandLabels as $m => $label)
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
+                        <td class="privacy-sensitive" style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
                             {{ $totaalInkomstenPerMaand[$m] > 0 ? number_format($totaalInkomstenPerMaand[$m], 2, ',', '.') : '0,00' }}
                         </td>
                     @endforeach
-                    <td style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
+                    <td class="privacy-sensitive" style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
                         {{ number_format(array_sum($totaalInkomstenPerMaand), 2, ',', '.') }}
                     </td>
                 </tr>
@@ -85,24 +85,24 @@
                     <tr style="border-bottom: 1px solid #f3f4f6; background-color: {{ $loop->even ? '#f9fafb' : 'white' }};">
                         <td style="padding: 7px 12px; font-weight: 500;">{{ $categorie }}</td>
                         @foreach($maandLabels as $m => $label)
-                            <td style="padding: 7px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
+                            <td class="privacy-sensitive" style="padding: 7px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
                                 {{ isset($maandBedragen[$m]) ? number_format($maandBedragen[$m], 2, ',', '.') : '' }}
                             </td>
                         @endforeach
-                        <td style="padding: 7px 12px; text-align: right; font-family: monospace; font-weight: 600; white-space: nowrap;">
+                        <td class="privacy-sensitive" style="padding: 7px 12px; text-align: right; font-family: monospace; font-weight: 600; white-space: nowrap;">
                             {{ number_format($totaal, 2, ',', '.') }}
                         </td>
                     </tr>
                 @endforeach
                 {{-- Totaalrij uitgaven --}}
                 <tr style="background-color: #7f1d1d; color: white; font-weight: 700;">
-                    <td style="padding: 8px 12px;">TOTAAL</td>
+                    <td class="privacy-sensitive" style="padding: 8px 12px;">TOTAAL</td>
                     @foreach($maandLabels as $m => $label)
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
+                        <td class="privacy-sensitive" style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
                             {{ $totaalUitgavenPerMaand[$m] > 0 ? number_format($totaalUitgavenPerMaand[$m], 2, ',', '.') : '0,00' }}
                         </td>
                     @endforeach
-                    <td style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
+                    <td class="privacy-sensitive" style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap;">
                         {{ number_format(array_sum($totaalUitgavenPerMaand), 2, ',', '.') }}
                     </td>
                 </tr>
@@ -125,12 +125,12 @@
                     <td style="padding: 8px 12px;">Resultaat</td>
                     @foreach($maandLabels as $m => $label)
                         @php $resultaat = $totaalInkomstenPerMaand[$m] - $totaalUitgavenPerMaand[$m]; @endphp
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap; color: {{ $resultaat >= 0 ? '#16a34a' : '#dc2626' }};">
+                        <td class="privacy-sensitive" style="padding: 8px 12px; text-align: right; font-family: monospace; white-space: nowrap; color: {{ $resultaat >= 0 ? '#16a34a' : '#dc2626' }};">
                             {{ number_format($resultaat, 2, ',', '.') }}
                         </td>
                     @endforeach
                     @php $totaalResultaat = array_sum($totaalInkomstenPerMaand) - array_sum($totaalUitgavenPerMaand); @endphp
-                    <td style="padding: 8px 12px; text-align: right; font-family: monospace; font-weight: 700; white-space: nowrap; color: {{ $totaalResultaat >= 0 ? '#16a34a' : '#dc2626' }};">
+                    <td class="privacy-sensitive" style="padding: 8px 12px; text-align: right; font-family: monospace; font-weight: 700; white-space: nowrap; color: {{ $totaalResultaat >= 0 ? '#16a34a' : '#dc2626' }};">
                         {{ number_format($totaalResultaat, 2, ',', '.') }}
                     </td>
                 </tr>

@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
+use Filament\Support\Icons\Heroicon;
 
 class RecipeForm
 {
@@ -21,7 +22,7 @@ class RecipeForm
 
             // ── Basisinfo ───────────────────────────────────────────────────
             Section::make('Basisinformatie')
-                ->icon('Heroicon::OutlinedInformationCircle')
+                ->icon(Heroicon::OutlinedInformationCircle)
                 ->schema([
                     TextInput::make('title')
                         ->label('Titel')
@@ -58,7 +59,7 @@ class RecipeForm
 
             // ── Tijden & porties ────────────────────────────────────────────
             Section::make('Tijden & porties')
-                ->icon('Heroicon::OutlinedClock')
+                ->icon(Heroicon::OutlinedClock)
                 ->schema([
                     TextInput::make('prep_time')
                         ->label('Voorbereidingstijd')
@@ -93,7 +94,7 @@ class RecipeForm
 
             // ── Ingrediënten ────────────────────────────────────────────────
             Section::make('Ingrediënten')
-                ->icon('Heroicon::OutlinedListBullet')
+                ->icon(Heroicon::OutlinedListBullet)
                 ->schema([
                     Repeater::make('ingredients_data')  // gewone array, geen relatie
                         ->hiddenLabel()
@@ -132,18 +133,18 @@ class RecipeForm
                                 ->placeholder('bijv. fijngesneden')
                                 ->columnSpan(2),
                         ])
-                
 
-                ->columns(8)
-                ->reorderable()
-                ->addActionLabel('Ingrediënt toevoegen')
-                ->defaultItems(0)
+
+                        ->columns(8)
+                        ->reorderable()
+                        ->addActionLabel('Ingrediënt toevoegen')
+                        ->defaultItems(0)
                 ])
                 ->columnSpanFull(),
 
             // ── Bereiding ───────────────────────────────────────────────────
             Section::make('Bereiding')
-                ->icon('Heroicon::OutlinedDocumentText')
+                ->icon(Heroicon::OutlinedDocumentText)
                 ->schema([
                     Repeater::make('instructions')
                         ->label('Stappen')
@@ -162,7 +163,7 @@ class RecipeForm
 
             // ── Bron & afbeelding ───────────────────────────────────────────
             Section::make('Bron & afbeelding')
-                ->icon('Heroicon::OutlinedPhoto')
+                ->icon(Heroicon::OutlinedPhoto)
                 ->schema([
                     Select::make('source_type')
                         ->label('Brontype')
@@ -189,7 +190,7 @@ class RecipeForm
 
             // ── Tags & notities ─────────────────────────────────────────────
             Section::make('Tags & notities')
-                ->icon('Heroicon::o-tag')
+                ->icon(Heroicon::OutlinedTag)
                 ->schema([
                     Select::make('tags')
                         ->label('Tags')

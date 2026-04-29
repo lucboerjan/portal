@@ -75,6 +75,7 @@ class FinMaandGrafiek extends ChartWidget
                     'backgroundColor' => 'rgba(34, 197, 94, 0.2)',
                     'borderColor'     => 'rgb(34, 197, 94)',
                     'borderWidth'     => 2,
+                    'className'       => 'privacy-sensitive',
                 ],
                 [
                     'label'           => 'Uitgaven',
@@ -85,6 +86,7 @@ class FinMaandGrafiek extends ChartWidget
                     'backgroundColor' => 'rgba(239, 68, 68, 0.2)',
                     'borderColor'     => 'rgb(239, 68, 68)',
                     'borderWidth'     => 2,
+                    'className'       => 'privacy-sensitive',
                 ],
             ],
             'labels' => array_values($maanden),

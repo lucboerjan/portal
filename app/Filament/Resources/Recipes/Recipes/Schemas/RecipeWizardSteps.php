@@ -10,13 +10,14 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Wizard\Step;
 use Illuminate\Support\Str;
+use Filament\Support\Icons\Heroicon;
 
 class RecipeWizardSteps
 {
     public static function getGeneralInfoStep(): Step
     {
         return Step::make('Basisinformatie')
-            ->icon('Heroicon::OutlinedInformationCircle')
+            ->icon(Heroicon::OutlinedInformationCircle)
             ->schema([
                 Section::make()
                     ->schema([
@@ -53,7 +54,7 @@ class RecipeWizardSteps
     {
         return Step::make('Ingrediënten')
             ->description('Ingrediënten en hoeveelheden')
-            ->icon('Heroicon::OutlinedListBullet')
+            ->icon(Heroicon::OutlinedListBullet)
             ->schema([
                 Section::make()
                     ->schema([
@@ -115,7 +116,7 @@ class RecipeWizardSteps
     {
         return Step::make('Bereiding')
             ->description('Bereidingsinstructies')
-            ->icon('Heroicon::OutlinedDocumentText')
+            ->icon(Heroicon::OutlinedDocumentText)
             ->schema([
                 Section::make()
                     ->schema([
