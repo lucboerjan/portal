@@ -97,4 +97,11 @@ class FinMaandGrafiek extends ChartWidget
     {
         return 'bar';
     }
+
+    protected function getExtraAttributes(): array
+{
+    return [
+        'class' => 'sensitive-chart',
+    ];
+}
 }
