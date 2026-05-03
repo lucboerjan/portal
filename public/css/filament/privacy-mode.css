@@ -36,3 +36,26 @@
 .dark .privacy-toggle svg {
     color: rgb(156, 163, 175);
 }
+
+.sensitive-chart canvas {
+    filter: blur(6px);
+    transition: filter 0.3s ease;
+}
+
+.sensitive-chart:hover canvas {
+    filter: none;
+}
+
+body.privacy-mode .fi-wi-chart-canvas-ctn canvas {
+    filter: blur(6px);
+    transition: filter 0.3s ease;
+}
+
+/* .fi-wi-chart-canvas-ctn canvas {
+    filter: blur(6px);
+    transition: filter 0.3s ease;
+}
+
+.fi-wi-chart-canvas-ctn:hover canvas {
+    filter: none;
+} */
