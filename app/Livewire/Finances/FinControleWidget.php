@@ -17,8 +17,8 @@ class FinControleWidget extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $vorigeMaand = \Carbon\Carbon::create(now()->year, now()->month, 1)->subMonth();
-
+        $vorigeMaand = \Carbon\Carbon::create(now()->year, now()->month, 1);
+    Log::info($vorigeMaand);
         $eindeVorigeMaand = FinRekeningStand::where('jaar', $vorigeMaand->year)
             ->where('maand', $vorigeMaand->month)
             ->sum('saldo');
