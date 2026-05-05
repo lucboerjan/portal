@@ -21,6 +21,10 @@ class CheckImdbUrls implements ShouldQueue
     {
         $films = Imdbrating::whereNotNull('imdburl')
             ->where('imdburl', '!=', '')
+            ->where(function ($query) {
+                $query->whereNull('url_geldig')
+                    ->orWhere('url_geldig', false);
+            })
             ->orderBy('titel')
             ->get();
 
@@ -34,15 +38,14 @@ class CheckImdbUrls implements ShouldQueue
 
                 Imdbrating::where('id', $film->id)->update(['url_geldig' => $geldig]);
 
-                Log::info("IMDB check: {$film->titel} → " . ($geldig ? 'OK' : 'FOUT'));
-
+                Log::info("IMDB check: {$film->titel} => " . ($geldig ? 'OK' : 'FOUT'));
             } catch (\Exception $e) {
                 Imdbrating::where('id', $film->id)->update(['url_geldig' => false]);
-                Log::warning("IMDB check mislukt: {$film->titel} → {$e->getMessage()}");
+                Log::warning("IMDB check mislukt: {$film->titel} => {$e->getMessage()}");
             }
 
             // Kleine pauze om IMDB niet te overbelasten
-            usleep(250000); // 0.25 seconde
+            usleep(500000); // 0.5 seconde
         }
     }
 }
