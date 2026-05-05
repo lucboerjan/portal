@@ -2,26 +2,26 @@
 
 namespace App\Filament\Resources\TvGids\ImdbRatings\Tables;
 
-use App\Models\Imdbrating;
-use App\Models\Vertoning;
-use Dom\Text;
-use Filament\Actions\EditAction;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\BulkAction;
 use App\Filament\Actions\MergeImdbRatingsAction;
+use App\Models\Imdbrating;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkAction;
 use Filament\Notifications\Notification;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Illuminate\Support\Collection;
+
 
 class ImdbRatingsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-            ->query(fn() => Imdbrating::query()->withCount('vertoningen'))
             ->columns([
                 TextColumn::make('titel')
                     ->label('Titel van de film')
@@ -36,20 +36,37 @@ class ImdbRatingsTable
                 TextColumn::make('imdburl')
                     ->label('IMDB URL')
                     ->url(fn(Imdbrating $r) => $r->imdburl)
-                    ->openUrlInNewTab(),
+                    ->openUrlInNewTab()
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('vertoningen_count')
                     ->label('# vertoningen')
+                    ->counts('vertoningen')
                     ->sortable(),
 
+                TextColumn::make('url_geldig')
+                    ->label('URL OK?')
+                    ->badge()
+                    ->color(fn(?bool $state) => match ($state) {
+                        true  => 'success',
+                        false => 'danger',
+                        null  => 'gray',
+                    })
+                    ->formatStateUsing(fn(?bool $state) => match ($state) {
+                        true  => '✓ OK',
+                        false => '✗ Fout',
+                        null  => '— Niet gecontroleerd',
+                    }),
             ])
+            ->defaultSort('titel')
             ->filters([
                 //
             ])
             ->recordActions([
                 ActionGroup::make([
-                    EditAction::make()->button()->color('info'),
-                    DeleteAction::make()->button()->color('warning'),
-                ])
+                    EditAction::make()->color('info'),
+                    DeleteAction::make()->color('warning'),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -57,11 +74,8 @@ class ImdbRatingsTable
                     MergeImdbRatingsAction::make()
                         ->label('Titels samenvoegen')
                         ->color('success')
-                        ->icon('Heroicon::OutlinedLink')
-
-                        ->before(function (\Illuminate\Support\Collection $records, BulkAction $action): void {
-                            \Illuminate\Support\Facades\Log::info('Before hook', ['count' => $records->count()]);
-
+                        ->icon(Heroicon::OutlinedLink)
+                        ->before(function (Collection $records, BulkAction $action): void {
                             if ($records->count() < 2) {
                                 Notification::make()
                                     ->title('Selecteer minimaal 2 films')
@@ -71,7 +85,6 @@ class ImdbRatingsTable
                                 $action->cancel();
                             }
                         }),
-
                 ]),
             ]);
     }
