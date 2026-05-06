@@ -36,16 +36,17 @@ class CheckImdbUrls implements ShouldQueue
 
                 $geldig = $response->successful();
 
-                $film->url_geldig = $geldig;
-                $film->saveQuietly(); // ← saveQuietly om de booted() update event te omzeilen!
+                Imdbrating::where('id', $film->id)->update(['url_geldig' => $geldig]);
+
                 Log::info("IMDB check: {$film->titel} → " . ($geldig ? 'OK' : 'FOUT'));
+
             } catch (\Exception $e) {
-                $film->url_geldig = false;
-                $film->saveQuietly();
+                Imdbrating::where('id', $film->id)->update(['url_geldig' => false]);
                 Log::warning("IMDB check mislukt: {$film->titel} → {$e->getMessage()}");
             }
 
-            usleep(500000);
+            // Kleine pauze om IMDB niet te overbelasten
+            usleep(250000); // 0.25 seconde
         }
     }
 }
