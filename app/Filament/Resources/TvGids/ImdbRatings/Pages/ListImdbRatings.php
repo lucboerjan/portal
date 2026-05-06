@@ -50,7 +50,8 @@ class ListImdbRatings extends ListRecords
                 ->label('Controleer IMDB URLs')
                 ->icon(Heroicon::OutlinedGlobeAlt)
                 ->color('info')
-                ->requiresConfirmation()
+                ->visible(Imdbrating::heeftUrlsNakijken())
+                //->requiresConfirmation()
                 ->modalDescription('Dit controleert alle IMDB URLs via HTTP. Dit kan enkele minuten duren en loopt op de achtergrond.')
                 ->action(function () {
                     CheckImdbUrls::dispatch();
