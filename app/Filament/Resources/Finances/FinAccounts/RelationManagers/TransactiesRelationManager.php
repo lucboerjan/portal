@@ -71,11 +71,11 @@ class TransactiesRelationManager extends RelationManager
                     ->label('Omschrijving')
                     ->searchable()
                     ->limit(40),
-                    
+
                 TextColumn::make('categorieen.omschrijving')
                     ->label('Categorie')
                     ->badge()
-                   // ->separator(',')
+                    // ->separator(',')
                     ->color(function ($state, $record) {
                         $categorie = $record->categorieen->first();
                         if (!$categorie) return 'gray';
@@ -167,6 +167,23 @@ class TransactiesRelationManager extends RelationManager
                 CreateAction::make()
                     ->label('Nieuwe transactie')
                     ->schema(fn() => $this->getTransactieForm())
+                    ->using(function (array $data) {
+                        $categorieId = $data['categorie_id'] ?? null;
+                        unset($data['categorie_id']);
+
+                        $data['rekening_id'] = $this->getOwnerRecord()->id;
+                        $transactie = FinTransactie::create($data);
+
+                        if ($categorieId) {
+                            $transactie->categorieKoppelingen()->create([
+                                'categorie_id' => $categorieId,
+                                'bedrag'       => null,
+                            ]);
+                            $transactie->update(['verwerkt' => true]);
+                        }
+
+                        return $transactie;
+                    })
                     ->successRedirectUrl(
                         fn() =>
                         \App\Filament\Resources\Finances\FinAccounts\FinAccountResource::getUrl('edit', [
@@ -179,7 +196,7 @@ class TransactiesRelationManager extends RelationManager
             ])
             ->recordActions([
                 Action::make('categoriseer')
-                ->visible(fn($record) => !$record->categorieen->isNotEmpty())
+                    ->visible(fn($record) => !$record->categorieen->isNotEmpty())
                     ->label('Categorie')
                     ->icon(Heroicon::Tag)
                     ->color('gray')
