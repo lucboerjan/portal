@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'privacy_pin' => env('PRIVACY_PIN'),
+
 ];

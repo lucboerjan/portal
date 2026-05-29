@@ -15,6 +15,10 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
+
+
 
 
 class ImdbRatingsTable
@@ -86,6 +90,22 @@ class ImdbRatingsTable
                             }
                         }),
                 ]),
+            ])
+            ->filters([
+                Filter::make('url_nakijken')
+                    ->label('URL nakijken')
+                    ->visible(Imdbrating::heeftUrlsNakijken())
+                    ->query(function (Builder $query, array $data) {
+                        if (!($data['isActive'] ?? false)) {
+                            return $query;
+                        }
+
+                        return $query
+                            ->whereNotNull('imdburl')
+                            ->where('imdburl', '!=', '')
+                            ->whereNull('url_geldig');
+                    })
+                    ->indicateUsing(fn(array $data) => 'URL nakijken'),
             ]);
     }
 }

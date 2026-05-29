@@ -19,14 +19,14 @@ class CheckImdbUrls implements ShouldQueue
 
     public function handle(): void
     {
-        $films = Imdbrating::whereNotNull('imdburl')
+/*         $films = Imdbrating::whereNotNull('imdburl')
             ->where('imdburl', '!=', '')
-            ->where(function ($query) {
-                $query->whereNull('url_geldig')
-                    ->orWhere('url_geldig', false);
-            })
+            ->whereNull('url_geldig')  // ← enkel null, expliciet
             ->orderBy('titel')
-            ->get();
+            ->get(); */
+            $films = Imdbrating::urlNakijken()->orderBy('titel')->get();
+
+        Log::info('Films te controleren: ' . $films->count());
 
         foreach ($films as $film) {
             try {
@@ -34,18 +34,19 @@ class CheckImdbUrls implements ShouldQueue
                     ->withHeaders(['User-Agent' => 'Mozilla/5.0'])
                     ->get($film->imdburl);
 
-                $geldig = $response->successful(); // 200-299
+                $geldig = $response->successful();
 
                 Imdbrating::where('id', $film->id)->update(['url_geldig' => $geldig]);
 
-                Log::info("IMDB check: {$film->titel} => " . ($geldig ? 'OK' : 'FOUT'));
+                Log::info("IMDB check: {$film->titel} → " . ($geldig ? 'OK' : 'FOUT'));
+
             } catch (\Exception $e) {
                 Imdbrating::where('id', $film->id)->update(['url_geldig' => false]);
-                Log::warning("IMDB check mislukt: {$film->titel} => {$e->getMessage()}");
+                Log::warning("IMDB check mislukt: {$film->titel} → {$e->getMessage()}");
             }
 
             // Kleine pauze om IMDB niet te overbelasten
-            usleep(500000); // 0.5 seconde
+            usleep(250000); // 0.25 seconde
         }
     }
 }
