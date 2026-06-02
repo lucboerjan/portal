@@ -54,13 +54,15 @@ class FundEndofMonthResult
                     'bedrag' => $aangroeiBedrag,
                 ]
             );
-        }
+        
 
         Log::info("Transactie verwerkt voor {$fund->naam}", [
             'transactie_id' => $transactie->id,
             'aangroeiBedrag' => $aangroeiBedrag,
             'datum' => $datum,
         ]);
+
+        
 
         // Transactiecategorie aanmaken of bijwerken
         FinTransactieCategorie::updateOrCreate(
@@ -75,5 +77,6 @@ class FundEndofMonthResult
         );
 
         Log::info("Klaar met verwerken fonds: {$fund->naam}");
+        }
     }
 }

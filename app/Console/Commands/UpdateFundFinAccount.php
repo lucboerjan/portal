@@ -16,11 +16,11 @@ class UpdateFundFinAccount extends Command
 
     public function handle(FundEndofMonthResult $fundTracker)
     {
-        Log::info("Start update fund fin account");
+        //Log::info("Start update fund fin account");
         $fondsen = \App\Models\InvestmentFund::all();
         foreach ($fondsen as $fund) {
             $result = $fundTracker->readAndStore($fund)  ?? "No result";
-            Log::info($fund->naam . ": " . $result);
+            //Log::info($fund->naam . ": " . $result);
         }
     }
 }

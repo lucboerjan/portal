@@ -47,6 +47,6 @@ class FinSlaRekeningStandenOp extends Command
         }
 
         $this->info('✅ Rekeningstanden opgeslagen voor ' . $maand . '/' . $jaar);
-        Log::channel('financial')->info('Rekeningstanden opgeslagen ', ['datum' => $dag . '/' . $maand . '/' . $jaar]);
+       //Log::channel('financial')->info('Rekeningstanden opgeslagen ', ['datum' => $dag . '/' . $maand . '/' . $jaar]);
     }
 }
