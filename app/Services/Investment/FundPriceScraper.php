@@ -36,6 +36,7 @@ class FundPriceScraper
             ->first();
 
         if ($bestaand) {
+            Log::channel('financial')->info("Bestaande koers gevonden, [{$fund->naam} => {$koers} EUR op {$datum}] ");
             return [
                 'status'   => 'ongewijzigd',
                 'datum'    => $datum,

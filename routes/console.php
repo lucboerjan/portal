@@ -31,8 +31,8 @@ Schedule::command('backup:clean')->dailyAt('03:00');
 Schedule::command('funds:fetch')
     ->everyFifteenMinutes()
     //->everyMinute()
-    ->between('06:00', '23:00')
-    ->withoutOverlapping();
+    ->between('06:00', '23:00');
+    //->withoutOverlapping();
 
 Schedule::command('app:update-fund-fin-account')
     ->everyFifteenMinutes()
@@ -40,7 +40,7 @@ Schedule::command('app:update-fund-fin-account')
     ->when(function () {
         return now()->endOfMonth()->isToday();
     })
-    ->withoutOverlapping()
+    //->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/scheduler-fund.log'));
 
 // ===============================================
