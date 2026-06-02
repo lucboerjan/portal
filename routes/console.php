@@ -29,7 +29,7 @@ Schedule::command('backup:clean')->dailyAt('03:00');
 // Scrapen Funds en bijwerken belegginsrekenigen
 // =============================================
 Schedule::command('funds:fetch')
-    ->everyFifteenMinutes()
+    ->everyMinute()
     //->everyMinute()
     ->between('06:00', '23:00');
     //->withoutOverlapping();

@@ -16,7 +16,7 @@ public function handle(FundPriceScraper $scraper): int
 {
     $fondsen = \App\Models\InvestmentFund::all();
     $nieuw   = 0;
-    Log::channel('financial')->info(" Koersen fondsen ophalen gestart...");
+    //Log::channel('financial')->info(" Koersen fondsen ophalen gestart...");
     foreach ($fondsen as $fund) {
         $result = $scraper->scrapeAndStore($fund);
         $datum  = isset($result['datum']) 
