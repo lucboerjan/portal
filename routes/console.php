@@ -29,9 +29,9 @@ Schedule::command('backup:clean')->dailyAt('03:00');
 // Scrapen Funds en bijwerken belegginsrekenigen
 // =============================================
 Schedule::command('funds:fetch')
-    ->everyMinute()
+    ->everyFifteenMinutes()
     //->everyMinute()
-    ->between('06:00', '23:00');
+    ->between('07:30', '23:45');
     //->withoutOverlapping();
 
 Schedule::command('app:update-fund-fin-account')
