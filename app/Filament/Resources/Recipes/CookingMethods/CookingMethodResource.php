@@ -12,11 +12,14 @@ use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use BackedEnum;
+use Filament\Support\Icons\Heroicon;
+
+
 
 class CookingMethodResource extends Resource
 {
     protected static ?string $model = CookingMethod::class;
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-fire';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFire;
 
     protected static ?int $navigationSort = 4;
     protected static ?string $modelLabel = 'Kookmethode';
