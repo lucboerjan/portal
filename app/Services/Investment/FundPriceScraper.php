@@ -36,6 +36,14 @@ class FundPriceScraper
             ->first();
 
         if ($bestaand) {
+            if (abs($bestaand->dagkoers - $koers) < 0.01) {
+                //Log::channel('financial')->info("Koers al up-to-date voor [{$fund->naam} => {$koers} EUR op {$datum}] ");
+                return [
+                    'status'   => 'ongewijzigd',
+                    'datum'    => $datum,
+                    'dagkoers' => $bestaand->dagkoers,
+                ];
+            }
             Log::channel('financial')->info("Bestaande koers gevonden, [{$fund->naam} => {$koers} EUR op {$datum}] ");
             return [
                 'status'   => 'ongewijzigd',
@@ -71,8 +79,8 @@ class FundPriceScraper
             if ($rate) {
                 $results[] = [
                     'naam'    => $fund->naam,
-                    'datum'   => $rate->datum,
-                    'dagkoers' => $rate->dagkoers,
+                    'datum'   => $rate[0]->datum,
+                    'dagkoers' => $rate[0]->dagkoers,
                 ];
             }
         });
