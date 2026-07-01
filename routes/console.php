@@ -46,7 +46,7 @@ Schedule::command('app:update-fund-fin-account')
 // ===============================================
 // Rekeningstanden overzetten naar overzichtstabel
 // ===============================================    
-Schedule::command('fin:rekening-standen-opslaan')->dailyAt('06:00');
+Schedule::command('fin:rekening-standen-opslaan')->dailyAt('23:55');
 
 // ========================================
 // Utilly Readings uitlezen en wegschrijven

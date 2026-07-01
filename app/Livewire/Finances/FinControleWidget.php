@@ -22,6 +22,10 @@ class FinControleWidget extends StatsOverviewWidget
             ->where('maand', $vorigeMaand->month)
             ->sum('saldo');
 
+        $eindeVorigeMaand = FinTransactie::where('datum', '<=', $vorigeMaand->copy()->endOfMonth()->format('Y-m-d'))
+            ->sum('bedrag');
+
+
         $transactiesNormaal = FinTransactie::whereYear('datum', now()->year)
             ->whereMonth('datum', now()->month)
             ->whereHas('categorieen', fn($q) => $q->where('exclude', false))
@@ -34,7 +38,20 @@ class FinControleWidget extends StatsOverviewWidget
 
         $actueleStand = FinRekening::where('actief', true)->sum('saldo');
 
-        $verwacht    = $eindeVorigeMaand + $transactiesNormaal;
+        $transactiesZonderCategorie = FinTransactie::whereYear('datum', now()->year)
+            ->whereMonth('datum', now()->month)
+            ->whereDoesntHave('categorieen')
+            ->sum('bedrag');
+
+        Log::info('Transacties zonder categorie: ' . $transactiesZonderCategorie);
+
+        $verwacht = $eindeVorigeMaand + $transactiesNormaal + $transactiesTransfer + $transactiesZonderCategorie;
+        Log::info('Vorige maand: ' . $vorigeMaand);
+        Log::info('Einde vorige maand: ' . $eindeVorigeMaand);
+        Log::info('Transacties normaal: ' . $transactiesNormaal);
+        Log::info('Verwacht: ' . $verwacht);
+        Log::info('Actuele stand: ' . $actueleStand);
+
         $verschil1   = $actueleStand - $verwacht;
         $controle1Ok = abs($verschil1) < 0.01;
         $controle2Ok = abs($transactiesTransfer) < 0.01;

@@ -10,26 +10,21 @@ use Illuminate\Support\Facades\Log;
 
 class FinSlaRekeningStandenOp extends Command
 {
-    protected $signature   = 'fin:rekening-standen-opslaan';
     protected $description = 'Sla de actuele rekeningsstanden op voor de huidige maand';
+    protected $signature = 'fin:rekening-standen-opslaan {--jaar= : Jaar} {--maand= : Maand}';
 
     public function handle(): void
     {
-        // Vorige maand berekenen
-        //$datum = now()->subMonth();
-        $datum = now();
-        $jaar  = $datum->year;
-        $maand = $datum->month;
-        $dag   = $datum->day;
+        $jaar  = $this->option('jaar')  ?? now()->year;
+        $maand = $this->option('maand') ?? now()->month;
 
-        // Einde van vorige maand
-        $eindeDatum = $datum->endOfMonth()->format('Y-m-d');
+        $eindeDatum = \Carbon\Carbon::create($jaar, $maand, 1)->endOfMonth()->format('Y-m-d');
 
         $rekeningen = FinRekening::where('actief', true)->get();
 
         foreach ($rekeningen as $rekening) {
             $saldo = FinTransactie::where('rekening_id', $rekening->id)
-                //->whereDate('datum', '<=', $eindeDatum)
+                ->whereDate('datum', '<=', $eindeDatum)
                 ->sum('bedrag');
 
             FinRekeningStand::updateOrCreate(
@@ -47,6 +42,6 @@ class FinSlaRekeningStandenOp extends Command
         }
 
         $this->info('✅ Rekeningstanden opgeslagen voor ' . $maand . '/' . $jaar);
-       //Log::channel('financial')->info('Rekeningstanden opgeslagen ', ['datum' => $dag . '/' . $maand . '/' . $jaar]);
+        Log::channel('financial')->info('Rekeningstanden opgeslagen', ['maand' => $maand . '/' . $jaar]);
     }
 }
