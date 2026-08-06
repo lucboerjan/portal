@@ -25,7 +25,7 @@ class InvestmentMaandverschilStat extends BaseWidget
         $stats[] = Stat::make(
             'Totaal maandverschil',
             '€ ' . number_format($totaal, 2, ',', '.')
-        );
+        )->extraAttributes(['class' => 'privacy-exempt']);
 
         return $stats;
     }
@@ -78,6 +78,7 @@ class InvestmentMaandverschilStat extends BaseWidget
         )
             ->description($prefix . number_format($verschilPct, 2, ',', '.') . '% | ' . $vanDatum . ' → ' . $totDatum)
             ->descriptionIcon($positief ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown)
-            ->color($positief ? 'success' : 'danger');
+            ->color($positief ? 'success' : 'danger')
+            ->extraAttributes(['class' => 'privacy-exempt']);
     }
 }

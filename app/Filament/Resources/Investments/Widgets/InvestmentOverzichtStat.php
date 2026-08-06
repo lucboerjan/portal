@@ -34,17 +34,20 @@ class InvestmentOverzichtStat extends BaseWidget
             Stat::make('Totale Huidige Waarde', '€ ' . number_format($totaalHuidigeWaarde, 2, ',', '.'))
                 ->description('Huidige waarde van alle fondsen')
                 ->descriptionIcon(Heroicon::Banknotes)
-                ->color('primary'),
+                ->color('primary')
+                ->extraAttributes(['class' => 'privacy-exempt']),
 
             Stat::make('Totale Aankoopwaarde', '€ ' . number_format($totaalAankoopwaarde, 2, ',', '.'))
                 ->description('Totaal geïnvesteerd bedrag')
                 ->descriptionIcon(Heroicon::ArrowTrendingDown)
-                ->color('gray'),
+                ->color('gray')
+                ->extraAttributes(['class' => 'privacy-exempt']),
 
             Stat::make('Totaal Rendement', '€ ' . number_format($totaalRendement, 2, ',', '.'))
                 ->description(number_format($totaalRendementPercentage, 2, ',', '.') . '%')
                 ->descriptionIcon($totaalRendement >= 0 ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown)
-                ->color($totaalRendement >= 0 ? 'success' : 'danger'),
+                ->color($totaalRendement >= 0 ? 'success' : 'danger')
+                ->extraAttributes(['class' => 'privacy-exempt']),
         ];
     }
 

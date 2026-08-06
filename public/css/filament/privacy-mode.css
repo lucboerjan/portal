@@ -10,6 +10,11 @@
     transition: filter 0.3s ease;
 }
 
+.privacy-mode .privacy-exempt .fi-wi-stats-overview-stat-value {
+    filter: none;
+    user-select: text;
+}
+
 .privacy-toggle {
     display: flex;
     align-items: center;

@@ -25,12 +25,12 @@ class InvestmentJaarverschilStat extends BaseWidget
             ->toArray();
 
         // Bereken totaal jaarverschil
-                $totaal = $fondsen->sum(fn($fonds) => $fonds->jaarverschil);
+        $totaal = $fondsen->sum(fn($fonds) => $fonds->jaarverschil);
 
-                        $stats[] = Stat::make(
-                                    'Totaal jaarverschil',
-                                                '€ ' . number_format($totaal, 2, ',', '.')
-                                                        );
+        $stats[] = Stat::make(
+            'Totaal jaarverschil',
+            '€ ' . number_format($totaal, 2, ',', '.')
+        )->extraAttributes(['class' => 'privacy-exempt']);
 
         return $stats;
     }
@@ -83,6 +83,7 @@ class InvestmentJaarverschilStat extends BaseWidget
         )
             ->description($prefix . number_format($verschilPct, 2, ',', '.') . '% | ' . $vanDatum . ' → ' . $totDatum)
             ->descriptionIcon($positief ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown)
-            ->color($positief ? 'success' : 'danger');
+            ->color($positief ? 'success' : 'danger')
+            ->extraAttributes(['class' => 'privacy-exempt']);
     }
 }

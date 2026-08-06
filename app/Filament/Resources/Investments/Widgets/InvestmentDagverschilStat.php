@@ -33,7 +33,8 @@ class InvestmentDagverschilStat extends BaseWidget
         $stats[] = Stat::make(
             'Totaal Dagverschil',
             '€ ' . number_format($totaal, 2, ',', '.')
-        );
+            
+        )->extraAttributes(['class' => 'privacy-exempt']);
 
         return $stats;
 
@@ -79,6 +80,7 @@ class InvestmentDagverschilStat extends BaseWidget
         )
             ->description($prefix . number_format($verschilPct, 2, ',', '.') . '% | ' . $datumLabel)
             ->descriptionIcon($positief ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown)
-            ->color($positief ? 'success' : 'danger');
+            ->color($positief ? 'success' : 'danger')
+            ->extraAttributes(['class' => 'privacy-exempt']);
     }
 }
