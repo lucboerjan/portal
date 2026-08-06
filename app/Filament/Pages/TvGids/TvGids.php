@@ -88,7 +88,7 @@ class TvGids extends Page
     // Select opties
     public function getZendersProperty()
     {
-        return Tvzender::orderBy('volgnummer')->pluck('naam', 'id');
+        return Tvzender::orderBy('naam')->pluck('naam', 'id');
     }
 
     public function getFilmsProperty()

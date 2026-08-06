@@ -10,7 +10,7 @@ class UpdateFundFinAccount extends Command
 {
 
     protected $signature = 'app:update-fund-fin-account';
-    protected $description = 'Bereken het saldoverschil voor de rekenignen gekoppeld aan de beleggingsfondsen';
+    protected $description = 'Bereken het saldoverschil voor de rekeningen gekoppeld aan de beleggingsfondsen';
 
 
 

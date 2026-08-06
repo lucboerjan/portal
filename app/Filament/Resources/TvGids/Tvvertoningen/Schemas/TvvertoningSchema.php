@@ -21,7 +21,7 @@ class TvvertoningSchema
             Select::make('tvzender_id')
                 ->label('Televisiezender')
                 ->options(
-                    Tvzender::orderBy('volgnummer')->pluck('naam', 'id')
+                    Tvzender::orderBy('naam')->pluck('naam', 'id')
                 )
                 ->required()
                 ->searchable(),
