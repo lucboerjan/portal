@@ -2,65 +2,67 @@
 
 namespace App\Filament\Resources\Investments\Widgets;
 
-use App\Models\InvestmentFund as Fund;
+use App\Models\InvestmentFund as Fonds;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Log;
 
 class FondsKoersontwikkelingChart extends ChartWidget
 {
-    protected  ?string $heading = 'Trend van de koersen';
-    protected  ?string $maxHeight = '350px';
-    protected  string $color = 'primary';
-    public  ?string $filter = null;
-
-    protected int|string|array $columnSpan = 'full';
-
-
-
-    public function filters(): ?array
-    {
-        return Fund::pluck('name', 'id')->toArray();
-    }
+    protected ?string $heading = 'Koersontwikkeling per Fonds';
+    protected static ?int $sort = 4;
+    protected int | string | array $columnSpan = 'full';
+    //protected string $view = 'filament.widgets.fonds-koersontwikkeling-chart';
+    public ?string $filter = null;
 
     protected function getData(): array
     {
         $fondsId = $this->filter;
 
-
-        $fund = Fund::find($fondsId);
-
-        if (! $fund) {
-            return [
-                'datasets' => [],
-                'labels' => [],
-            ];
+        if (!$fondsId) {
+            $fonds = Fonds::has('InvestmentPurchase')->first();
+            if (!$fonds) {
+                return ['datasets' => [], 'labels' => []];
+            }
+            $fondsId = $fonds->id;
         }
 
-        $dagkoersen = $fund->InvestmentRate()
-            ->orderBy('datum')
+        $fonds = Fonds::find($fondsId);
+        if (!$fonds) {
+            return ['datasets' => [], 'labels' => []];
+        }
+
+        $dagkoersen = $fonds->InvestmentRate()
+            ->where('datum', '>=', now()->subDays(90))
+            ->orderBy('datum', 'asc')
             ->get();
 
+        if ($dagkoersen->isEmpty()) {
+            return ['datasets' => [], 'labels' => []];
+        }
 
-        $labels = $dagkoersen->pluck('datum')->map(fn($d) => $d->format('d-m-Y'));
+        $labels = [];
+        $koersen = [];
 
-        $filteredLabels = $labels/* ->filter(function ($date) {
-            $month = (int) substr($date, 5, 2);
-            $day   = (int) substr($date, 0, 2);
+        foreach ($dagkoersen as $dagkoers) {
+            $labels[] = $dagkoers->datum->format('d-m-Y');
+            $koersen[] = (float) $dagkoers->dagkoers;
+        }
 
-            // Toon enkel labels op de eerste dag van maand 1,5,9
-            return $day === 1 && in_array($month, [1, 5, 9, 12]);
-        })->values();  */
-;
         return [
             'datasets' => [
                 [
-                    'label' => $fund->naam,
-                    'data' => $dagkoersen->pluck('dagkoers'),
-                    'borderColor' => '#3b82f6',
+                    'label' => $fonds->naam,
+                    'data' => $koersen,
+                    'borderColor' => 'rgb(59, 130, 246)',
+                    'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
                     'tension' => 0.3,
+                    'fill' => true,
+                    'borderWidth' => 2,
+                    'pointRadius' => 2,
+                    'pointHoverRadius' => 5,
                 ],
             ],
-            'labels' => $filteredLabels,
+            'labels' => $labels,
         ];
     }
 
@@ -71,16 +73,43 @@ class FondsKoersontwikkelingChart extends ChartWidget
 
     protected function getFilters(): ?array
     {
-        return Fund::has('InvestmentPurchase')
+        return Fonds::has('InvestmentPurchase')
             ->orderBy('naam')
             ->pluck('naam', 'id')
             ->toArray();
     }
 
-    public function mount(): void
+    protected function getOptions(): array
     {
-        $this->filter = Fund::has('InvestmentPurchase')
-            ->orderBy('id')
-            ->value('id');
+        // GEEN RAWJS CALLBACKS - dit veroorzaakt de error!
+        return [
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
+                    'position' => 'top',
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    'mode' => 'index',
+                    'intersect' => false,
+                ],
+            ],
+            'scales' => [
+                'y' => [
+                    'display' => true,
+                    'beginAtZero' => false,
+                ],
+                'x' => [
+                    'display' => true,
+                    'ticks' => [
+                        'maxTicksLimit' => 10,
+                        'maxRotation' => 45,
+                        'minRotation' => 45,
+                    ],
+                ],
+            ],
+        ];
     }
-}
+};

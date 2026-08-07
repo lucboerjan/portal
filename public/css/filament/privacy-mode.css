@@ -15,6 +15,10 @@
     user-select: text;
 }
 
+.privacy-mode .privacy-exempt .fi-wi-chart-canvas-ctn canvas {
+    filter: none;
+}
+
 .privacy-toggle {
     display: flex;
     align-items: center;
