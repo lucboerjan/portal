@@ -19,7 +19,24 @@ class UtilityReadingsTable
                     ->date('d-m-Y')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('meter_stand')->label('Reading Value')->sortable()->searchable(),
+
+                TextColumn::make('meter_stand')->label('Reading Value')->sortable()->searchable()
+                                    ->tooltip(function ($record) {
+                        $previous = \App\Models\UtilityReading::query()
+                            ->where('utility_type_id', $record->utility_type_id)
+                            ->where('reading_date', '<', $record->reading_date)
+                            ->orderBy('reading_date', 'desc')
+                            ->value('meter_stand');
+
+                        if ($previous === null) {
+                            return 'Geen vorige meterstand beschikbaar';
+                        }
+
+                        $diff = $record->meter_stand - $previous;
+                        $sign = $diff >= 0 ? '+' : '';
+
+                        return "Verschil met vorige maand: {$sign}" . number_format($diff, 2, ',', '.') . " {$record->utilityType->unit}";
+                    }),
                 TextColumn::make('utilityType.name')->label('Utility Type Name')->sortable()->searchable(),
                 TextColumn::make('utilityType.unit')->label('Unit')->sortable()->searchable(),
                 TextColumn::make('utilityType.type')->label('Type')->sortable()->searchable(),
