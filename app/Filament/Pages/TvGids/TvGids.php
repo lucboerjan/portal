@@ -137,6 +137,7 @@ class TvGids extends Page
 
         $this->leegmaken();
         $this->datum = $this->form_datum;
+        $this->dispatch('focus-zoek-titel'); 
     }
 
     // Leegmaken

@@ -11,8 +11,7 @@
                     ‹
                 </button>
 
-                <input type="date"
-                    wire:model.live="datum"
+                <input type="date" wire:model.live="datum"
                     class="border border-gray-300 rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-white" />
 
                 <button wire:click="volgendeDag"
@@ -36,7 +35,8 @@
                 </thead>
                 <tbody>
                     @forelse($this->vertoningen as $v)
-                        <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <tr
+                            class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
                             <td class="py-2 px-3">
                                 {{ \Carbon\Carbon::parse($v->datum)->format('d-m-Y') }}
                             </td>
@@ -45,14 +45,15 @@
                             <td class="py-2 px-3">{{ $v->imdbrating->jaar }}</td>
                             <td class="py-2 px-3">{{ $v->imdbrating->imdbrating }}</td>
                             <td class="py-2 px-3">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                                <span
+                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
                                     {{ $v->imdbrating->vertoningen()->count() }}
                                 </span>
                             </td>
                             <td class="py-2 px-3">
                                 <div class="flex gap-1">
                                     {{-- IMDB Link --}}
-                                    @if($v->imdbrating->imdburl)
+                                    @if ($v->imdbrating->imdburl)
                                         <a href="{{ $v->imdbrating->imdburl }}" target="_blank"
                                             class="inline-flex items-center px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700">
                                             <x-heroicon-o-link class="w-3 h-3" />
@@ -101,8 +102,7 @@
                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                         Datum vertoning:
                     </label>
-                    <input type="date"
-                        wire:model.live="form_datum"
+                    <input type="date" wire:model.live="form_datum"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white" />
                 </div>
 
@@ -111,9 +111,7 @@
                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                         Titel van de film:
                     </label>
-                    <input type="text"
-                        wire:model.live="zoekTitel"
-                        placeholder="Zoek film..."
+                    <input type="text" id="zoek-titel" wire:model.live="zoekTitel" placeholder="Zoek film..."
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white" />
                 </div>
 
@@ -122,8 +120,8 @@
                     <select wire:model="imdbrating_id"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white">
                         <option value="">-- Kies een film --</option>
-                        @foreach($this->films as $id => $titel)
-                            <option value="{{ $id }}">{{ $titel  }}</option>
+                        @foreach ($this->films as $id => $titel)
+                            <option value="{{ $id }}">{{ $titel }}</option>
                         @endforeach
                     </select>
                     @error('imdbrating_id')
@@ -139,7 +137,7 @@
                     <select wire:model="tvzender_id"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white">
                         <option value="">-- Kies een zender --</option>
-                        @foreach($this->zenders as $id => $naam)
+                        @foreach ($this->zenders as $id => $naam)
                             <option value="{{ $id }}">{{ $naam }}</option>
                         @endforeach
                     </select>
@@ -158,8 +156,9 @@
                 </div>
 
                 {{-- Nieuw film formulier --}}
-                @if($showNieuweFilm)
-                    <div class="border border-blue-200 dark:border-blue-800 rounded-xl p-3 space-y-3 bg-blue-50 dark:bg-blue-950">
+                @if ($showNieuweFilm)
+                    <div
+                        class="border border-blue-200 dark:border-blue-800 rounded-xl p-3 space-y-3 bg-blue-50 dark:bg-blue-950">
 
                         <p class="text-xs font-semibold text-blue-700 dark:text-blue-300">
                             Nieuwe film toevoegen aan IMDB lijst
@@ -169,8 +168,7 @@
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                                 Titel *
                             </label>
-                            <input type="text"
-                                wire:model="nieuweFilmTitel"
+                            <input type="text" wire:model="nieuweFilmTitel"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white" />
                             @error('nieuweFilmTitel')
                                 <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -182,19 +180,15 @@
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                                     Jaar
                                 </label>
-                                <input type="number"
-                                    wire:model="nieuweFilmJaar"
-                                    placeholder="2024"
+                                <input type="number" wire:model="nieuweFilmJaar" placeholder="2024"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white" />
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                                     IMDB Rating
                                 </label>
-                                <input type="number"
-                                    wire:model="nieuweFilmRating"
-                                    step="0.1" min="0" max="10"
-                                    placeholder="7.5"
+                                <input type="number" wire:model="nieuweFilmRating" step="0.1" min="0"
+                                    max="10" placeholder="7.5"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white" />
                             </div>
                         </div>
@@ -203,8 +197,7 @@
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                                 IMDB URL
                             </label>
-                            <input type="text"
-                                wire:model="nieuweFilmUrl"
+                            <input type="text" wire:model="nieuweFilmUrl"
                                 placeholder="https://www.imdb.com/title/tt..."
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white" />
                             @error('nieuweFilmUrl')
@@ -248,7 +241,7 @@
                 </a>
 
                 {{-- Edit indicator --}}
-                @if($editId)
+                @if ($editId)
                     <div class="text-xs text-center text-orange-500 font-medium">
                         ✏️ Bezig met bewerken van vertoning #{{ $editId }}
                     </div>
@@ -258,4 +251,14 @@
         </div>
 
     </div>
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('focus-zoek-titel', () => {
+                setTimeout(() => {
+                    document.getElementById('zoek-titel')?.focus();
+                }, 300);
+            });
+        });
+    </script>
+
 </x-filament-panels::page>
