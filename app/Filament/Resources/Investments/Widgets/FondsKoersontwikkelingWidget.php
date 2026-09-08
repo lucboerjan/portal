@@ -10,7 +10,8 @@ class FondsKoersontwikkelingWidget extends ChartWidget
     protected ?string $heading = 'Koersontwikkeling per Fonds';
     protected static ?int $sort = 4;
     protected int | string | array $columnSpan = 'full';
-    protected  string $view = 'filament.widgets.fonds-koers-chart-custom';
+    //protected  string $view = 'filament.widgets.fonds-koers-chart-custom';
+    protected string $view = 'filament.widgets.fonds-koersontwikkeling-chart';
     public ?string $filter = null;
 
     protected function getData(): array

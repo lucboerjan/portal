@@ -66,6 +66,7 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
             ->passwordReset()
+            ->profile()
             //->authGuard('web')
             ->colors([
                 'primary' => $colors[$color] ?? Color::Violet,

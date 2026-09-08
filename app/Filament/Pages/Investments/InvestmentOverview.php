@@ -25,7 +25,7 @@ class InvestmentOverview extends Page
             \App\Filament\Resources\Investments\Widgets\InvestmentDagverschilStat::class,
             \App\Filament\Resources\Investments\Widgets\InvestmentMaandverschilStat::class,
             \App\Filament\Resources\Investments\Widgets\InvestmentJaarverschilStat::class,
-            \App\Filament\Resources\Investments\Widgets\FondsKoersontwikkelingChart::class
+            //\App\Filament\Resources\Investments\Widgets\FondsKoersontwikkelingChart::class
 
          ];
     }
