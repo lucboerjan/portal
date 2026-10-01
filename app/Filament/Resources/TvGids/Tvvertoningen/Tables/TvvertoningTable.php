@@ -12,7 +12,8 @@ use Filament\Actions\Action;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
- 
+use Illuminate\Database\Eloquent\Builder;
+
 
 
 
@@ -37,14 +38,21 @@ class TvvertoningTable
                     ->label('Jaar'),
                 TextColumn::make('imdbrating.imdbrating')
                     ->label('Rating'),
-                TextColumn::make('vertoningen_count')
+                /*                 TextColumn::make('vertoningen_count')
+                                    ->label('###')
+
+                                    ->getStateUsing(
+                                        fn(vertoning $r) =>
+                                        $r->imdbrating?->vertoningen()->count() ?? 0
+                                    )
+                                    ->badge()
+                                    ->color('gray'), */
+                TextColumn::make('imdbrating_vertoningen_count')
                     ->label('###')
-                    ->getStateUsing(
-                        fn(vertoning $r) =>
-                        $r->imdbrating?->vertoningen()->count() ?? 0
-                    )
                     ->badge()
-                    ->color('gray'),
+                    ->color('gray')
+                    ->sortable(),
+                    //->getStateUsing(fn(Vertoning $r) => $r->imdbrating?->vertoningen()->count() ?? 0),
             ])
             ->defaultSort('datum', 'desc')
             ->filters([
