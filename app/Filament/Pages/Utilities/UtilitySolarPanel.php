@@ -16,6 +16,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Notifications\Notification;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Models\UtilitySolarPanelReading;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 
@@ -32,14 +33,14 @@ class UtilitySolarPanel extends Page implements HasTable
 
     protected string $view = 'filament.pages.solar-panel-counter';
 
-            public static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         return 'Utilities';
     }
-        public static function getNavigationSort(): ?int
-        {
-            return 100;
-        }
+    public static function getNavigationSort(): ?int
+    {
+        return 100;
+    }
 
 
     public ?array $data = [];
@@ -109,9 +110,13 @@ class UtilitySolarPanel extends Page implements HasTable
             ->query(UtilitySolarPanelReading::query())
             ->defaultSort('date', 'desc')
             ->columns([
+
                 TextColumn::make('date')
                     ->label('Datum')
-                    ->date('d/m/Y'),
+                    ->date('d/m/Y')
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->whereRaw("DATE_FORMAT(date, '%d/%m/%Y') LIKE ?", ["%{$search}%"]);
+                    }),
                 TextColumn::make('counter_reading')
                     ->label('Meterstand (kWh)')
                     ->searchable(),
@@ -150,5 +155,4 @@ class UtilitySolarPanel extends Page implements HasTable
                 DeleteAction::make(),
             ]);
     }
-
 }
