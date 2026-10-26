@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\Widget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Type\Integer;
 
 class EindeLoopbaanLbj extends Widget
@@ -23,7 +24,7 @@ class EindeLoopbaanLbj extends Widget
 
         private function pensioenDatum()
     {
-        return Carbon::create(2026, 12, 31);
+        return Carbon::create(2027, 01, 01);
     }
 
     private function berekenKalenderDagen()
@@ -72,6 +73,7 @@ class EindeLoopbaanLbj extends Widget
 
             $message = ($isWerkdag == true) ? ' is een werkdag' : ' is GEEN werkdag';
 
+            Log::info($currentDate->format('Y-m-d') . $message);
             $currentDate->addDay();
         }
         // Trek geplande verlofdagen per jaar af
