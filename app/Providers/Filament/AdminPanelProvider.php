@@ -65,7 +65,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
-            ->passwordReset()
+            ->favicon(asset('favicon.svg'))->passwordReset()
             ->profile()
             //->authGuard('web')
             ->colors([
